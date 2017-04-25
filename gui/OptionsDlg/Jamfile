@@ -1,0 +1,28 @@
+SubDir P4WIN gui OptionsDlg ;
+
+P4WinIncludes ;
+P4WinDefines ;
+
+Library $(P4WINLIB) :
+	ChangelistsPage.cpp
+	ClientsPage.cpp
+	ConnectInfoPage.cpp
+	DepotPage.cpp
+	DialogsPage.cpp
+	DiffAssocDlg.cpp
+	DisplayPage.cpp
+	DoubleClickPage.cpp
+	EditAssocDlg.cpp
+	EditorsPage.cpp
+	FileUtilitiesPage.cpp
+	HelperAppsPage.cpp
+	HistoryPage.cpp
+	JobsPage.cpp
+	LabelsPage.cpp
+	MergeAppPage.cpp
+	OptionsTreeDlg.cpp
+	PanesPage.cpp
+	SpecsPage.cpp
+	StatusPanePage.cpp
+	TempDirPage.cpp
+	;

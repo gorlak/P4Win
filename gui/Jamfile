@@ -1,0 +1,72 @@
+SubDir P4WIN gui ;
+
+P4WinIncludes ;
+P4WinDefines ;
+
+Main P4win.exe : P4win.cpp ;
+WinRes P4win.exe : P4win.rc : /d_AFXDLL /dUNICODE ;
+WinLinkage P4win.exe : version.lib winmm.lib wsock32.lib ;
+
+LinkLibraries P4win.exe :
+	$(P4WINLIB)
+	$(P4WINCMNLIB)
+	$(CLIENTLIB)
+	$(RPCLIB)
+	$(SUPPORTLIB)
+	;
+
+Library $(P4WINLIB) :
+	AddFilterDlg.cpp AddListDlg.cpp AutoResolveDlg.cpp AutoResolvePage.cpp
+	BookmarkAdd.cpp Bookmarks.cpp
+	BranchListCtrl.cpp BranchView.cpp ChgDescribe.cpp
+	ClientListCtrl.cpp ClientView.cpp
+	ClientWizBegin.cpp ClientWizCreate.cpp ClientWizSheet.cpp
+	CoolBtn.cpp CustomGetDlg.cpp DeleteFixes.cpp
+	DeltaTreeCtrl.cpp DeltaView.cpp DepotTreeCtrl.cpp DepotView.cpp
+	Diff2Dlg.cpp Diff2ObjsDlg.cpp Diff2Output.cpp Document.cpp FavEditDlg.cpp
+	Favorites.cpp
+	FileInfoDlg.cpp FileType.cpp
+	ClientFilterDlg.cpp FilterByOwnerDlg.cpp FilterDepotDlg.cpp FindFilesDlg.cpp
+	FlatSplitter.cpp ForceSyncDlg.cpp GetPwdDlg.cpp HistoryDlg.cpp
+	ImageList.cpp
+	IntegContinue.cpp IntegrateContinue.cpp JobDescribe.cpp
+	JobListCtrl.cpp JobListDlg.cpp JobView.cpp JobsConfigure.cpp
+	LabelAddReplace.cpp LabelDelSync.cpp LabelListCtrl.cpp
+	LabelView.cpp MSTreeCtrl.cpp MainFrm.cpp MoveFiles.cpp
+	MsgBox.cpp
+	NewClientDlg.cpp NewWindowDlg.cpp OldChgFilterDlg.cpp
+	OldChgListCtrl.cpp OldChgRevRangeDlg.cpp OldChgView.cpp
+	P4Branch.cpp P4Change.cpp P4Client.cpp P4EditBox.cpp
+	P4FileStats.cpp P4Fix.cpp P4Info.cpp
+	P4Job.cpp P4Label.cpp P4ListBrowse.cpp P4ListBox.cpp
+	P4ListAll.cpp P4ListCtrl.cpp
+	P4Lists.cpp P4Menu.cpp P4Object.cpp P4PaneContent.cpp
+	P4PaneView.cpp P4Registry.cpp P4StatColl.cpp P4User.cpp
+	RemoveViewer.cpp ReresolvingDlg.cpp ResolveFlagsDlg.cpp
+	RevertListDlg.cpp SetPwdDlg.cpp SortListCtrl.cpp
+	SortListHeader.cpp SpecDescDlg.cpp StatusView.cpp StdAfx.cpp
+	SyncChange.cpp TemplateNameDlg.cpp TokenString.cpp ToolsAdd.cpp
+	ToolsArgs.cpp ToolsDlg.cpp UserListCtrl.cpp UserView.cpp
+	ViewerDlg.cpp WinPos.cpp ZimbabweSplitter.cpp catchalldlg.cpp
+	;
+
+
+SubInclude P4WIN gui IntegDlg ;
+SubInclude P4WIN gui OptionsDlg ;
+SubInclude P4WIN gui merge ;
+SubInclude P4WIN gui p4api ;
+SubInclude P4WIN gui spec-dlgs ;
+
+SubDir P4WIN gui P4Win409 ;
+
+Main P4Win409.dll ;
+WinRes P4Win409.dll : P4Win409.rc : [ FDefines _AFXDLL ] ;
+WinDllDeffile P4Win409.dll : P4Win409.def ;
+WinDllNoMainLinkage P4Win409.dll ;
+
+SubDir P4WIN gui P4Win411 ;
+
+Main P4Win411.dll ;
+WinRes P4Win411.dll : P4Win411.rc : [ FDefines _AFXDLL ] ;
+WinDllDeffile P4Win411.dll : P4Win411.def ;
+WinDllNoMainLinkage P4Win411.dll ;

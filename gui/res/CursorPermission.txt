@@ -1,0 +1,59 @@
+Return-Path: <rodimus@2kweb.com>
+Received: from 2kweb.net (interlink-2000.com [192.41.9.197]) by mail6 (8.6.13/Netcom)
+	id WAA05488; Sat, 3 May 1997 22:44:22 -0700
+Received: from fabianbo (apolo5-a9.racsa.co.cr [200.9.53.86]) by 2kweb.net (8.8.5) id XAA03152; Sat, 3 May 1997 23:44:05 -0600 (MDT)
+X-Authentication-Warning: 2kweb.net: Host apolo5-a9.racsa.co.cr [200.9.53.86] claimed to be fabianbo
+Message-ID: <336C10FF.3CB4@2kweb.com>
+Date: Sat, 03 May 1997 22:30:55 -0600
+From: Fabian Borges <rodimus@2kweb.com>
+X-Mailer: Mozilla 3.0Gold (Win95; I)
+MIME-Version: 1.0
+To: Nick Irias <cabago@netcom.com>
+Subject: Re: The Running CD
+References: <199705032131.OAA09086@netcom5.netcom.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-UIDL: cb628df5e4c2e5516a1901f014371230
+
+
+Sorry for the delay in answering, but I reallly don't check
+that adress anymore. Now I'm at rodimus@2kweb.com. As for the
+cursors, have it. It's freeware, if I did not want it manipulated
+I wouldn't have uploaded it. But it is very courteous on your
+part to ask for permission. Have it, do what you want with it.
+Alhough a link, or a brief mentioning of my name would be nice,
+but not obligatory.
+
+-- 
+************************************************************
+-Hombre Que Baila Se Cae,
+Hombre Que Nada Se Ahoga...
+Fabian Borges (rodimus@2kweb.com)
+http://www.2kweb.com/rodimus/ ---> Home Page
+http://www.2kweb.com/rodimus/tf/ --->Tranformers Page
+http://www.2kweb.com/rodimus/themes/ --->Desktop Themes
+http://www.2kweb.com/rodimus/icons.htm ---> Icons Page
+http://www.2kweb.com/rodimus/C-64/c-64.htm ---> Commodore 64
+
+
+
+
+From: "Nick Irias" <cabago@netcom.com>
+To: "Fabian Borges" <iherrero@sol.racsa.co.cr>
+Subject: The running CD
+Date: Fri, 2 May 1997 19:00:11 -0700
+X-MSMail-Priority: Normal
+X-Priority: 3
+X-Mailer: Microsoft Internet Mail 4.70.1155
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+Hi,
+
+I saw your running CD animated cursor on the net and like it.  Do you sell
+animated cursors?  If so, I am wondering what your fee would be to provide
+an animated cursor, based upon the running CD cursor?  I would want
+unlimited rights to distribute the resulting .ani file.
+
+Nick

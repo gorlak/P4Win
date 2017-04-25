@@ -1,0 +1,186 @@
+P4Win Release Notes:  97.3 beta
+
+
+Patches for 97.3
+-------------------------------------------------------------------------------
+#4540 
+
+	Bugfix: enable editing of change spec for changes that dont have any files
+
+#4516 
+
+	Bugfix:  Multiple depots were not displaying correctly during refresh of
+	depot window.
+
+#4268 
+
+	Bug: Job descriptions were being truncated
+
+#4261 
+
+	Bug: Tabs now stripped out of change descriptions in history
+	dialog, and selected revision now remains selected, even when the
+	list is not the control with focus.
+
+#3823 
+
+	Bug: Merge app arguments were incorrect
+
+#3681 
+
+	Bug: Submit of a change with no files reports the error and subsequently 
+	reports "change x submitted".
+
+#3677 
+
+	Bug: GetAtLabelorChange menu command was available even if no 
+	files were selected.
+
+#3675 
+
+	Bug: Description fields in branch, oldchange, client, label and
+	job views had trailing "..." even when the entire description fit.  
+	And leading quote was appearing in job descriptions.
+
+#3674 
+
+	Bugfix:  Changes window no longer shows "+" next to the
+	"OtherPendingChanges" node unless it has children
+
+#3669 
+
+	Bug: Kxtext and xltext file types not recognized
+
+
+
+Enhancements for 97.3
+-------------------------------------------------------------------------------
+
+#4560 	
+	Now runs p4diff as internal diff.  It is still possible to use
+	the Perforce-Options menu command to define an external diff 
+	application.
+
+#4542
+
+	Now possible to change connection settings.  p4port, p4user and
+	p4client can be set from within p4win.  By default, settings persist
+	only until p4win exits, but changes to connection settings can also
+	be written to the registry, at the user's option.
+
+#4452 
+
+	Allow direct edit of files open in changes window.
+
+#4446 
+
+	Double click in depot window now opens client file in editor ONLY
+	if that file is already checked out for edit.  Otherwise, it fetches the
+	depot head-rev copy for read-only viewing.
+
+#4424 
+
+	Performance: Depot listing slightly faster, and open files
+	listing update is 10-15 times faster.  
+
+#4357 
+
+	Performance:  Now uses 30% less memory.
+
+#4351 
+
+	Add optional display of file open action and change
+	description to pending changes window.
+
+#4303 
+
+	Detect and appropriately sort depot listing from case-insensitive servers.
+
+#4272 
+
+	Server/Client info window made cut-pasteable - also
+	includes OS version and service pack info.
+
+#4269 
+
+	Allow edit, delete, lock and unlock to operate on folders in 
+	the depot window.
+
+#4259 
+
+	File history dialog now is sizeable, and the text 
+	window has scrollbars as required when the window is sized smaller
+	than the text control contents
+
+#4258 
+
+	File history revision list control now sorts bi-directional when column
+	headers clicked.
+
+#4249 
+
+	Defined double click actions for list views.  Client and user views 
+	run describe, and all other list views run edit when double clicked.
+
+#4248 
+
+	All list views now have bi-directional sort.  The job,
+	branch and label views resort automatically when a new item is created,
+	and scroll the new item into view.
+
+#4243 
+
+	Spec dialog upgrade: droplists for user jobviews and job status fields
+
+#4126 
+
+	Updated dialogs for add files.  The	dialog allows the target change 
+	for added files to be altered, to support drag-drop from file mangler 
+	(NT 3.51) or file-finder file adding.
+
+#3927 
+
+	Make window position and state, and splitter bar position persistent
+
+#3871 
+
+	Replace options dialog with a tabbed dialog, with a tab dedicated
+	to file-app associations.  This is required to support the one-shot
+	editing from the depot window.
+
+#3848 
+
+	Allow right drag of files from depot window to a pending change, 
+	with a context menu appearing on the drop.  This allows delete 
+	under a specific change.
+
+#3844 
+
+	File information dialog, accessible in depot window, to show all
+	relevant file parameters, including a list of who has the file open or 
+	locked.
+
+
+#3685 
+
+	At startup, check to see if a previous instance of p4win is running.  
+	If so, allow user to reactivate previous instance or choose to continue 
+	with a second instance that may have different port, client or user 
+	parameters.
+
+#3682 
+
+	Allow change edit, submit and jobfix when any item under the change is 
+	selected.
+
+
+#3673 
+
+	NT 3.51 support:
+
+	Context menues now work under NT 3.51 in list views
+	Drag-drop from file mangler
+	File-add dialog as alternative to file mangler
+	8.3 path expansion for NT3.51 file dialog
+
+

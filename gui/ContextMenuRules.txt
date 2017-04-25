@@ -1,0 +1,19 @@
+ContextMenuRules.txt
+
+The following rules apply to menues for all list views based on CP4ListView.  
+The context menues should be consistent from one view to the next.  The command
+sequence is as follows:
+
+New
+Edit
+Describe
+Delete
+-Separator-
+Special Action 1
+Special Action 2
+.....   Action n
+-Separator-
+Refresh
+
+Ideally, the main window menu will be structured in a similar manner for any
+commands that involve these views.

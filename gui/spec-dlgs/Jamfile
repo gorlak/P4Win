@@ -1,0 +1,11 @@
+SubDir P4WIN gui spec-dlgs ;
+
+P4WinIncludes ;
+P4WinDefines ;
+
+Library $(P4WINLIB) :
+	P4SpecData.cpp
+	P4SpecDlg.cpp
+	P4SpecSheet.cpp
+	ReviewList.cpp
+	;

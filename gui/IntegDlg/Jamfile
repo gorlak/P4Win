@@ -1,0 +1,12 @@
+SubDir P4WIN gui IntegDlg ;
+
+P4WinIncludes ;
+P4WinDefines ;
+
+Library $(P4WINLIB) :
+	FileSpecPage.cpp
+	IntegOptSheet.cpp
+	OptionsPage.cpp
+	RevRange.cpp
+	;
+

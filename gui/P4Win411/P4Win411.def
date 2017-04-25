@@ -1,0 +1,6 @@
+; P4Win411.def : Declares the module parameters for the DLL.
+
+LIBRARY      "P4Win411"
+
+EXPORTS
+    ; Explicit exports can go here

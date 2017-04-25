@@ -1,0 +1,17 @@
+SubDir P4WIN common ;
+
+P4WinIncludes ;
+P4WinDefines ;
+
+Library $(P4WINCMNLIB) :
+	ExceptionAttacher.cpp
+	ExceptionHandler.cpp
+	GetWinVer.cpp
+	MiniVersion.cpp
+	P4AboutDialog.cpp
+	P4GuiApp.cpp
+	P4Image.cpp
+	P4ImageList.cpp
+	RichEdCtrlEx.cpp
+	WindowsVersion.cpp 
+	WriteRegistry.cpp ;

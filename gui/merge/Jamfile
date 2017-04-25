@@ -1,0 +1,9 @@
+SubDir P4WIN gui merge ;
+
+P4WinIncludes ;
+P4WinDefines ;
+
+Library $(P4WINLIB) :
+	merge2dlg.cpp
+	merge3dlg.cpp
+	;

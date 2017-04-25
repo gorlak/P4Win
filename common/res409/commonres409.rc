@@ -1,0 +1,151 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "..\commonres.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "..\\commonres.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_ABOUTBOX MENU 
+BEGIN
+    POPUP "This is the popup context menu for the rich edit control"
+    BEGIN
+        MENUITEM "&Copy\tCtrl+C",				ID_COPY_ABOUT_BOX
+    END
+END
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUT DIALOGEX 0, 0, 263, 107
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CLIENTEDGE
+CAPTION "About "
+FONT 10, "MS Shell Dlg 2", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,205,88,50,12
+    CONTROL         "",IDC_VERSION,"RichEdit20A",ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY | 
+                    ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP,5,5,
+                    250,79
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 255
+        TOPMARGIN, 5
+        BOTTOMMARGIN, 100
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    ID_EMAIL_PERFORCE       "Send a message to Technical Support at Perforce using your default e-mail program\nSend a message to Technical Support at Perforce using your default e-mail program"
+    ID_WWW_PERFORCE_COM     "Display the Perforce Web Site on your default web browser\nDisplay the Perforce Web Site on your default web browser"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_AFX_OLE_INIT_FAILED "Fatal Error: Initialization of the OLE Dynamic Link Libraries failed"
+    IDS_THIS_APPLICATION_REQUIRES_WIN_NT_4_0_OR_WIN9X 
+                            "This application requires Windows NT 4.0 or\nWindows 95 or 98.\n---Exiting"
+    IDS_THIS_APPLICATION_REQUIRES_WIN_NT
+                            "This application requires Windows NT.\n---Exiting"
+    IDS_UNABLE_TO_SEND_MAIL_MESSAGE "Unable to send e-mail message"
+    IDS_WARNING             "Warning"
+    IDS_ERROR               "Error"
+    IDS_MISSINGVERSIONERROR "missing version info"
+    IDS_RESOURCEDLL         "Resource DLL"
+    IDS_BUILD_NUMBER_n      "Build %1!d!"
+    IDS_WWW_ADDRESS         "http://www.perforce.com"
+    IDS_EMAIL_ADDRESS       "support@perforce.com"
+    IDS_EMAIL_SUBJECT       "Perforce customer feedback"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_EMAIL_SENDER        "Perforce Technical Support"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

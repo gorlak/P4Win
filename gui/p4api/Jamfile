@@ -1,0 +1,54 @@
+SubDir P4WIN gui p4api ;
+
+P4WinIncludes ;
+P4WinDefines ;
+
+Library $(P4WINLIB) :
+	Cmd_Add.cpp
+	Cmd_AutoResolve.cpp
+	Cmd_Branches.cpp
+	Cmd_Changes.cpp
+	Cmd_Clients.cpp
+	Cmd_Delete.cpp
+	Cmd_Depots.cpp
+	Cmd_Describe.cpp
+	Cmd_Diff.cpp
+	Cmd_Diff2.cpp
+	Cmd_DirStat.cpp
+	Cmd_Dirs.cpp
+	Cmd_EditSpec.cpp
+	Cmd_Files.cpp
+	Cmd_Fix.cpp
+	Cmd_Fixes.cpp
+	Cmd_Fstat.cpp
+	Cmd_Get.cpp
+	Cmd_History.cpp
+	Cmd_Info.cpp
+	Cmd_Integrate.cpp
+	Cmd_Integrate2.cpp
+	Cmd_Jobs.cpp
+	Cmd_LabelSynch.cpp
+	Cmd_Labels.cpp
+	Cmd_ListOp.cpp
+	Cmd_ListOpStat.cpp
+	Cmd_Login.cpp
+	Cmd_Logout.cpp
+	Cmd_MaxChange.cpp
+	Cmd_Opened.cpp
+	Cmd_Ostat.cpp
+	Cmd_Password.cpp
+	Cmd_PrepBrowse.cpp
+	Cmd_PrepEdit.cpp
+	Cmd_Refresh.cpp
+	Cmd_Resolve.cpp
+	Cmd_Resolved.cpp
+	Cmd_Revert.cpp
+	Cmd_SendSpec.cpp
+	Cmd_Unresolved.cpp
+	Cmd_Users.cpp
+	Cmd_Where.cpp
+	GuiClient.cpp
+	GuiClientUser.cpp
+	P4Command.cpp
+	P4CommandStatus.cpp
+	;
