@@ -8,9 +8,9 @@ the Workshop. See for build instructions.
 
 ### Compiling
 
-See [build.txt](https://swarm.workshop.perforce.com/projects/perforce-software-p4win/files/main/build.txt).
+Coming soon, @gorlak
 
 ### License
 
 Please refer to
-[LICENSE](https://swarm.workshop.perforce.com/projects/perforce-software-p4win/files/main/LICENSE).
+[LICENSE](LICENSE.md).
