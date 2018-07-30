@@ -4,3 +4,6 @@
 [submodule "Dependencies/p4"]
 	path = Dependencies/p4
 	url = https://github.com/gorlak/P4.git
+[submodule "Dependencies/openssl"]
+	path = Dependencies/openssl
+	url = https://github.com/gorlak/openssl.git
