@@ -1,3 +1,6 @@
 [submodule "Dependencies/premake"]
 	path = Dependencies/premake
 	url = https://github.com/premake/premake-core.git
+[submodule "Dependencies/p4"]
+	path = Dependencies/p4
+	url = https://github.com/gorlak/P4.git
