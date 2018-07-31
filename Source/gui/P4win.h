@@ -13,6 +13,8 @@
 
 //--------------------
 // clientapi headers:
+#pragma warning ( push )
+#pragma warning ( disable: 4244 )
 #include <clientapi.h>
 #include <clientmerge.h>
 #include <i18napi.h>
@@ -20,6 +22,7 @@
 #include <ntmangle.h>
 #include <datetime.h>
 #include <enviro.h>
+#pragma warning ( pop )
 //--------------------
 
 #include <wchar.h>
