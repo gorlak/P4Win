@@ -4,11 +4,19 @@ newoption
 	description	= "Bundle japanese resources",
 }
 
+newoption
+{
+	trigger = "architecture",
+	description = "Specify architecture (see premake 'architecture' action for choices)",
+	default = "x86", -- (function() if os.is64bit() then return 'x86_64' else return 'x86' end end)()
+}
+
 workspace "P4Win"
 
 -- global options
 
-architecture "x86_64"
+architecture( _OPTIONS[ "architecture" ] )
+
 floatingpoint "Fast"
 
 flags
@@ -104,6 +112,7 @@ project "P4"
 		"ID_M=\"0\"",
 		"ID_D=\"0\"",
 		"Z_PREFIX",
+		"USE_SSL",
 	}
 
 	includedirs
@@ -132,6 +141,7 @@ project "P4"
 	{
 		"Dependencies/p4/api/p4dvcsapi.*",
 		"Dependencies/p4/client/clientmain.*",
+		"Dependencies/p4/sslstub/**",
 		"Dependencies/p4/sys/fileiovms.*",
 		"Dependencies/p4/sys/macfile.*",
 	}
@@ -144,7 +154,7 @@ project "P4Win"
 
 	flags
 	{
-		"FatalWarnings",
+		-- "FatalWarnings",
 	}
 
 	disablewarnings
@@ -177,10 +187,16 @@ project "P4Win"
 		"Source/gui/OptionsDlg",
 	}
 
+	local platform = "x64"
+	if _OPTIONS[ "architecture" ] == "x86" then
+		platform = "Win32"
+	end
+
 	files
 	{
 		"Source/**.cpp",
 		"Source/**.h",
+		"Source/gui/res/P4Win.manifest",
 	}
 
 	if _OPTIONS["japanese"] then
@@ -201,8 +217,22 @@ project "P4Win"
 	links
 	{
 		"P4",
+		"ssleay32",
+		"libeay32",
 		"dbghelp",
 		"ws2_32",
 		"wininet",
 		"winmm",
 	}
+
+	configuration "Debug"
+		libdirs
+		{
+			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/mdd"
+		}
+
+	configuration "not Debug"
+		libdirs
+		{
+			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/md"
+		}

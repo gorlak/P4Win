@@ -58,6 +58,8 @@ void CCmd_Info::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
         m_Info.m_CurrentDirectory = value;
     else if(tag == _T("Client root"))
         m_Info.m_ClientRoot = value;
+    else if(tag == _T("Client stream"))
+        m_Info.m_ClientStream = value;
     else if(tag == _T("Client address"))
         m_Info.m_ClientAddress = value;
     else if(tag == _T("Server address"))
@@ -80,6 +82,20 @@ void CCmd_Info::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
         ;   // we know about it, but don't care about it
     else if(tag == _T("Client unknown."))
         m_Info.m_Error = LoadStringResource(IDS_CLIENT_UNKNOWN_TO_SERVER);
+    else if(tag == _T("Peer address"))
+        ;   // we know about it, but don't care about it
+    else if(tag == _T("ServerID"))
+        ;   // we know about it, but don't care about it
+    else if(tag == _T("Server services"))
+        ;   // we know about it, but don't care about it
+    else if(tag == _T("Replica of"))
+        ;   // we know about it, but don't care about it
+    else if(tag == _T("Server license-ip"))
+        ;   // we know about it, but don't care about it
+    else if(tag == _T("Case Handling"))
+        ;   // we know about it, but don't care about it
+    else if(tag == _T("Changelist server"))
+        ;   // we know about it, but don't care about it
     else
     {
         ASSERT(0);   // info not recognized

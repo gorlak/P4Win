@@ -61,6 +61,7 @@ BOOL CP4GuiApp::InitInstance()
 
     GetVersionInfo();
 
+#if 0 // gorlak
     if (m_hInstRes != NULL)
         AfxSetResourceHandle(m_hInstRes);
     else
@@ -70,6 +71,9 @@ BOOL CP4GuiApp::InitInstance()
         AfxMessageBox(msg, MB_ICONSTOP);
         return FALSE;
     }
+#else
+	AfxSetResourceHandle( this->m_hInstance );
+#endif
 
     SetRegistryKey(_T("Perforce"));
 
@@ -246,7 +250,7 @@ void CP4GuiApp::GetVersionInfo()
     // Get full path and name of executable
     TCHAR moduleName[MAX_PATH];
     GetModuleFileName(m_hInstance, moduleName, MAX_PATH);
-
+#if 0 // gorlak
     // Get version info for executable and language dll
     GetFileVersionInfo(moduleName, m_appLanguage, m_appVersion, m_appCopyright);
     GetFileVersionInfo(m_resDllName, m_resLanguage, m_resVersion, m_resCopyright);
@@ -257,6 +261,7 @@ void CP4GuiApp::GetVersionInfo()
 			m_appVersion, moduleName, m_resVersion, m_resDllName);
 		AfxMessageBox(txt, MB_ICONSTOP);
 	}
+#endif
 }
 
 bool CP4GuiApp::GetFileVersionInfo(LPCTSTR fileName, CString &language, CString &version, CString &copyright)

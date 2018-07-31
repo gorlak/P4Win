@@ -29,6 +29,8 @@ static LPCTSTR actions[]=
 	_T("branch"),
 	_T("integrate"),
 	_T("import"),
+	_T("move/add"),
+	_T("move/delete"),
 	_T("no action"),
 	0
 };

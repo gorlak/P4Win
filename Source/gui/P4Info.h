@@ -27,6 +27,7 @@ public:
 	CString m_ClientName;
 	CString m_ClientHost;
 	CString m_ClientRoot;
+	CString m_ClientStream;
 	CString m_CurrentDirectory;
 	CString m_ClientAddress;
     CString m_ClientP4Charset;

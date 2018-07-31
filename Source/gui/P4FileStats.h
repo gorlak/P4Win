@@ -19,6 +19,8 @@ enum FileAction
 	F_BRANCH,
 	F_INTEGRATE,
 	F_IMPORT,
+	F_MOVEADD,
+	F_MODEDELETE,
 	
 	F_MAXACTION
 };
