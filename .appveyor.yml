@@ -1,0 +1,22 @@
+image:
+  - Visual Studio 2017
+
+platform:
+  - x86
+
+configuration:
+  - Debug
+  - Release
+
+install:
+  - git submodule update --init
+  - cinst strawberryperl
+  - set PATH=%PATH%;C:\Strawberry\perl\bin
+
+build_script:
+  - cmd: cd Dependencies
+  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+  - cmd: openssl-build
+  - cmd: cd ..
+  - cmd: premake vs2017
+  - cmd: msbuild Build\P4Win.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32 /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:minimal

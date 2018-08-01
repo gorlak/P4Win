@@ -89,7 +89,7 @@ configuration "Release"
 	symbols "On"
 	optimize "Speed"
 	editandcontinue "Off"
-	omitframepointer "On"
+	--omitframepointer "On"
 	buildoptions
 	{
 		"/Ob2",
