@@ -6,4 +6,5 @@ configuration:
   - Release
 
 build_script:
+  - cmd: cd Dependencies
   - cmd: dir
