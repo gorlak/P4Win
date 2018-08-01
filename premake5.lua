@@ -1,5 +1,11 @@
 newoption
 {
+	trigger	= "client",
+	description	= "Build the p4 client",
+}
+
+newoption
+{
 	trigger	= "japanese",
 	description	= "Bundle japanese resources",
 }
@@ -31,7 +37,6 @@ defines
 	"_CRT_SECURE_NO_DEPRECATE",
 	"_CRT_NON_CONFORMING_SWPRINTFS",
 	"_WINSOCK_DEPRECATED_NO_WARNINGS",
-	"_AFXDLL=1",
 }
 
 buildoptions
@@ -95,11 +100,12 @@ configuration {}
 
 -- projects
 
-project "P4"
+project "P4API"
 
 	kind "StaticLib"
 	language "C++"
 	characterset "MBCS"
+	-- staticruntime "On"
 
 	defines
 	{
@@ -151,9 +157,11 @@ project "P4Win"
 	kind "WindowedApp"
 	language "C++"
 	characterset "Unicode"
+	-- staticruntime "On"
 
 	flags
 	{
+		"MFC",
 		-- "FatalWarnings",
 	}
 
@@ -216,7 +224,7 @@ project "P4Win"
 
 	links
 	{
-		"P4",
+		"P4API",
 		"ssleay32",
 		"libeay32",
 		"dbghelp",
@@ -236,3 +244,80 @@ project "P4Win"
 		{
 			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/md"
 		}
+
+if _OPTIONS["client"] then
+	project "P4"
+
+		kind "ConsoleApp"
+		language "C++"
+		characterset "MBCS"
+		-- staticruntime "On"
+
+		disablewarnings
+		{
+			"4091", -- dbghelp.dll antics
+			"4996", -- deprecation
+		}
+
+		defines
+		{
+			"WIN32_LEAN_AND_MEAN", -- necessary for <rpc.h> debacle
+			"OS_NT",
+			"ID_OS=\"NTX64\"",
+			"ID_REL=\"2018.1\"",
+			"ID_PATCH=\"gorlak\"",
+			"ID_Y=\"0\"",
+			"ID_M=\"0\"",
+			"ID_D=\"0\"",
+			"Z_PREFIX",
+			"USE_SSL",
+		}
+
+		includedirs
+		{
+			"Dependencies/openssl-install/include",
+			"Dependencies/p4/client",
+			"Dependencies/p4/diff",
+			"Dependencies/p4/i18n",
+			"Dependencies/p4/map",
+			"Dependencies/p4/msgs",
+			"Dependencies/p4/net",
+			"Dependencies/p4/rpc",
+			"Dependencies/p4/support",
+			"Dependencies/p4/sys",
+			"Dependencies/p4/zlib",
+		}
+
+		local platform = "x64"
+		if _OPTIONS[ "architecture" ] == "x86" then
+			platform = "Win32"
+		end
+
+		files
+		{
+			"Dependencies/p4/client/clientmain.*",
+		}
+
+		links
+		{
+			"P4API",
+			"ssleay32",
+			"libeay32",
+			"dbghelp",
+			"ws2_32",
+			"wininet",
+			"setargv.obj",
+		}
+
+		configuration "Debug"
+			libdirs
+			{
+				"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/mdd"
+			}
+
+		configuration "not Debug"
+			libdirs
+			{
+				"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/md"
+			}
+end
