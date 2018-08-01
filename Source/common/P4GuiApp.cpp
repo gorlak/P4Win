@@ -71,8 +71,6 @@ BOOL CP4GuiApp::InitInstance()
         AfxMessageBox(msg, MB_ICONSTOP);
         return FALSE;
     }
-#else
-	AfxSetResourceHandle( this->m_hInstance );
 #endif
 
     SetRegistryKey(_T("Perforce"));
