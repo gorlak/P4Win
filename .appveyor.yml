@@ -9,6 +9,7 @@ configuration:
   - Release
 
 install:
+  - git submodule update --init
   - cinst strawberryperl
   - set PATH=%PATH%;C:\Strawberry\perl\bin
 
