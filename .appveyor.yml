@@ -8,6 +8,9 @@ configuration:
   - Debug
   - Release
 
+install:
+  - cinst strawberryperl
+
 build_script:
   - cmd: cd Dependencies
   - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
