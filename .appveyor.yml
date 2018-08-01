@@ -1,5 +1,9 @@
+image:
+  - Visual Studio 2017
+
 platform:
   - x86
+  - x64
 
 configuration:
   - Debug
@@ -7,4 +11,4 @@ configuration:
 
 build_script:
   - cmd: cd Dependencies
-  - cmd: dir
+  - cmd: openssl-build
