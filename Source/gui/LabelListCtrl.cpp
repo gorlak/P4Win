@@ -605,23 +605,23 @@ void CLabelListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
     SetIndexAndPoint( index, point );
 
 	// Can always create new label
-	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_NEW );
+	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_NEW, LoadStringResource(ID_LABEL_NEW) );
 
 	if(index != -1)
 	{
 		// Make sure item is selected
 		SetItemState(index, LVIS_SELECTED|LVIS_FOCUSED, LVIS_DROPHILITED|LVIS_SELECTED|LVIS_FOCUSED );
 
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_EDIT_SPEC );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_DESCRIBE );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_DELETE );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_TEMPLATE );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_EDIT_SPEC, LoadStringResource(ID_LABEL_EDIT_SPEC) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_DESCRIBE, LoadStringResource(ID_LABEL_DESCRIBE) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_DELETE, LoadStringResource(ID_LABEL_DELETE) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_TEMPLATE, LoadStringResource(ID_LABEL_TEMPLATE) );
 		popMenu.AppendMenu(MF_SEPARATOR);
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_LISTFILES );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_SYNC );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_DELETEFILES );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_SYNC_CLIENT );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_ADDTOLABELVIEW );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_LISTFILES, LoadStringResource(ID_LABEL_LISTFILES) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_SYNC, LoadStringResource(ID_LABEL_SYNC) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_DELETEFILES, LoadStringResource(ID_LABEL_DELETEFILES) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_SYNC_CLIENT, LoadStringResource(ID_LABEL_SYNC_CLIENT) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_ADDTOLABELVIEW, LoadStringResource(ID_LABEL_ADDTOLABELVIEW) );
 		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_LABEL_DIFF2, LoadStringResource(IDS_LABEL_DIFF2) );
 	}	
 

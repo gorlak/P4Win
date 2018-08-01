@@ -626,29 +626,29 @@ void CClientListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
     SetIndexAndPoint( index, point );
 
 	// Can always create a new client
-	popMenu.AppendMenu( stringsON, ID_CLIENTSPEC_NEW );
+	popMenu.AppendMenu( stringsON, ID_CLIENTSPEC_NEW, LoadStringResource(ID_CLIENTSPEC_NEW) );
 
 	// Only offer edit if no other client is selected
 	if ( index == -1 || GetSelectedItemText() == GET_P4REGPTR()->GetP4Client() )
-		popMenu.AppendMenu( stringsON, ID_CLIENT_EDITMY );
+		popMenu.AppendMenu( stringsON, ID_CLIENT_EDITMY, LoadStringResource(ID_CLIENT_EDITMY) );
 
 	if( index != -1 )
 	{
 		// Make sure item gets selected
 		SetItemState( index, LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED );
 			
-		popMenu.AppendMenu( stringsON, ID_CLIENT_DESCRIBE ); //or client edit if user is the owner
-		popMenu.AppendMenu( stringsON, ID_CLIENT_DELETE );
+		popMenu.AppendMenu( stringsON, ID_CLIENT_DESCRIBE, LoadStringResource(ID_CLIENT_DESCRIBE) ); //or client edit if user is the owner
+		popMenu.AppendMenu( stringsON, ID_CLIENT_DELETE, LoadStringResource(ID_CLIENT_DELETE) );
 
 		popMenu.AppendMenu( MF_SEPARATOR );
 
 		// Can only switch to a client if its not my current client
 		if ( GetSelectedItemText() != GET_P4REGPTR()->GetP4Client() )
-			popMenu.AppendMenu( stringsON, ID_CLIENTSPEC_SWITCH );
+			popMenu.AppendMenu( stringsON, ID_CLIENTSPEC_SWITCH, LoadStringResource(ID_CLIENTSPEC_SWITCH) );
 		else	// can only set as default if it is my current client
-			popMenu.AppendMenu( stringsON, ID_SETDEFCLIENT );
+			popMenu.AppendMenu( stringsON, ID_SETDEFCLIENT, LoadStringResource(ID_SETDEFCLIENT) );
 
-		popMenu.AppendMenu( stringsON, ID_CLIENT_TEMPLATE );
+		popMenu.AppendMenu( stringsON, ID_CLIENT_TEMPLATE, LoadStringResource(ID_CLIENT_TEMPLATE) );
 		if (GET_P4REGPTR()->LocalCliTemplateSw())
 		{
 			popMenu.AppendMenu( MF_SEPARATOR );

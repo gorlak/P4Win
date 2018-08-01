@@ -683,7 +683,7 @@ void COldChgListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 	if(index != -1)
 	{
 		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_CHANGE_EDSPEC, LoadStringResource( IDS_EDIT ) );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_CHANGE_DESCRIBE );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_CHANGE_DESCRIBE, LoadStringResource( ID_CHANGE_DESCRIBE ) );
 		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_CHANGE_ADDJOBFIX, LoadStringResource( IDS_ADDJOBFIX ) );
 		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_CHANGE_REMOVEFIX, LoadStringResource( IDS_CHANGE_REMOVEFIX ) );	
 		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_SYNC_CHANGE, LoadStringResource( IDS_SYNC_CHANGE ) );

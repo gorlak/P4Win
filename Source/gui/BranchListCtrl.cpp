@@ -301,18 +301,18 @@ void CBranchListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
     int	index;
     SetIndexAndPoint( index, point );
     
-	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_BRANCH_NEW );
+	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_BRANCH_NEW, LoadStringResource(ID_BRANCH_NEW) );
 	if( index != -1 )
 	{
 		// Make sure the item gets selected
 		SetItemState( index, LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED );
 		
 		// Then add menu commands that are relevant
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_BRANCH_EDITSPEC );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_BRANCH_DESCRIBE );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_BRANCH_DELETE );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_BRANCH_EDITSPEC, LoadStringResource(ID_BRANCH_EDITSPEC) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_BRANCH_DESCRIBE, LoadStringResource(ID_BRANCH_DESCRIBE) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_BRANCH_DELETE, LoadStringResource(ID_BRANCH_DELETE) );
 		popMenu.AppendMenu( MF_SEPARATOR );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_BRANCH_INTEG );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_BRANCH_INTEG, LoadStringResource(ID_BRANCH_INTEG) );
 	}
 	popMenu.AppendMenu( MF_SEPARATOR );
 	popMenu.AppendMenu( MF_ENABLED | MF_STRING, ID_FILTERBRANCHBYOWNER, 

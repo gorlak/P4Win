@@ -5603,12 +5603,12 @@ void CDeltaTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 
 		// Choice for empty changes if not default
 		if(!HasChildren(currentItem) && !defChange)
-			popMenu.AppendMenu( stringsON, ID_CHANGE_DEL );
+			popMenu.AppendMenu( stringsON, ID_CHANGE_DEL, LoadStringResource( ID_CHANGE_DEL ) );
 
 		// Choices relevant only to non-empty change
 		if(HasChildren(currentItem))
 		{
-			popMenu.AppendMenu( stringsON, ID_CHANGE_REVORIG );
+			popMenu.AppendMenu( stringsON, ID_CHANGE_REVORIG, LoadStringResource( ID_CHANGE_REVORIG ) );
 			popMenu.AppendMenu( stringsON, ID_FILE_DIFFHEAD, LoadStringResource(IDS_DIFFFILESAGAINSTDEPOT));	
 			popMenu.AppendMenu( stringsON, ID_POSITIONDEPOT, LoadStringResource(IDS_FINDCHGFILESINDEPOT_F));	
 		}

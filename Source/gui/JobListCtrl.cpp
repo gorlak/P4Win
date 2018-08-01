@@ -747,17 +747,17 @@ void CJobListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
     SetIndexAndPoint( index, point );
 
 	// Can always create new job
-	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_NEW );
+	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_NEW, LoadStringResource(ID_JOB_NEW) );
 
 	if(index != -1)
 	{
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_EDITSPEC );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_DESCRIBE );
-		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_DELETE );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_EDITSPEC, LoadStringResource(ID_JOB_EDITSPEC) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_DESCRIBE, LoadStringResource(ID_JOB_DESCRIBE) );
+		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_DELETE, LoadStringResource(ID_JOB_DELETE) );
 	}
 	popMenu.AppendMenu(MF_SEPARATOR);
-	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_SETFILTER );
-	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_REMOVEFILTER );
+	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_SETFILTER, LoadStringResource(ID_JOB_SETFILTER) );
+	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_REMOVEFILTER, LoadStringResource(ID_JOB_REMOVEFILTER) );
 	popMenu.AppendMenu(MF_SEPARATOR);
 	popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_JOB_SETFILEFILTER, LoadStringResource(IDS_FILTER_JOBVIEW) );
 	if (GET_P4REGPTR()->GetEnableSubChgIntegFilter())
