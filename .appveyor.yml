@@ -3,7 +3,6 @@ image:
 
 platform:
   - x86
-  - x64
 
 configuration:
   - Debug
@@ -11,4 +10,8 @@ configuration:
 
 build_script:
   - cmd: cd Dependencies
+  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
   - cmd: openssl-build
+  - cmd: cd ..
+  - cmd: premake vs2017
+  - cmd: msbuild Build\P4Win.sln /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:minimal
