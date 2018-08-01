@@ -18,54 +18,54 @@ if "%VSCMD_ARG_TGT_ARCH%" equ "x64" (
     set SETUP=ms\do_ms.bat
 )
 
+set RUNTIME=d
+
 pushd %~dp0openssl
 
 ::
-:: static crt
+:: Backup
 ::
 
-perl Configure %CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-mt
-call %SETUP%
-nmake -f ms\nt.mak
-nmake -f ms\nt.mak install
-copy /y tmp32\lib.pdb %~dp0\%PLATFORM%-mt\lib\
-nmake -f ms\nt.mak clean
+if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.orig
 
-perl Configure debug-%CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-mtd
+::
+:: Release
+::
+
+perl Configure %CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-m%RUNTIME%
 call %SETUP%
+
+if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.unhacked
+if "%RUNTIME%" equ "d" perl -p -e "s/\/MT/\/MD/g" ms\nt.mak.unhacked > ms\nt.mak
+
 nmake -f ms\nt.mak
 nmake -f ms\nt.mak install
-copy /y tmp32.dbg\lib.pdb %~dp0\%PLATFORM%-mtd\lib\
+copy /y tmp32\lib.pdb %~dp0\%PLATFORM%-m%RUNTIME%\lib\
 nmake -f ms\nt.mak clean
 
 ::
-:: dll crt
+:: Debug
 ::
 
-copy /y ms\nt.mak ms\nt.mak.orig
-
-perl Configure %CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-md
+perl Configure debug-%CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-m%RUNTIME%d
 call %SETUP%
-copy /y ms\nt.mak ms\nt.mak.unhacked
-perl -p -e "s/\/MT/\/MD/g" ms\nt.mak.unhacked > ms\nt.mak
+
+if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.unhacked
+if "%RUNTIME%" equ "d" perl -p -e "s/\/MT/\/MD/g" ms\nt.mak.unhacked > ms\nt.mak
+
 nmake -f ms\nt.mak
 nmake -f ms\nt.mak install
-copy /y tmp32\lib.pdb %~dp0\%PLATFORM%-md\lib\
+copy /y tmp32.dbg\lib.pdb %~dp0\%PLATFORM%-m%RUNTIME%d\lib\
 nmake -f ms\nt.mak clean
-
-perl Configure debug-%CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-mdd
-call %SETUP%
-copy /y ms\nt.mak ms\nt.mak.unhacked
-perl -p -e "s/\/MT/\/MD/g" ms\nt.mak.unhacked > ms\nt.mak
-nmake -f ms\nt.mak
-nmake -f ms\nt.mak install
-copy /y tmp32.dbg\lib.pdb %~dp0\%PLATFORM%-mdd\lib\
-nmake -f ms\nt.mak clean
-
-copy /y ms\nt.mak.orig ms\nt.mak
 
 ::
-:: Tidy up workspace
+:: Restore
+::
+
+if "%RUNTIME%" equ "d" copy /y ms\nt.mak.orig ms\nt.mak
+
+::
+:: Tidy
 ::
 
 git checkout .
@@ -78,21 +78,14 @@ pushd %~dp0
 if exist openssl-install attrib -r openssl-install\*.* /s
 if exist openssl-install rmdir /s /q openssl-install
 
-ren %PLATFORM%-mt\lib mt
-ren %PLATFORM%-mtd\lib mtd
-ren %PLATFORM%-md\lib md
-ren %PLATFORM%-mdd\lib mdd
+ren %PLATFORM%-m%RUNTIME%\lib m%RUNTIME%
+ren %PLATFORM%-m%RUNTIME%d\lib m%RUNTIME%d
 
-ren %PLATFORM%-mt openssl-install
+ren %PLATFORM%-m%RUNTIME% openssl-install
 mkdir openssl-install\lib\vstudio-%VisualStudioVersion%\%PLATFORM%
-move openssl-install\mt openssl-install\lib\vstudio-%VisualStudioVersion%\%PLATFORM%\
-move %PLATFORM%-mtd\mtd openssl-install\lib\vstudio-%VisualStudioVersion%\%PLATFORM%\
-move %PLATFORM%-md\md openssl-install\lib\vstudio-%VisualStudioVersion%\%PLATFORM%\
-move %PLATFORM%-mdd\mdd openssl-install\lib\vstudio-%VisualStudioVersion%\%PLATFORM%\
-
-rmdir /s /q %PLATFORM%-mtd
-rmdir /s /q %PLATFORM%-md
-rmdir /s /q %PLATFORM%-mdd
+move openssl-install\m%RUNTIME% openssl-install\lib\vstudio-%VisualStudioVersion%\%PLATFORM%\
+move %PLATFORM%-m%RUNTIME%d\m%RUNTIME%d openssl-install\lib\vstudio-%VisualStudioVersion%\%PLATFORM%\
+rmdir /s /q %PLATFORM%-m%RUNTIME%d
 
 popd
 
