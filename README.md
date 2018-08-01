@@ -1,3 +1,4 @@
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/gorlak/P4Win?branch=master&svg=true)](https://ci.appveyor.com/project/GeoffEvans/p4win)
 
 ### About This Project
 
