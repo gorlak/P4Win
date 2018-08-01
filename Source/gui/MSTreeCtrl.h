@@ -33,7 +33,7 @@ protected:
 		FOLDER_ALREADY_EXPANDED = -2,
 	};
 private:
-	CDWordArray m_SelectionSet;
+	CPtrArray m_SelectionSet;
 	HTREEITEM m_LastParent;
 	HTREEITEM m_LastSelect;
 	HTREEITEM m_AnchorItem;
@@ -67,7 +67,7 @@ protected:
 // Attributes
 public:
 	virtual CWnd * GetWnd() { return this; }
-	int GetSelectionSetSize() { return m_SelectionSet.GetSize(); }
+	INT_PTR GetSelectionSetSize() { return m_SelectionSet.GetSize(); }
 
 // Operations
 private:
@@ -105,13 +105,13 @@ protected:
 	void SetLParam(HTREEITEM curr_item, LPARAM lParam);
 	void SetItemText(HTREEITEM curr_item, LPCTSTR txt);
 	void SetChildCount(HTREEITEM curr_item, int count);
-	DWORD GetLParam(HTREEITEM curr_item);
+	LPARAM GetLParam(HTREEITEM curr_item);
 	int GetImage(HTREEITEM curr_item);
 	int GetChildCount(HTREEITEM curr_item);
 	BOOL HasExpandedChildren(HTREEITEM curr_item);
 
 	// Access the selected items
-	int SelectionToIndex(HTREEITEM item);
+	INT_PTR SelectionToIndex(HTREEITEM item);
 	BOOL IsSelected(HTREEITEM item) { return SelectionToIndex(item) != -1; }
 	inline HTREEITEM GetLastSelectionParent() { return m_LastParent; }
 	inline HTREEITEM GetLastSelection() { return m_LastSelect; }
@@ -167,14 +167,14 @@ protected:
 	afx_msg void OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	DECLARE_MESSAGE_MAP()
 
 public:
 	void SetMultiSelect(BOOL b) { m_MultiSelect = b; }
 	HTREEITEM GetSelectedItem(int index);
 	CString GetItemText(HTREEITEM curr_item);
-	int GetSelectedCount();
+	INT_PTR GetSelectedCount();
 
 protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);

@@ -2452,7 +2452,7 @@ void CMainFrame::ClearLastUpdateTime()
 	_________________________________________________________________
 */
 
-void CMainFrame::OnTimer(UINT nIDEvent) 
+void CMainFrame::OnTimer(UINT_PTR nIDEvent) 
 {
 	CFrameWnd::OnTimer(nIDEvent);
 
@@ -2714,7 +2714,7 @@ void CMainFrame::OnFileAddSetDir(LPTSTR lpInitDir /*= NULL*/)
 	fDlg.m_ofn.nFilterIndex=GET_P4REGPTR()->GetAddFileFilterIndex();
 	
 	CString errorTxt;
-	int retcode=fDlg.DoModal();
+	INT_PTR retcode=fDlg.DoModal();
 
 	if(retcode == IDOK)
 	{
@@ -3254,7 +3254,7 @@ void CMainFrame::OnPositionToPrev()
 	}
 }
 
-LONG CMainFrame::OnFindReplace(WPARAM wParam, LPARAM lParam)
+LRESULT CMainFrame::OnFindReplace(WPARAM wParam, LPARAM lParam)
 {
 	LPFINDREPLACE lpfp = (LPFINDREPLACE)lParam;
 	if (m_pFRDlg->FindNext() || m_pFRDlg->IsTerminating())
@@ -4436,7 +4436,7 @@ void CMainFrame::OnToolsImport()
 	fDlg.m_ofn.nMaxCustFilter=512;
 
 	CString errorTxt;
-	int retcode=fDlg.DoModal();
+	INT_PTR retcode=fDlg.DoModal();
 
 	if(retcode == IDOK)
 	{
@@ -4765,7 +4765,7 @@ void CMainFrame::OnToolsExport()
 	fDlg.m_ofn.nMaxCustFilter=512;
 
 	CString errorTxt;
-	int retcode=fDlg.DoModal();
+	INT_PTR retcode=fDlg.DoModal();
 
 	if(retcode == IDOK)
 	{

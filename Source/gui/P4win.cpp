@@ -198,7 +198,7 @@ void CP4winApp::ParseArg(LPCTSTR pArg)
         case view:
             if(lstrlen(pArg))
             {
-                m_InitialView = (TCHAR)CharUpper((LPTSTR)(TBYTE)pArg[0]);
+				m_InitialView = ::toupper( pArg[0] );
                 return;
             }
         case charset:
@@ -341,16 +341,16 @@ BOOL CP4winApp::InitInstance()
 			{ 
 				TCHAR *p = ep->buf;
 				lstrcpy(p, GET_P4REGPTR()->GetP4Port());
-				ep->port = p - ep->buf;
+				ep->port = static_cast<int>(p - ep->buf);
 				p += lstrlen(p) + 1;
 				lstrcpy(p, GET_P4REGPTR()->GetP4Client());
-				ep->client = p - ep->buf;
+				ep->client = static_cast<int>(p - ep->buf);
 				p += lstrlen(p) + 1;
 				lstrcpy(p, GET_P4REGPTR()->GetP4User());
-				ep->user = p - ep->buf;
+				ep->user = static_cast<int>(p - ep->buf);
 				p += lstrlen(p) + 1;
 				lstrcpy(p, m_ExpandPath);
-				ep->path = p - ep->buf;
+				ep->path = static_cast<int>(p - ep->buf);
 				::SendMessage( HWND_BROADCAST, m_WM_SENDCMD, (WPARAM)1, (LPARAM)0 );
 				Sleep(500);
 				if (ep->flag)
@@ -1405,7 +1405,7 @@ BOOL CP4winApp::RunApp(int app, RunAppMode mode, HWND hWnd, BOOL isUnicode,
 	than the defines because they are not defined on NT.
 	*/
 
-	DWORD dwLockTimeout = 0;
+	DWORD_PTR dwLockTimeout = 0;
 	SystemParametersInfo(0x2000 /*==SPI_GETFOREGROUNDLOCKTIMEOUT*/, NULL, &dwLockTimeout, NULL);
 	if (dwLockTimeout && (mode == RA_WAIT))
 		SystemParametersInfo(0x2001 /*==SPI_SETFOREGROUNDLOCKTIMEOUT*/, 0, (LPVOID)0, SPIF_SENDWININICHANGE | SPIF_UPDATEINIFILE);
@@ -1791,8 +1791,8 @@ CString MakeCRs(LPCTSTR text)
         // even if it is a double byte char, or an expanded CR
         if(pOut - pOutBuf + 2 > size - 1)
         {
-            int oldSize = pOut - pOutBuf;
-            int nLastNonCR = pLastNonCR - pOutBuf;
+            int oldSize = static_cast<int>(pOut - pOutBuf);
+            int nLastNonCR = static_cast<int>(pLastNonCR - pOutBuf);
             out.ReleaseBuffer(oldSize);
             size += growBy;
             pOutBuf = out.GetBufferSetLength(size);
@@ -1858,8 +1858,8 @@ CString MakeLFs(LPCTSTR text)
         // even if it is a double byte char, or an expanded CR
         if(pOut - pOutBuf + 2 > size - 1)
         {
-            int oldSize = pOut - pOutBuf;
-            int nLastNonCR = pLastNonCR - pOutBuf;
+            int oldSize = static_cast<int>(pOut - pOutBuf);
+            int nLastNonCR = static_cast<int>(pLastNonCR - pOutBuf);
             out.ReleaseBuffer(oldSize);
             size += growBy;
             pOutBuf = out.GetBufferSetLength(size);
@@ -2066,7 +2066,7 @@ int nCommon(LPCTSTR str1, LPCTSTR str2)
 	LPCTSTR ptr2= str2;
 
 	if(IS_NOCASE())
-	 	while( (TBYTE)CharUpper((LPTSTR)(TBYTE)*ptr1) == (TBYTE)CharUpper((LPTSTR)(TBYTE)*ptr2) && 
+	 	while( ::toupper(*ptr1) == ::toupper(*ptr2) && 
             *ptr1 != _T('\0') && *ptr2 != _T('\0'))
 		{		
 			commonLength++;
@@ -2285,7 +2285,7 @@ void CP4winApp::OnNewWindow()
 
 void CP4winApp::GetFileType(const CString &itemStr, int &BaseType, int &StoreType,
 							BOOL &TypeK, BOOL &TypeW, BOOL &TypeX, BOOL &TypeO,
-							BOOL &TypeM, BOOL &TypeL, BOOL &TypeS, int &NbrRevs, BOOL &Unknown)
+							BOOL &TypeM, BOOL &TypeL, BOOL &TypeS, DWORD_PTR &NbrRevs, BOOL &Unknown)
 {
 	TypeS = FALSE;
 
@@ -2367,7 +2367,7 @@ void CP4winApp::GetFileType(const CString &itemStr, int &BaseType, int &StoreTyp
 				if (_istdigit(itemStr.GetAt(plus+1)))
 				{
 					CString str = itemStr.Mid(plus+1);
-					NbrRevs = (int)_tstof(str);
+					NbrRevs = static_cast<DWORD_PTR>(_tstof(str));
 					if (NbrRevs < 1)
 						NbrRevs = 1;
 					while (_istdigit(itemStr.GetAt(++plus)))

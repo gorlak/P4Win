@@ -245,7 +245,7 @@ private:
     CStringArray m_args;
     CArray<char*,char*> m_argsA;
 protected:
-    int GetArgc() const { return m_args.GetSize(); }
+    INT_PTR GetArgc() const { return m_args.GetSize(); }
     LPCTSTR GetArgv(int index) const { return m_args.GetAt(index); }
 	int m_BaseArgs;
 

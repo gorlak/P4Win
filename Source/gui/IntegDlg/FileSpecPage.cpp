@@ -254,7 +254,7 @@ void CIntegFileSpecPage::LoadBranchView(void)
 			while (*++p != _T('\n'))
 				;
 		}
-		p = q + m_Description.Find(_T("\nView:\n"), p - q) + sizeof(_T("\nView:\n"))/sizeof(TCHAR) - 1;
+		p = q + m_Description.Find(_T("\nView:\n"), static_cast<int>(p - q)) + sizeof(_T("\nView:\n"))/sizeof(TCHAR) - 1;
 		while (*p)
 		{
 			if ((TBYTE)(*p) <= _T(' '))
@@ -487,7 +487,7 @@ BOOL CIntegFileSpecPage::OnInitDialog()
 
 LRESULT CIntegFileSpecPage::OnGotoDlgCtrl(WPARAM wParam, LPARAM lParam)
 {
-	GotoDlgCtrl(GetDlgItem(wParam));
+	GotoDlgCtrl(GetDlgItem(static_cast<int>(wParam)));
 	return 0;
 }
 
@@ -1197,11 +1197,11 @@ void CIntegFileSpecPage::OnSysCommand(UINT nID, LPARAM lParam)
 LRESULT CIntegFileSpecPage::OnEnableDisableButtons(WPARAM wParam, LPARAM lParam)
 {
 	if( m_BranchFlag == INTEG_USING_BRANCH_SPEC )
-		GetDlgItem(IDC_BACK)->EnableWindow( lParam );
-	GetDlgItem( IDC_ADVOPTS )->EnableWindow( lParam );
-	GetDlgItem( IDC_PREVIEW )->EnableWindow( lParam );
-	GetDlgItem( IDC_FINISH )->EnableWindow( lParam );
-	GetDlgItem( IDHELP )->EnableWindow( lParam );
+		GetDlgItem(IDC_BACK)->EnableWindow( lParam != 0 );
+	GetDlgItem( IDC_ADVOPTS )->EnableWindow( lParam != 0 );
+	GetDlgItem( IDC_PREVIEW )->EnableWindow( lParam != 0 );
+	GetDlgItem( IDC_FINISH )->EnableWindow( lParam != 0 );
+	GetDlgItem( IDHELP )->EnableWindow( lParam != 0 );
 	GetDlgItem( IDCANCEL )->SetWindowText( LoadStringResource(lParam ? IDS_CANCEL : IDS_CLOSE) );
 	return 0;
 }

@@ -68,6 +68,32 @@ const int StackColumns = 4;		// Number of columns in stack dump.
 #define	ONEM			(ONEK*ONEK)
 #define	ONEG			(ONEK*ONEK*ONEK)
 
+#if defined(_M_IX86)
+# define IMAGE_FILE_ARCH IMAGE_FILE_MACHINE_I386
+# define AXREG Eax
+# define BXREG Ebx
+# define CXREG Ecx
+# define DXREG Edx
+# define SIREG Esi
+# define DIREG Edi
+# define BPREG Ebp
+# define IPREG Eip
+# define SPREG Esp
+#elif defined(_M_X64)
+# define IMAGE_FILE_ARCH IMAGE_FILE_MACHINE_AMD64
+# define AXREG Rax
+# define BXREG Rbx
+# define CXREG Rcx
+# define DXREG Rdx
+# define SIREG Rsi
+# define DIREG Rdi
+# define BPREG Rbp
+# define IPREG Rip
+# define SPREG Rsp
+#else
+# error Machine type not supported
+#endif // _M_IX86
+
 static bool allowER = false;
 
 void EnableErrorRecording(bool allow)
@@ -562,8 +588,12 @@ static void DumpStack(HANDLE LogFile, DWORD *pStack)
 	{
 		// Esp contains the bottom of the stack, or at least the bottom of
 		// the currently used area.
-		DWORD* pStackTop;
+		void* pStackTop;
 
+#ifdef _M_AMD64
+		NT_TIB* pTib = (NT_TIB *)NtCurrentTeb();
+		pStackTop = pTib->StackBase;
+#else
 		__asm
 		{
 			// Load the top (highest address) of the stack from the
@@ -572,6 +602,7 @@ static void DumpStack(HANDLE LogFile, DWORD *pStack)
 			mov	eax, fs:[4]
 			mov pStackTop, eax
 		}
+#endif
 
 		if (pStackTop > pStack + MaxStackDump)
 			pStackTop = pStack + MaxStackDump;
@@ -646,14 +677,14 @@ static void DumpRegisters(HANDLE LogFile, PCONTEXT Context)
 	// Print out the register values in an XP error window compatible format.
 	hprintf(LogFile, _T("\r\n"));
 	hprintf(LogFile, _T("Context:\r\n"));
-	hprintf(LogFile, _T("EDI:    0x%08x  ESI: 0x%08x  EAX:   0x%08x\r\n"),
-				Context->Edi, Context->Esi, Context->Eax);
-	hprintf(LogFile, _T("EBX:    0x%08x  ECX: 0x%08x  EDX:   0x%08x\r\n"),
-				Context->Ebx, Context->Ecx, Context->Edx);
-	hprintf(LogFile, _T("EIP:    0x%08x  EBP: 0x%08x  SegCs: 0x%08x\r\n"),
-				Context->Eip, Context->Ebp, Context->SegCs);
-	hprintf(LogFile, _T("EFlags: 0x%08x  ESP: 0x%08x  SegSs: 0x%08x\r\n"),
-				Context->EFlags, Context->Esp, Context->SegSs);
+	hprintf(LogFile, _T("DI:    0x%08x  SI: 0x%08x  AX:   0x%08x\r\n"),
+				Context->DIREG, Context->SIREG, Context->AXREG);
+	hprintf(LogFile, _T("BX:    0x%08x  CX: 0x%08x  DX:   0x%08x\r\n"),
+				Context->BXREG, Context->CXREG, Context->DXREG);
+	hprintf(LogFile, _T("IP:    0x%08x  BP: 0x%08x  SegCs: 0x%08x\r\n"),
+				Context->IPREG, Context->BPREG, Context->SegCs);
+	hprintf(LogFile, _T("Flags: 0x%08x  SP: 0x%08x  SegSs: 0x%08x\r\n"),
+				Context->EFlags, Context->SPREG, Context->SegSs);
 }
 
 static bool WriteErrorLog(LPCTSTR pszPath, PEXCEPTION_POINTERS pExceptPtrs, LPCTSTR pszModuleFileName)
@@ -682,7 +713,7 @@ static bool WriteErrorLog(LPCTSTR pszPath, PEXCEPTION_POINTERS pExceptPtrs, LPCT
 	// VirtualQuery can be used to get the allocation base associated with a
 	// code address, which is the same as the ModuleHandle. This can be used
 	// to get the filename of the module that the crash happened in.
-	if (VirtualQuery((void*)Context->Eip, &MemInfo, sizeof(MemInfo)) &&
+	if (VirtualQuery((void*)Context->IPREG, &MemInfo, sizeof(MemInfo)) &&
 						(GetModuleFileName((HINSTANCE)MemInfo.AllocationBase,
 										  szCrashModulePathName,
 										  sizeof(szCrashModulePathName)-2) > 0))
@@ -695,7 +726,7 @@ static bool WriteErrorLog(LPCTSTR pszPath, PEXCEPTION_POINTERS pExceptPtrs, LPCT
 	hprintf(hLogFile, _T("%s caused %s (0x%08x) \r\nin module %s at %04x:%08x.\r\n\r\n"),
 				pszModuleFileName, GetExceptionDescription(Exception->ExceptionCode),
 				Exception->ExceptionCode,
-				pszCrashModuleFileName, Context->SegCs, Context->Eip);
+				pszCrashModuleFileName, Context->SegCs, Context->IPREG);
 
 	DumpSystemInformation(hLogFile);
 
@@ -730,7 +761,7 @@ static bool WriteErrorLog(LPCTSTR pszPath, PEXCEPTION_POINTERS pExceptPtrs, LPCT
 	// is no memory to read. If the dereferencing of code[] fails, the
 	// exception handler will print '??'.
 	hprintf(hLogFile, _T("\r\nBytes at CS:EIP:\r\n"));
-	BYTE * code = (BYTE *)Context->Eip;
+	BYTE * code = (BYTE *)Context->IPREG;
 	for (int codebyte = 0; codebyte < NumCodeBytes; codebyte++)
 	{
 		__try
@@ -749,7 +780,7 @@ static bool WriteErrorLog(LPCTSTR pszPath, PEXCEPTION_POINTERS pExceptPtrs, LPCT
 
 	// Esp contains the bottom of the stack, or at least the bottom of
 	// the currently used area
-	DWORD* pStack = (DWORD *)Context->Esp;
+	DWORD* pStack = (DWORD *)Context->SPREG;
 
 	DumpStack(hLogFile, pStack);
 
@@ -835,7 +866,7 @@ int __cdecl RecordExceptionInfo(PEXCEPTION_POINTERS pExceptPtrs)
 
 	// Get path to executable directory and append error folder name
 	TCHAR szPath[MAX_PATH*2];
-	lstrcpyn(szPath, szModuleName, pszFilePart - szModuleName);
+	lstrcpyn(szPath, szModuleName, static_cast<int>(pszFilePart - szModuleName));
 	szPath[pszFilePart - szModuleName] = 0;
 	lstrcat(szPath, XCRASHREPORT_ERROR_FOLDER);
 	CreateDirectory(szPath,NULL);

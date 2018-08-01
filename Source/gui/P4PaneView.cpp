@@ -417,7 +417,7 @@ void CCaptionTextControl::DrawItem(LPDRAWITEMSTRUCT di)
 	dc.Detach();
 }
 
-int CCaptionTextControl::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
+INT_PTR CCaptionTextControl::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
 {
 	// CWnd implementation won't do us any good, so we have to handle
 	// this.

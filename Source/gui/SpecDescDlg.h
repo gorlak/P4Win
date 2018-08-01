@@ -329,7 +329,7 @@ protected:
 	afx_msg void OnPositionToPrev();
 	afx_msg void OnUpdatePositionToNext(CCmdUI* pCmdUI);
 	afx_msg void OnPositionToNext();
-	afx_msg LONG OnFindReplace(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnFindReplace(WPARAM wParam, LPARAM lParam);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

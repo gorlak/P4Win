@@ -75,7 +75,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CIntegRevRange message handlers
 
-int CIntegRevRange::DoModal() 
+INT_PTR CIntegRevRange::DoModal() 
 {
 	return CPropertyPage::DoModal();
 }

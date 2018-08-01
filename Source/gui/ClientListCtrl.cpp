@@ -239,7 +239,7 @@ void CClientListCtrl::DoClientspecNew(BOOL bUseDefTemplate, LPCTSTR defName )
 		dlg.SetName(clientname);
 		dlg.SetPort(port);
 		dlg.AllowBrowse(FALSE);
-		int rc;
+		INT_PTR rc;
 		while(1)
 		{
 			if( (rc = dlg.DoModal()) == IDCANCEL )	// user bailed
@@ -1226,7 +1226,7 @@ LRESULT CClientListCtrl::OnP4ClientList(WPARAM wParam, LPARAM lParam)
 	{
 		CString msg;
 		CObList const *clients= pCmd->GetList();
-		int count = clients->GetCount();
+		INT_PTR count = clients->GetCount();
 
 		SetRedraw(FALSE);
     	int index = 0;
@@ -1571,7 +1571,7 @@ int CClientListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	ASSERT( CLIENT_MAXCOL == colnames.GetSize( ) );
     //FIXTHIS: default column widths should be in resource
 	int width[ CLIENT_MAXCOL ]={90,90,90,90,150,150};
-	RestoreSavedWidths(width, colnames.GetSize( ), sRegValue_ClientList );
+	RestoreSavedWidths(width, static_cast<int>(colnames.GetSize()), sRegValue_ClientList );
 	InsertColumnHeaders( colnames, width );
 
 	return 0;
@@ -1684,7 +1684,7 @@ void CClientListCtrl::OnDiff2Clients()
 	if (!m_Active.IsEmpty())
 		dlg.m_Edit1 = m_Active;
 	SET_APP_HALTED(TRUE);
-	int rc=dlg.DoModal();  
+	INT_PTR rc=dlg.DoModal();  
 	SET_APP_HALTED(FALSE);
 	if (rc == IDOK)
 	{

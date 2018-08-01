@@ -53,7 +53,7 @@ public:
 					   , const CString &format );
 
 public:
-	int GetNumItems( ) 
+	INT_PTR GetNumItems( ) 
 		{ return m_asSpecElems.GetSize( ) ; }
 
 	CString GetTagOf( int i )

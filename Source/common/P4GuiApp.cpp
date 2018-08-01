@@ -388,14 +388,7 @@ void CP4GuiApp::OnAppEmail()
                     NULL                            // files
                 };
 
-	//		static	bExcptHandler = FALSE;
-
-	//		if (!bExcptHandler)
-	//		{
-	//			bExcptHandler = TRUE;
-	//			SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)topLevelExceptionFilter);
-	//		}
-			(lpfnMAPISendMail)(0, (ULONG)(m_pMainWnd->m_hWnd), &mm, MAPI_DIALOG | MAPI_LOGON_UI, 0);
+			(lpfnMAPISendMail)(0, reinterpret_cast<ULONG_PTR>(m_pMainWnd->m_hWnd), &mm, MAPI_DIALOG | MAPI_LOGON_UI, 0);
 		}
 		else
 			AfxMessageBox(LoadStringResource(IDS_UNABLE_TO_SEND_MAIL_MESSAGE));

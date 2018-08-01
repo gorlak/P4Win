@@ -330,7 +330,7 @@ public:
 	CP4ViewImageList *GetViewImageList() { return m_viewImageList; }
 	CP4WinToolBarImageList *GetToolBarImageList() { return m_toolBarImageList; }
 	int GetFileImageIndex(CP4FileStats *fs, BOOL IsChangesWindow=FALSE);
-	void GetFileType(const CString &itemStr,int &BaseType,int &StoreType,BOOL &TypeK,BOOL &TypeW,BOOL &TypeX,BOOL &TypeO,BOOL &TypeM,BOOL &TypeL,BOOL &TypeS,int &NbrRevs,BOOL &Unknown);
+	void GetFileType(const CString &itemStr,int &BaseType,int &StoreType,BOOL &TypeK,BOOL &TypeW,BOOL &TypeX,BOOL &TypeO,BOOL &TypeM,BOOL &TypeL,BOOL &TypeS,DWORD_PTR &NbrRevs,BOOL &Unknown);
 	BOOL Set_m_ClientRoot(LPCTSTR clientroot);
 	BOOL Set_m_ClientSubOpts(LPCTSTR clientSubOpts);
 	void OnSysColorChange();

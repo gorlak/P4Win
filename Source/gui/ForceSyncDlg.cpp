@@ -450,7 +450,7 @@ void CForceSyncDlg::OnDiffFile(BOOL bHave)
 
 	if (bHave)
 	{
-		int cnt = m_StringList.GetCount();
+		INT_PTR cnt = m_StringList.GetCount();
 		CCmd_Fstat *pCmd2= new CCmd_Fstat;
 		pCmd2->Init(NULL, RUN_SYNC);
 		if( pCmd2->Run( FALSE, &m_StringList, TRUE, 0 ) && !pCmd2->GetError() )

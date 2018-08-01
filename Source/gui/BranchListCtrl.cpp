@@ -422,7 +422,7 @@ LRESULT CBranchListCtrl::OnRequestBranchesList(WPARAM wParam, LPARAM lParam)
 	ASSERT_KINDOF(CWnd, pWnd);
 
 	// Clear the branches list
-	for( int index= m_BranchesList.GetUpperBound(); index >= 0; index-- )
+	for( INT_PTR index= m_BranchesList.GetUpperBound(); index >= 0; index-- )
 		delete m_BranchesList.GetAt( index );
 	m_BranchesList.RemoveAll();
 
@@ -736,7 +736,7 @@ int CBranchListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	ASSERT( BRANCH_MAXCOL == colnames.GetSize( ) );
     //FIXTHIS: move default widths into resource
 	int width[BRANCH_MAXCOL]={90,90,60,90,250};
-	RestoreSavedWidths(width, colnames.GetSize( ), sRegKey_ColumnNames);
+	RestoreSavedWidths(width, static_cast<int>(colnames.GetSize()), sRegKey_ColumnNames);
 	if (width[BRANCH_UPDATEDATE] > 5000 && width[BRANCH_DESC] > 5000)
 		width[BRANCH_OPTIONS] = width[BRANCH_UPDATEDATE] = width[BRANCH_DESC] = 90;
 	InsertColumnHeaders( colnames, width );

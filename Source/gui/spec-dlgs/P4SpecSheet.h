@@ -46,7 +46,7 @@ protected:
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CP4SpecSheet)
 	public:
-	virtual int DoModal();
+	virtual INT_PTR DoModal();
 	virtual void OnCancel();
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

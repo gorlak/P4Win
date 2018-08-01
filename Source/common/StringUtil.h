@@ -50,7 +50,7 @@ inline CString TruncateString(LPCTSTR str, int limit)
 	LPCTSTR pEnd = str;
 	while(limit-- && *pEnd)
 		pEnd = CharNext(pEnd);
-	return CString(str, pEnd - str);
+	return CString(str, static_cast<int>(pEnd - str));
 }
 
 inline void ConvertDates( CString &date1, CString &date2 )

@@ -64,7 +64,7 @@ public:
 	// ClassWizard generate virtual function overrides
 	//{{AFX_VIRTUAL(CIntegRevRange)
 	public:
-	virtual int DoModal();
+	virtual INT_PTR DoModal();
 	virtual void OnOK();
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

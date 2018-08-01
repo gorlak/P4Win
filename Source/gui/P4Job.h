@@ -59,7 +59,7 @@ public:
 	LPCTSTR GetStatusText() const {ASSERT(m_Initialized); return m_IdxStatusTxt == -1 ? _T("") : m_FieldData.GetAt(m_IdxStatusTxt); }
 	LPCTSTR GetDescription() const {ASSERT(m_Initialized); return m_IdxDescription == -1 ? _T("") : m_FieldData.GetAt(m_IdxDescription); }
 
-	LPCTSTR GetJobField(int i) const;
+	LPCTSTR GetJobField(INT_PTR i) const;
 	LPCTSTR GetJobFieldByCode(DWORD code) const;
 
 	void SetJobStatus(UINT status);

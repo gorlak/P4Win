@@ -305,7 +305,7 @@ public:
 	// Call this with TRUE to have ExpandDepotString() start keeping a list of found items
 	// Call this with FALSE to stop ExpandDepotString() from adding to the list
 	void SetAdd2ExpandItemList(BOOL b) { m_Add2ExpandItemList = b; if (b) m_ExpandItemList.RemoveAll(); }
-	int  GetExpandItemListCount() { return m_ExpandItemList.GetCount(); }
+	INT_PTR  GetExpandItemListCount() { return m_ExpandItemList.GetCount(); }
 	BOOL SelectExpandItemList();
 
 	//		called by mainframe to initiate updates of depot view

@@ -217,7 +217,7 @@ void CTempDirPage::OnBrowse()
 	// Set filter index
 	fDlg.m_ofn.nFilterIndex=1;
 	
-	int retcode=fDlg.DoModal();
+	INT_PTR retcode=fDlg.DoModal();
 
 	if(retcode == IDOK)
 	{

@@ -132,7 +132,7 @@ BOOL CP4Job::Create(LPCTSTR jobsRow, CDWordArray *codes)
 
 	m_FieldData.Add(jobName);
 
-	int max = codes->GetSize();
+	INT_PTR max = codes->GetSize();
 	for (int i = 0; ++i < max; )
 	{
 		switch (codes->GetAt(i))
@@ -188,7 +188,7 @@ void CP4Job::Create(CStringArray &names, CDWordArray &codes)
 {
 	m_FieldData.Copy(names);
 	m_FieldCodes.Copy(codes);
-	int max = m_FieldCodes.GetSize();
+	INT_PTR max = m_FieldCodes.GetSize();
 	for (int i = 0; ++i < max; )
 	{
 		switch (m_FieldCodes.GetAt(i))
@@ -216,8 +216,8 @@ void CP4Job::ConvertToColumns(CArray<int, int> &colCodes, CStringArray &colNames
 	CString txt;
 	CStringArray newFieldData;
 	CDWordArray  newFieldCodes;
-	int maxFlds = fieldNames.GetSize();
-	int maxCols = colNames.GetSize();
+	INT_PTR maxFlds = fieldNames.GetSize();
+	INT_PTR maxCols = colNames.GetSize();
     for( int subItem=0; subItem < maxCols; subItem++ )
     {
 		txt = _T("");
@@ -242,7 +242,7 @@ void CP4Job::ConvertToColumns(CArray<int, int> &colCodes, CStringArray &colNames
 	m_FieldCodes.SetSize(0);
 	m_FieldCodes.Copy(newFieldCodes);
 
-	int max = m_FieldCodes.GetSize();
+	INT_PTR max = m_FieldCodes.GetSize();
 	for (int i = 0; ++i < max; )
 	{
 		switch (m_FieldCodes.GetAt(i))
@@ -292,7 +292,7 @@ BOOL CP4Job::Create(StrDict *varlist, CStringArray *fieldnames, CDWordArray *fie
 		}
 		m_FieldCodes.Copy(*fieldCodes);
 
-		int max = m_FieldCodes.GetSize();
+		INT_PTR max = m_FieldCodes.GetSize();
 		for (i = 0; ++i < max; )
 		{
 			switch (m_FieldCodes.GetAt(i))
@@ -349,7 +349,7 @@ void CP4Job::SetJobStatus(UINT status)
 
 BOOL CP4Job::HaveCode( CDWordArray *codes, DWORD code )
 {
-	int max = codes->GetSize();
+	INT_PTR max = codes->GetSize();
     for( int i=-1; ++i < max; )
     {
         if( code == codes->GetAt(i) )
@@ -359,7 +359,7 @@ BOOL CP4Job::HaveCode( CDWordArray *codes, DWORD code )
     return FALSE;
 }
 
-LPCTSTR CP4Job::GetJobField(int i) const
+LPCTSTR CP4Job::GetJobField(INT_PTR i) const
 {
 	ASSERT(m_OKbyColm);
 	return ((i < m_FieldData.GetSize()) && (i >= 0)) ? m_FieldData.GetAt(i) : _T("???");
@@ -368,7 +368,7 @@ LPCTSTR CP4Job::GetJobField(int i) const
 LPCTSTR CP4Job::GetJobFieldByCode(DWORD code) const
 {
 	ASSERT(m_OKbyCode);
-	int max = m_FieldCodes.GetSize();
+	INT_PTR max = m_FieldCodes.GetSize();
 	for (int i = -1; ++i < max; )
 	{
 		if (m_FieldCodes.GetAt(i) == code)

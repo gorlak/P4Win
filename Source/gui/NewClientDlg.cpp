@@ -148,7 +148,7 @@ void CNewClientDlg::SetNew( const CString &type )
 	_________________________________________________________________
 */
 
-int CNewClientDlg::DoModal() 
+INT_PTR CNewClientDlg::DoModal() 
 {
 	ASSERT ( !m_What.IsEmpty( ) );
 	return CDialog::DoModal();

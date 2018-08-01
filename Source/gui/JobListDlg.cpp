@@ -88,7 +88,7 @@ BOOL CJobListDlg::OnInitDialog()
 	SetFont(m_Font);
 	
 	// Modify the list control style so that the entire selected row is highlighted
-	DWORD dwStyle = ::SendMessage(m_JobListCtrl.m_hWnd,LVM_GETEXTENDEDLISTVIEWSTYLE,0,0);
+	LRESULT dwStyle = ::SendMessage(m_JobListCtrl.m_hWnd,LVM_GETEXTENDEDLISTVIEWSTYLE,0,0);
 	dwStyle |= LVS_EX_FULLROWSELECT;
 	::SendMessage(m_JobListCtrl.m_hWnd,LVM_SETEXTENDEDLISTVIEWSTYLE,0,dwStyle);
 
@@ -144,7 +144,7 @@ BOOL CJobListDlg::OnInitDialog()
 	m_JobListCtrl.SetFont(m_Font);
 
 	// Insert the columns 
-	int maxcols = m_ColNames->GetSize();
+	INT_PTR maxcols = m_ColNames->GetSize();
 	int width=GetSystemMetrics(SM_CXVSCROLL);;
 	int retval;
 	LV_COLUMN lvCol;
@@ -545,7 +545,7 @@ int CALLBACK JobListDlgSort(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 		rc = txt2.Compare(txt1);
 
 	// check for duplicate keys; if so, sort on next sort columns
-	if (!rc && lParamSort && ((nextcol = pDlg->NextSortColumn(lParamSort)) != 0))
+	if (!rc && lParamSort && ((nextcol = pDlg->NextSortColumn( static_cast<int>( lParamSort ) )) != 0))
 	{
 		// nextcol now contains a value like 1 for col-0-ascending or like -1 for col-0-decending
 		BOOL saveSortAscending = pDlg->IsSortAscending();

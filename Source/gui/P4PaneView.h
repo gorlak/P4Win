@@ -20,7 +20,7 @@ class CCaptionTextControl : public CButton
 {
 	DECLARE_DYNCREATE(CCaptionTextControl)
 	virtual void DrawItem(LPDRAWITEMSTRUCT);
-	int OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
+	INT_PTR OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
 	bool m_textTruncated;
 public:
 	DECLARE_MESSAGE_MAP()

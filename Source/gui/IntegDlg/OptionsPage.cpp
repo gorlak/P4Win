@@ -85,7 +85,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CIntegOptionsPage message handlers
 
-int CIntegOptionsPage::DoModal() 
+INT_PTR CIntegOptionsPage::DoModal() 
 {
 	return CPropertyPage::DoModal();
 }

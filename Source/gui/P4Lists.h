@@ -62,7 +62,7 @@ public:
 	CRevision *GetNextRevision();
 	CRevision *GetHeadRevision();
 	CRevision *GetPrevRevision();
-	int GetRevisionCount();
+	INT_PTR GetRevisionCount();
 	CString GetFileName();
 	void Clear();
 

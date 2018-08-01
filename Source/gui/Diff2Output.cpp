@@ -114,7 +114,7 @@ BOOL CDiff2Output::OnInitDialog()
 	SetFont(m_Font);
 
 	// Modify the list control style so that the entire selected row is highlighted
-	DWORD dwStyle = ::SendMessage(m_ListCtrl.m_hWnd,LVM_GETEXTENDEDLISTVIEWSTYLE,0,0);
+	LRESULT dwStyle = ::SendMessage(m_ListCtrl.m_hWnd,LVM_GETEXTENDEDLISTVIEWSTYLE,0,0);
 	dwStyle |= LVS_EX_FULLROWSELECT;
 	::SendMessage(m_ListCtrl.m_hWnd,LVM_SETEXTENDEDLISTVIEWSTYLE,0,dwStyle);
 
@@ -552,7 +552,7 @@ void CDiff2Output::OnItemchangedP4List(NMHDR* pNMHDR, LRESULT* pResult)
 	int index = m_ListCtrl.GetNextSelectedItem(pos);
 	CWnd *ctl = GetDlgItem(ID_DIFF2);
 	ctl->UpdateWindow();
-	BOOL enable = m_ListCtrl.GetItemData(index);
+	BOOL enable = m_ListCtrl.GetItemData(index) != 0;
 	if(enable != ctl->IsWindowEnabled())
 		ctl->EnableWindow(enable);	// 0 -> cannot diff; 1 -> can diff
 }
@@ -830,20 +830,20 @@ LRESULT CDiff2Output::OnP4ViewFile(WPARAM wParam, LPARAM lParam)
 						extension.CompareNoCase(_T("bat")) != 0 && extension.CompareNoCase(_T("cmd")) != 0)
 					{										// give VS .NET 7.1 (non-standard!) a try
 						hinst= ShellExecute( m_hWnd, _T("Open.VisualStudio.7.1"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-						if( (int) hinst > 32)
+						if( reinterpret_cast<intptr_t>( hinst ) > 32)
 						{
 							break;  // successfull viewer launch
 						}
-						if( (int) hinst == SE_ERR_NOASSOC)	// give MSDEV (non-standard!) a try
+						if( reinterpret_cast<intptr_t>( hinst ) == SE_ERR_NOASSOC)	// give MSDEV (non-standard!) a try
 						{
 							hinst= ShellExecute( m_hWnd, _T("&Open with MSDEV"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-							if( (int) hinst > 32 ) 
+							if( reinterpret_cast<intptr_t>( hinst ) > 32 ) 
 								break;  // successfull MSDEV viewer launch
 						}
-						if( (int) hinst == SE_ERR_NOASSOC)	// give standard "open" a try
+						if( reinterpret_cast<intptr_t>( hinst ) == SE_ERR_NOASSOC)	// give standard "open" a try
 						{
 							hinst= ShellExecute( m_hWnd, _T("open"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-							if( (int) hinst > 32 ) 
+							if( reinterpret_cast<intptr_t>( hinst ) > 32 ) 
 								break;  // successfull MSDEV viewer launch
 						}
 					}

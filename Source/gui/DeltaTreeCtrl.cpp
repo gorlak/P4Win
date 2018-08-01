@@ -6404,7 +6404,7 @@ BOOL CDeltaTreeCtrl::AnyBinaryFiles(BOOL bAnyResolvable/*=FALSE*/)
 		BOOL	typeM;
 		BOOL	typeL;
 		BOOL	typeS;
-		int		nbrrevs;
+		DWORD_PTR		nbrrevs;
 		BOOL	unknown;
 		for(int i=GetSelectedCount()-1; i>=0; i--)
 		{
@@ -6819,7 +6819,7 @@ void CDeltaTreeCtrl::OnFileMergeResolve(BOOL bRunMerge)
 			BOOL	typeM;
 			BOOL	typeL;
 			BOOL	typeS;
-			int		nbrrevs;
+			DWORD_PTR		nbrrevs;
 			BOOL	unknown;
 			int j;
 			appName.Empty();
@@ -8113,7 +8113,7 @@ void CDeltaTreeCtrl::OnSetFlyoverMessage(HTREEITEM currentItem)
 				BOOL	typeM = FALSE;
 				BOOL	typeL = FALSE;
 				BOOL	typeS = FALSE;
-				int		nbrrevs = 1;
+				DWORD_PTR		nbrrevs = 1;
 				BOOL	unknown = FALSE;
 
 				// convert the GetItemText() string to 5 flags

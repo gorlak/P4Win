@@ -123,7 +123,7 @@ void CMultiSelTreeCtrl::SetLParam(HTREEITEM curr_item, LPARAM lParam)
 	SetItem( &item );	
 }
 
-DWORD CMultiSelTreeCtrl::GetLParam(HTREEITEM curr_item)
+LPARAM CMultiSelTreeCtrl::GetLParam(HTREEITEM curr_item)
 {
 	TV_ITEM item;
 	item.hItem=curr_item;
@@ -218,7 +218,7 @@ BOOL CMultiSelTreeCtrl::HasExpandedChildren(HTREEITEM curr_item)
 // delete selection set from tree and selection set
 void CMultiSelTreeCtrl::DeleteSelectedItems()	
 {
-	for(int i= m_SelectionSet.GetSize()-1; i >= 0; i++)
+	for(INT_PTR i= m_SelectionSet.GetSize()-1; i >= 0; i++)
 	{
 		DeleteItem((HTREEITEM) m_SelectionSet.GetAt(i));	
 	}
@@ -229,7 +229,7 @@ void CMultiSelTreeCtrl::DeleteSelectedItems()
 void CMultiSelTreeCtrl::UnselectAll()
 {
 	HTREEITEM item;
-	for(int i= m_SelectionSet.GetSize()-1; i >= 0; i--)
+	for(INT_PTR i= m_SelectionSet.GetSize()-1; i >= 0; i--)
 	{
 		item= (HTREEITEM) m_SelectionSet.GetAt(i);	
 		// Undo any display atts
@@ -310,7 +310,7 @@ static int CALLBACK SortTreeCB(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort
 
 }
 
-void CMultiSelTreeCtrl::OnTimer(UINT nIDEvent) 
+void CMultiSelTreeCtrl::OnTimer(UINT_PTR nIDEvent) 
 {
 	CTreeCtrl::OnTimer(nIDEvent);
 	if (nIDEvent == SORT_TIMER)
@@ -364,7 +364,7 @@ BOOL CMultiSelTreeCtrl::SetSelectState(HTREEITEM item, BOOL selected)
 		return FALSE;
 
 	HTREEITEM parent=GetParentItem(item);
-	int index = SelectionToIndex(item);
+	INT_PTR index = SelectionToIndex(item);
 	BOOL found = index != -1;
 	BOOL success=TRUE;
 
@@ -389,7 +389,7 @@ BOOL CMultiSelTreeCtrl::SetSelectState(HTREEITEM item, BOOL selected)
 		// and add it to selection set
 		if(success)
 		{
-			m_SelectionSet.Add((DWORD) item);
+			m_SelectionSet.Add(item);
 			if (!m_ShiftDown && !m_MultiSelect)
 				SelectItem(item);
 		}
@@ -433,7 +433,7 @@ BOOL CMultiSelTreeCtrl::ToggleSelectState(HTREEITEM item)
 	if(parent != m_LastParent && m_LastParent != NULL)
 		return FALSE;
 
-	int index = SelectionToIndex(item);
+	INT_PTR index = SelectionToIndex(item);
 	BOOL found = index != -1;
 	BOOL success=TRUE;
 
@@ -453,7 +453,7 @@ BOOL CMultiSelTreeCtrl::ToggleSelectState(HTREEITEM item)
 
 		// and add it to selection set
 		if(success)
-			m_SelectionSet.Add((DWORD) item);
+			m_SelectionSet.Add(item);
 	}
 	
 	m_LastSelect=item;
@@ -527,10 +527,10 @@ BOOL CMultiSelTreeCtrl::RangeSelect(HTREEITEM secondItem)
 }
 
 // Access the selected items
-inline int CMultiSelTreeCtrl::SelectionToIndex(HTREEITEM item)
+inline INT_PTR CMultiSelTreeCtrl::SelectionToIndex(HTREEITEM item)
 {
 	// First, see if item is in list
-	for(int index=m_SelectionSet.GetSize()-1; index >= 0; index--)
+	for(INT_PTR index=m_SelectionSet.GetSize()-1; index >= 0; index--)
 	{
 		if(item == (HTREEITEM) m_SelectionSet.GetAt(index))
 		{
@@ -573,7 +573,7 @@ HTREEITEM CMultiSelTreeCtrl::GetSelectedItem(int index)
 	return NULL;
 }
 
-int CMultiSelTreeCtrl::GetSelectedCount()
+INT_PTR CMultiSelTreeCtrl::GetSelectedCount()
 {
 	return m_SelectionSet.GetSize();
 }
@@ -598,7 +598,7 @@ void CMultiSelTreeCtrl::SetAppearance(BOOL bold, BOOL selected, BOOL cut)
 void CMultiSelTreeCtrl::ApplySelectAtts(UINT flags)
 {
 	HTREEITEM item;
-	for(int i= m_SelectionSet.GetSize()-1; i >= 0; i--)
+	for(INT_PTR i= m_SelectionSet.GetSize()-1; i >= 0; i--)
 	{
 		item= (HTREEITEM) m_SelectionSet.GetAt(i);	
 		// Undo any display atts
@@ -1267,11 +1267,11 @@ void CMultiSelTreeCtrl::ExpandSelection( int linesToExpand )
 // selected.  All other selections are tossed, like Exploder does.
 void CMultiSelTreeCtrl::DoKeyedDeselect( BOOL scrollingDown )
 {
-	CDWordArray keepSet;
+	CPtrArray keepSet;
 	HTREEITEM currentItem= m_AnchorItem;
 	
 	// Record the contiguous selection's we're keeping
-	keepSet.Add( (DWORD) m_AnchorItem );
+	keepSet.Add( m_AnchorItem );
 	while(1)
 	{
 		if( scrollingDown )
@@ -1282,12 +1282,12 @@ void CMultiSelTreeCtrl::DoKeyedDeselect( BOOL scrollingDown )
 		if( currentItem == NULL || !IsSelected( currentItem ) )
 			break;
 
-		keepSet.Add( (DWORD) currentItem );
+		keepSet.Add( currentItem );
 	}
 
 	// Unselect everything
 	//
-	int i;
+	INT_PTR i;
 	for( i= m_SelectionSet.GetSize()-1; i >= 0; i-- )
 	{
 		currentItem= (HTREEITEM) m_SelectionSet.GetAt(i);	
@@ -1399,7 +1399,7 @@ void CMultiSelTreeCtrl::ShowNbrSelected()
 	if (m_MultiSelect)
 		return;
 	CString msg;
-	int n = m_SelectionSet.GetSize();
+	INT_PTR n = m_SelectionSet.GetSize();
 	if (n < 2)
 		msg = LoadStringResource(IDS_FOR_HELP_PRESS_F1);
 	else

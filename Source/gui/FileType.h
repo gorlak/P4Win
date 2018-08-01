@@ -59,8 +59,8 @@ protected:
 	BOOL	m_SaveTypeO;
 	BOOL	m_SaveTypeL;
 	BOOL	m_SaveTypeS;
-	int		m_NbrRevs;
-	int		m_SaveNbrRevs;
+	DWORD_PTR		m_NbrRevs;
+	DWORD_PTR		m_SaveNbrRevs;
 
 	// Generated message map functions
 	//{{AFX_MSG(CFileType)

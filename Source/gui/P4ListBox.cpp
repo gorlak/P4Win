@@ -88,7 +88,7 @@ void CP4ListBox::update_width(LPCTSTR s)
 	CClientDC dc(this);
 	CFont *f = CListBox::GetFont();
 	dc.SelectObject(f);
-	CSize sz = dc.GetTextExtent(s, _tcslen(s));
+	CSize sz = dc.GetTextExtent(s, static_cast<int>(_tcslen(s)));
 	sz.cx += 3*::GetSystemMetrics(SM_CXBORDER) + 20;
 	if (sz.cx > width_)
 	{

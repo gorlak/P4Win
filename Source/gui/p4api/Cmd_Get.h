@@ -30,17 +30,17 @@ public:
     void SetOpeningForEdit(BOOL b) { m_bOpeningForEdit = b; }
 	void Add2Recover(CString &str) { m_Recover.AddHead(str); }
 	int  GetNumberAdded() { return m_AddCount; }
-	int  GetWarningsCount() { return m_Warnings.GetCount(); }
+	INT_PTR GetWarningsCount() { return m_Warnings.GetCount(); }
 	void SetRevHistWnd(HWND hwnd) { m_RevHistWnd = hwnd; }
 	HWND GetRevHistWnd() { return m_RevHistWnd; }
 	void SetRevReq(int rev) { m_RevReq = rev; }
 	int  GetRevReq() { return m_RevReq; }
-	void Add2SelSet(HTREEITEM item) { m_SelectionSet.Add((DWORD) item); }
-	CDWordArray *GetSelectionSet() { return &m_SelectionSet; }
+	void Add2SelSet(HTREEITEM item) { m_SelectionSet.Add(item); }
+	CPtrArray *GetSelectionSet() { return &m_SelectionSet; }
 
     // Attributes	
 protected:
-	CDWordArray m_SelectionSet;	// saves selection set if we want to edit after sync
+	CPtrArray m_SelectionSet;	// saves selection set if we want to edit after sync
     CStringList m_GetList;
     CStringList m_RemoveList;
 	CStringList m_Recover;

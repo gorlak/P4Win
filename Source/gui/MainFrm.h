@@ -481,7 +481,7 @@ public:
 	BOOL IsExpandDepotContinuing() { return m_pDepotView->GetTreeCtrl().IsExpandDepotContinuing(); }
 	BOOL PumpMessages( ) { return m_pDeltaView->GetTreeCtrl().PumpMessages( ); }
 	BOOL SelectExpandItemList() { return m_pDepotView->GetTreeCtrl().SelectExpandItemList(); }
-	int  GetExpandItemListCount() { return m_pDepotView->GetTreeCtrl().GetExpandItemListCount(); }
+	INT_PTR  GetExpandItemListCount() { return m_pDepotView->GetTreeCtrl().GetExpandItemListCount(); }
 
 	// a wrapper to make OnToolTipText public
 	BOOL OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult ) 
@@ -549,7 +549,7 @@ protected:
 	afx_msg void OnViewUsers();
 	afx_msg void OnUpdateViewDepot(CCmdUI* pCmdUI);
 	afx_msg void OnViewDepot(UINT nID);
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnUpdateJobNew(CCmdUI* pCmdUI);
     afx_msg void OnUpdateBranchNew(CCmdUI* pCmdUI);
     afx_msg void OnUpdateLabelNew(CCmdUI* pCmdUI);
@@ -631,7 +631,7 @@ protected:
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
 	afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadID);
 	afx_msg void OnParentNotify(UINT message, LPARAM lParam);
-	afx_msg LONG OnFindReplace(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnFindReplace(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnUpdateMenuWithIcon(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateViewUpdate(CCmdUI* pCmdUI);
 	afx_msg void OnViewUpdate();

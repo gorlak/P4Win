@@ -207,7 +207,7 @@ CRevision *CHistory::GetPrevRevision()
 }
 
 	
-int CHistory::GetRevisionCount()
+INT_PTR CHistory::GetRevisionCount()
 {
 	return m_pList->GetCount();
 }

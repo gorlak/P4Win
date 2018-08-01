@@ -56,121 +56,121 @@ BOOL COptionsTreeDlg::OnInitDialog()
 
 	HTREEITEM hTreePanes = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_PANES),
 		0, 1, TVI_ROOT, TVI_LAST);
-	m_Tree.SetItemData(hTreePanes, (DWORD)&m_PanesPage);
+	m_Tree.SetItemData(hTreePanes, (DWORD_PTR)&m_PanesPage);
 	if (m_InitialPage == IDS_PAGE_PANES)
 		hTreeSelect = hTreePanes;
 
 	HTREEITEM hTreeConnectInfo = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_CONNECTION),
 		0, 1, hTreePanes, TVI_LAST);
-	m_Tree.SetItemData(hTreeConnectInfo, (DWORD)&m_ConnectInfoPage);
+	m_Tree.SetItemData(hTreeConnectInfo, (DWORD_PTR)&m_ConnectInfoPage);
 	if (m_InitialPage == IDS_PAGE_CONNECTION)
 		hTreeSelect = hTreeConnectInfo;
 
 	HTREEITEM hTreeDepot = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_DEPOT),
 		0, 1, hTreePanes, TVI_LAST);
-	m_Tree.SetItemData(hTreeDepot, (DWORD)&m_DepotPage);
+	m_Tree.SetItemData(hTreeDepot, (DWORD_PTR)&m_DepotPage);
 	if (m_InitialPage == IDS_PAGE_DEPOT)
 		hTreeSelect = hTreeDepot;
 
 	HTREEITEM hTreeChangelists = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_CHANGELIST),
 		0, 1, hTreePanes, TVI_LAST);
-	m_Tree.SetItemData(hTreeChangelists, (DWORD)&m_ChangelistsPage);
+	m_Tree.SetItemData(hTreeChangelists, (DWORD_PTR)&m_ChangelistsPage);
 	if (m_InitialPage == IDS_PAGE_CHANGELIST)
 		hTreeSelect = hTreeChangelists;
 
 	HTREEITEM hTreeLabels = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_LABEL),
 		0, 1, hTreePanes, TVI_LAST);
-	m_Tree.SetItemData(hTreeLabels, (DWORD)&m_LabelsPage);
+	m_Tree.SetItemData(hTreeLabels, (DWORD_PTR)&m_LabelsPage);
 	if (m_InitialPage == IDS_PAGE_LABEL)
 		hTreeSelect = hTreeLabels;
 
 	HTREEITEM hTreeClients = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_CLIENT),
 		0, 1, hTreePanes, TVI_LAST);
-	m_Tree.SetItemData(hTreeClients, (DWORD)&m_ClientsPage);
+	m_Tree.SetItemData(hTreeClients, (DWORD_PTR)&m_ClientsPage);
 	if (m_InitialPage == IDS_PAGE_CLIENT)
 		hTreeSelect = hTreeClients;
 
 	HTREEITEM hTreeJobs = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_JOB),
 		0, 1, hTreePanes, TVI_LAST);
-	m_Tree.SetItemData(hTreeJobs, (DWORD)&m_JobsPage);
+	m_Tree.SetItemData(hTreeJobs, (DWORD_PTR)&m_JobsPage);
 	if (m_InitialPage == IDS_PAGE_JOB)
 		hTreeSelect = hTreeJobs;
 
 	HTREEITEM hTreeStatusPane = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_STATUS),
 		0, 1, hTreePanes, TVI_LAST);
-	m_Tree.SetItemData(hTreeStatusPane, (DWORD)&m_StatusPanePage);
+	m_Tree.SetItemData(hTreeStatusPane, (DWORD_PTR)&m_StatusPanePage);
 	if (m_InitialPage == IDS_PAGE_STATUS)
 		hTreeSelect = hTreeStatusPane;
 
 	HTREEITEM hTreeFiles = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_FILES),
 		0, 1, TVI_ROOT, TVI_LAST);
-	m_Tree.SetItemData(hTreeFiles, (DWORD)&m_TempDirPage);
+	m_Tree.SetItemData(hTreeFiles, (DWORD_PTR)&m_TempDirPage);
 	if (m_InitialPage == IDS_PAGE_FILES)
 		hTreeSelect = hTreeFiles;
 
 	HTREEITEM hTreeEditors = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_VIEWEDIT),
 		0, 1, hTreeFiles, TVI_LAST);
-	m_Tree.SetItemData(hTreeEditors, (DWORD)&m_EditorsPage);
+	m_Tree.SetItemData(hTreeEditors, (DWORD_PTR)&m_EditorsPage);
 	if (m_InitialPage == IDS_PAGE_VIEWEDIT)
 		hTreeSelect = hTreeEditors;
 
 	HTREEITEM hTreeHelperApps = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_DIFF),
 		0, 1, hTreeFiles, TVI_LAST);
-	m_Tree.SetItemData(hTreeHelperApps, (DWORD)&m_HelperAppsPage);
+	m_Tree.SetItemData(hTreeHelperApps, (DWORD_PTR)&m_HelperAppsPage);
 	if (m_InitialPage == IDS_PAGE_DIFF)
 		hTreeSelect = hTreeHelperApps;
 
 	HTREEITEM hTreeMergeApp = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_MERGE),
 		0, 1, hTreeFiles, TVI_LAST);
-	m_Tree.SetItemData(hTreeMergeApp, (DWORD)&m_MergeAppPage);
+	m_Tree.SetItemData(hTreeMergeApp, (DWORD_PTR)&m_MergeAppPage);
 	if (m_InitialPage == IDS_PAGE_MERGE)
 		hTreeSelect = hTreeMergeApp;
 
 	HTREEITEM hTreeFileUtilities = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_FILEUTIL),
 		0, 1, hTreeFiles, TVI_LAST);
-	m_Tree.SetItemData(hTreeFileUtilities, (DWORD)&m_FileUtilitiesPage);
+	m_Tree.SetItemData(hTreeFileUtilities, (DWORD_PTR)&m_FileUtilitiesPage);
 	if (m_InitialPage == IDS_PAGE_FILEUTIL)
 		hTreeSelect = hTreeFileUtilities;
 
 	HTREEITEM hTreeDoubleClick = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_DOUBLECLICK),
 		0, 1, hTreeFiles, TVI_LAST);
-	m_Tree.SetItemData(hTreeDoubleClick, (DWORD)&m_DoubleClickPage);
+	m_Tree.SetItemData(hTreeDoubleClick, (DWORD_PTR)&m_DoubleClickPage);
 	if (m_InitialPage == IDS_PAGE_DOUBLECLICK)
 		hTreeSelect = hTreeDoubleClick;
 
 	HTREEITEM hTreeDialogs = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_DIALOGS),
 		0, 1, TVI_ROOT, TVI_LAST);
-	m_Tree.SetItemData(hTreeDialogs, (DWORD)&m_DialogsPage);
+	m_Tree.SetItemData(hTreeDialogs, (DWORD_PTR)&m_DialogsPage);
 	if (m_InitialPage == IDS_PAGE_DIALOGS)
 		hTreeSelect = hTreeDialogs;
 
 	HTREEITEM hTreeHist = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_REVISIONHISTORY),
 		0, 1, hTreeDialogs, TVI_LAST);
-	m_Tree.SetItemData(hTreeHist, (DWORD)&m_HistoryPage);
+	m_Tree.SetItemData(hTreeHist, (DWORD_PTR)&m_HistoryPage);
 	if (m_InitialPage == IDS_PAGE_REVISIONHISTORY)
 		hTreeSelect = hTreeHist;
 
 	HTREEITEM hTreeInteg = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_INTEGRATION),
 		0, 1, hTreeDialogs, TVI_LAST);
-	m_Tree.SetItemData(hTreeInteg, (DWORD)&m_IntegrationPage);
+	m_Tree.SetItemData(hTreeInteg, (DWORD_PTR)&m_IntegrationPage);
 	if (m_InitialPage == IDS_PAGE_INTEGRATION)
 		hTreeSelect = hTreeInteg;
 
 	HTREEITEM hTreeSpecs = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_SPECIFICATIONS),
 		0, 1, hTreeDialogs, TVI_LAST);
-	m_Tree.SetItemData(hTreeSpecs, (DWORD)&m_SpecsPage);
+	m_Tree.SetItemData(hTreeSpecs, (DWORD_PTR)&m_SpecsPage);
 	if (m_InitialPage == IDS_PAGE_SPECIFICATIONS)
 		hTreeSelect = hTreeSpecs;
 
 	HTREEITEM hTreeAutoR = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_AUTORESOLVE),
 		0, 1, hTreeDialogs, TVI_LAST);
-	m_Tree.SetItemData(hTreeAutoR, (DWORD)&m_AutoRslvPage);
+	m_Tree.SetItemData(hTreeAutoR, (DWORD_PTR)&m_AutoRslvPage);
 	if (m_InitialPage == IDS_PAGE_AUTORESOLVE)
 		hTreeSelect = hTreeAutoR;
 
 	HTREEITEM hTreeDisplay = m_Tree.InsertItem(LoadStringResource(IDS_PAGE_OPTIONS),
 		0, 1, hTreeDialogs, TVI_LAST);
-	m_Tree.SetItemData(hTreeDisplay, (DWORD)&m_DisplayPage);
+	m_Tree.SetItemData(hTreeDisplay, (DWORD_PTR)&m_DisplayPage);
 	if (m_InitialPage == IDS_PAGE_OPTIONS)
 		hTreeSelect = hTreeDisplay;
 
@@ -281,47 +281,47 @@ void COptionsTreeDlg::OnHelp()
 	HTREEITEM hItem = m_Tree.GetSelectedItem();
 	if (hItem)
 	{
-		DWORD pPage = (DWORD)m_Tree.GetItemData(hItem);
+		DWORD_PTR pPage = m_Tree.GetItemData(hItem);
 
-		if      (pPage == (DWORD)&m_ConnectInfoPage)
+		if      (pPage == (DWORD_PTR)&m_ConnectInfoPage)
 			helpID= DLG_OPT_CONNECTION;
-		else if (pPage == (DWORD)&m_DepotPage)
+		else if (pPage == (DWORD_PTR)&m_DepotPage)
 			helpID= DLG_OPT_PANES_DEPOT;
-		else if (pPage == (DWORD)&m_ChangelistsPage)
+		else if (pPage == (DWORD_PTR)&m_ChangelistsPage)
 			helpID= DLG_OPT_PANES_CHANGELISTS;
-		else if (pPage == (DWORD)&m_LabelsPage)
+		else if (pPage == (DWORD_PTR)&m_LabelsPage)
 			helpID= DLG_OPT_PANES_LABELS;
-		else if (pPage == (DWORD)&m_ClientsPage)
+		else if (pPage == (DWORD_PTR)&m_ClientsPage)
 			helpID= DLG_OPT_PANES_CLIENTS;
-		else if (pPage == (DWORD)&m_JobsPage)
+		else if (pPage == (DWORD_PTR)&m_JobsPage)
 			helpID= DLG_OPT_PANES_JOBS;
-		else if (pPage == (DWORD)&m_EditorsPage)
+		else if (pPage == (DWORD_PTR)&m_EditorsPage)
 			helpID= DLG_OPT_FILES_VIEW;
-		else if (pPage == (DWORD)&m_HelperAppsPage)
+		else if (pPage == (DWORD_PTR)&m_HelperAppsPage)
 			helpID= DLG_OPT_FILES_DIFF;
-		else if (pPage == (DWORD)&m_MergeAppPage)
+		else if (pPage == (DWORD_PTR)&m_MergeAppPage)
 			helpID= DLG_OPT_FILES_MERGE;
-		else if (pPage == (DWORD)&m_FileUtilitiesPage)
+		else if (pPage == (DWORD_PTR)&m_FileUtilitiesPage)
 			helpID= DLG_OPT_FILES_FILEUTIL;
-		else if (pPage == (DWORD)&m_PanesPage)
+		else if (pPage == (DWORD_PTR)&m_PanesPage)
 			helpID= DLG_OPT_PANES;
-		else if (pPage == (DWORD)&m_SpecsPage)
+		else if (pPage == (DWORD_PTR)&m_SpecsPage)
 			helpID= DLG_OPT_DIALOGS_SECIFICATION;
-		else if (pPage == (DWORD)&m_AutoRslvPage)
+		else if (pPage == (DWORD_PTR)&m_AutoRslvPage)
 			helpID= TASK_RESOLVING_FILES;
-		else if (pPage == (DWORD)&m_DisplayPage)
+		else if (pPage == (DWORD_PTR)&m_DisplayPage)
 			helpID= DLG_OPT_DIALOGS_OPTIONS;
-		else if (pPage == (DWORD)&m_DialogsPage)
+		else if (pPage == (DWORD_PTR)&m_DialogsPage)
 			helpID= DLG_OPT_DIALOGS_ADVANCED;
-		else if (pPage == (DWORD)&m_HistoryPage)
+		else if (pPage == (DWORD_PTR)&m_HistoryPage)
 			helpID= DLG_OPT_DIALOGS_REVHIST ;
-		else if (pPage == (DWORD)&m_IntegrationPage)
+		else if (pPage == (DWORD_PTR)&m_IntegrationPage)
 			helpID= DLG_OPT_DIALOGS_INTEGRATION ;
-		else if (pPage == (DWORD)&m_DoubleClickPage)
+		else if (pPage == (DWORD_PTR)&m_DoubleClickPage)
 			helpID= DLG_OPT_DOUBLE_CLICK ;
-		else if (pPage == (DWORD)&m_TempDirPage)
+		else if (pPage == (DWORD_PTR)&m_TempDirPage)
 			helpID= DLG_OPT_FILES;
-		else if (pPage == (DWORD)&m_StatusPanePage)
+		else if (pPage == (DWORD_PTR)&m_StatusPanePage)
 			helpID= DLG_OPT_PANES_STATUS;
 	}
 	ASSERT(helpID);

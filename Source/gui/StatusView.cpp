@@ -878,7 +878,7 @@ LRESULT CStatusView::OnFindPattern(WPARAM wParam, LPARAM lParam)
 
 static	int	indexNbr = -1;
 
-int CStatusView::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
+INT_PTR CStatusView::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
 {
 	// CWnd implementation won't do us any good, so we have to handle this.
 	// watch out!  sometimes get called with null pointer

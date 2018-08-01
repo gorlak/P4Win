@@ -165,7 +165,7 @@ int CALLBACK CSpecsPage::FontEnumProc( ENUMLOGFONTEX *enumLogFontEx, NEWTEXTMETR
 							(LPCTSTR)enumLogFontEx->elfFullName) == CB_ERR ) )
 	{
 		int index= specsPage->m_FontCombo.AddString( (LPCTSTR)enumLogFontEx->elfFullName );
-		specsPage->m_FontCombo.SetItemData( index, (DWORD) fontType );	
+		specsPage->m_FontCombo.SetItemData( index, (DWORD_PTR) fontType );	
 	}
 	return 1;
 }
@@ -324,7 +324,7 @@ void CSpecsPage::OnSelchangeFont()
 
 	CClientDC dc(NULL);
 
-	DWORD fontType= (cursel >= 0) ? m_FontCombo.GetItemData( m_FontCombo.GetCurSel() ) : 0;
+	DWORD_PTR fontType= (cursel >= 0) ? m_FontCombo.GetItemData( m_FontCombo.GetCurSel() ) : 0;
 
 	// Check if we have a font that is either a vector or Truettype font
 	if ( fontType != RASTER_FONTTYPE)

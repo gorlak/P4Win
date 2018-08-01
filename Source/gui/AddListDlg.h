@@ -68,7 +68,7 @@ protected:
 
 // Implementation
 public:
-    int DoModal();
+    INT_PTR DoModal();
 	CStringList *GetEnumeratedList() { ASSERT(m_Initialized); return &m_EnumeratedList; }
 	int GetSelectedChange() { ASSERT(m_Initialized); return m_SelectedChange; }
 	int GetAction() { return m_Action; }

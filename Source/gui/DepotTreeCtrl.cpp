@@ -1283,7 +1283,7 @@ LRESULT CDepotTreeCtrl::OnP4Get(WPARAM wParam, LPARAM lParam)
 					m_SkipSyncDialog = TRUE;
 				// May have to reslect all that were selected when sync command fired.
 				// This undoes any fiddling the user might have done while waiting.
-				CDWordArray *selset = pCmd->GetSelectionSet();	// get original sel set
+				CPtrArray *selset = pCmd->GetSelectionSet();	// get original sel set
 				int cnt = selset->GetSize();
 				BOOL b = cnt == GetSelectedCount();
 				if (b)
@@ -9066,7 +9066,7 @@ void CDepotTreeCtrl::OnSetFlyoverMessage(HTREEITEM currentItem)
 			BOOL	typeM = FALSE;
 			BOOL	typeL = FALSE;
 			BOOL	typeS = FALSE;
-			int		nbrrevs;
+			DWORD_PTR		nbrrevs;
 			BOOL	unknown = FALSE;
 
 			// convert the GetItemText() string to many flags

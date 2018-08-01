@@ -460,7 +460,7 @@ void CBookmarks::OnImport()
 	fDlg.m_ofn.nMaxCustFilter=512;
 
 	CString errorTxt;
-	int retcode=fDlg.DoModal();
+	INT_PTR retcode=fDlg.DoModal();
 
 	if(retcode == IDOK)
 	{
@@ -686,7 +686,7 @@ void CBookmarks::OnExport()
 	fDlg.m_ofn.nMaxCustFilter=512;
 
 	CString errorTxt;
-	int retcode=fDlg.DoModal();
+	INT_PTR retcode=fDlg.DoModal();
 
 	if(retcode == IDOK)
 	{

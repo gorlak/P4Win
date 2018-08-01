@@ -312,10 +312,10 @@ void CP4SpecSheet::OnShowWindow(BOOL bShow, UINT nStatus)
 	CDialog::OnShowWindow(bShow, nStatus);
 }
 
-int CP4SpecSheet::DoModal() 
+INT_PTR CP4SpecSheet::DoModal() 
 {
 	m_P4SpecDlg.SetIsModal(TRUE);
-	int retcode=CDialog::DoModal();
+	INT_PTR retcode=CDialog::DoModal();
 	m_P4SpecDlg.DoCleanup();
 	return retcode;
 }

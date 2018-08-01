@@ -412,7 +412,7 @@ UINT CAddListDlg::VerifyOKToContinue()
     return AfxMessageBox(warning, MB_YESNO|MB_ICONEXCLAMATION);
 }
 
-int CAddListDlg::DoModal()
+INT_PTR CAddListDlg::DoModal()
 { 
     if(m_UserTerminated) 
         return IDCANCEL; 

@@ -162,7 +162,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // HistoryDlg message handlers
 
-int CHistoryDlg::DoModal() 
+INT_PTR CHistoryDlg::DoModal() 
 {
 	return CDialog::DoModal();
 }

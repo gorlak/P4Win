@@ -3372,7 +3372,7 @@ void CSpecDescDlg::OnPositionToPrev()
 	}
 }
 
-LONG CSpecDescDlg::OnFindReplace(WPARAM wParam, LPARAM lParam)
+LRESULT CSpecDescDlg::OnFindReplace(WPARAM wParam, LPARAM lParam)
 {
 	LPFINDREPLACE lpfp = (LPFINDREPLACE)lParam;
 	if (m_pFRDlg->FindNext() || m_pFRDlg->IsTerminating())

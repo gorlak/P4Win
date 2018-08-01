@@ -114,7 +114,7 @@ BOOL CGetPwdDlg::OnInitDialog()
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CGetPwdDlg::OnTimer(UINT nIDEvent) 
+void CGetPwdDlg::OnTimer(UINT_PTR nIDEvent) 
 {
 	CDialog::OnTimer(nIDEvent);
 

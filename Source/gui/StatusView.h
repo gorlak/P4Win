@@ -68,7 +68,7 @@ protected:
 	//{{AFX_VIRTUAL(CStatusView)
 	public:
 	virtual void OnInitialUpdate();
-	int OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
+	INT_PTR OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
 	protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);

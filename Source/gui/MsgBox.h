@@ -70,19 +70,19 @@ protected:
 	BOOL	m_ShowVscroll;
 };
 
-inline int MsgBox(UINT nIDText, UINT nType =1, int cancelButton =0, CWnd* pParent =NULL, BOOL *lpBdontShow =NULL, BOOL bShowVscroll =FALSE)
+inline INT_PTR MsgBox(UINT nIDText, UINT nType =1, int cancelButton =0, CWnd* pParent =NULL, BOOL *lpBdontShow =NULL, BOOL bShowVscroll =FALSE)
 {
 	CMsgBox dlg(LoadStringResource(nIDText), nType, cancelButton, pParent, lpBdontShow, bShowVscroll);
-	int rc = dlg.DoModal();
+	INT_PTR rc = dlg.DoModal();
 	if (lpBdontShow)
 	   *lpBdontShow = dlg.IsDontShowAgain();
 	return rc;
 }
 
-inline int MsgBox(CString text, UINT nType =1, int cancelButton =0, CWnd* pParent =NULL, BOOL *lpBdontShow =NULL, BOOL bShowVscroll =FALSE)
+inline INT_PTR MsgBox(CString text, UINT nType =1, int cancelButton =0, CWnd* pParent =NULL, BOOL *lpBdontShow =NULL, BOOL bShowVscroll =FALSE)
 {
 	CMsgBox dlg(text, nType, cancelButton, pParent, lpBdontShow, bShowVscroll);
-	int rc = dlg.DoModal();
+	INT_PTR rc = dlg.DoModal();
 	if (lpBdontShow)
 	   *lpBdontShow = dlg.IsDontShowAgain();
 	return rc;

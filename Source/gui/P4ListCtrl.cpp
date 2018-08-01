@@ -182,7 +182,7 @@ void CP4ListCtrl::ReSort()
 	sp.listCtrl = this;
 	sp.subItem = m_LastSortCol;
         SetRedraw(FALSE);
-	SortItems(SortCallback, (DWORD)&sp);
+	SortItems(SortCallback, (DWORD_PTR)&sp);
         SetRedraw(TRUE);
 	
 	// update the header and make sure the selected item is visible
@@ -943,7 +943,7 @@ int CP4ListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CListCtrl::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
-	DWORD dwStyle = ::SendMessage(m_hWnd,LVM_GETEXTENDEDLISTVIEWSTYLE,0,0);
+	LRESULT dwStyle = ::SendMessage(m_hWnd,LVM_GETEXTENDEDLISTVIEWSTYLE,0,0);
 	dwStyle |= LVS_EX_FULLROWSELECT;
 	::SendMessage(m_hWnd,LVM_SETEXTENDEDLISTVIEWSTYLE,0,dwStyle);
 	
@@ -1360,7 +1360,7 @@ LRESULT CP4ListCtrl::P4ObjectList(WPARAM wParam, LPARAM lParam,
 	if (bFiltered && (GetItemCount() < m_ListAll.column[0].GetCount()))
 		dlg.SetP4ObjectIsFiltered(TRUE);
 
-	int retcode= dlg.DoModal();
+	INT_PTR retcode= dlg.DoModal();
     SET_APP_HALTED(FALSE);
 
 	// Delete the object list

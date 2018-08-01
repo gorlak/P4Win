@@ -314,7 +314,7 @@ void CHelperAppsPage::Browse(CString &filename, LPCTSTR title)
 	// Set filter index
 	fDlg.m_ofn.nFilterIndex=1;
 	
-	int retcode=fDlg.DoModal();
+	INT_PTR retcode=fDlg.DoModal();
 
 	if(retcode == IDOK)
 	{

@@ -20,7 +20,7 @@ public:
 
     BOOL Run(int changeNum, CStringList *files, CStringList *files2edit=NULL);
     void MergeOpenInfo(CObList *pOpenList);
-    int GetAddedFileCount() const { return m_StrListOut.GetCount(); }
+    INT_PTR GetAddedFileCount() const { return m_StrListOut.GetCount(); }
 
     CObList const *GetList() const { return &m_List; }			
     int GetChangeNum() const { return m_ChangeNum; }
