@@ -14,7 +14,7 @@ newoption
 {
 	trigger = "architecture",
 	description = "Specify architecture (see premake 'architecture' action for choices)",
-	default = "x86", -- (function() if os.is64bit() then return 'x86_64' else return 'x86' end end)()
+	default = (function() if os.is64bit() then return 'x86_64' else return 'x86' end end)(),
 }
 
 workspace "P4Win"
