@@ -527,7 +527,7 @@ BOOL CMultiSelTreeCtrl::RangeSelect(HTREEITEM secondItem)
 }
 
 // Access the selected items
-inline INT_PTR CMultiSelTreeCtrl::SelectionToIndex(HTREEITEM item)
+INT_PTR CMultiSelTreeCtrl::SelectionToIndex(HTREEITEM item)
 {
 	// First, see if item is in list
 	for(INT_PTR index=m_SelectionSet.GetSize()-1; index >= 0; index--)
