@@ -23,7 +23,6 @@ install:
 
 build_script:
   - cmd: cd Dependencies
-  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - cmd: openssl-build
   - cmd: cd ..
   - cmd: premake --architecture=%ARCH% vs2017
