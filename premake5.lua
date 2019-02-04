@@ -245,79 +245,78 @@ project "P4Win"
 			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/md"
 		}
 
-if _OPTIONS["client"] then
-	project "P4"
+project "P4"
 
-		kind "ConsoleApp"
-		language "C++"
-		characterset "MBCS"
-		-- staticruntime "On"
+	kind "ConsoleApp"
+	language "C++"
+	characterset "MBCS"
+	-- staticruntime "On"
 
-		disablewarnings
+	disablewarnings
+	{
+		"4091", -- dbghelp.dll antics
+		"4996", -- deprecation
+	}
+
+	defines
+	{
+		"WIN32_LEAN_AND_MEAN", -- necessary for <rpc.h> debacle
+		"OS_NT",
+		"ID_OS=\"NTX64\"",
+		"ID_REL=\"2018.1\"",
+		"ID_PATCH=\"gorlak\"",
+		"ID_Y=\"0\"",
+		"ID_M=\"0\"",
+		"ID_D=\"0\"",
+		"Z_PREFIX",
+		"USE_SSL",
+	}
+
+	includedirs
+	{
+		"Dependencies/openssl-install/include",
+		"Dependencies/p4/client",
+		"Dependencies/p4/diff",
+		"Dependencies/p4/i18n",
+		"Dependencies/p4/map",
+		"Dependencies/p4/msgs",
+		"Dependencies/p4/net",
+		"Dependencies/p4/rpc",
+		"Dependencies/p4/support",
+		"Dependencies/p4/sys",
+		"Dependencies/p4/zlib",
+	}
+
+	local platform = "x64"
+	if _OPTIONS[ "architecture" ] == "x86" then
+		platform = "Win32"
+	end
+
+	files
+	{
+		"Dependencies/p4/client/clientmain.*",
+		"Source/p4/**"
+	}
+
+	links
+	{
+		"P4API",
+		"ssleay32",
+		"libeay32",
+		"dbghelp",
+		"ws2_32",
+		"wininet",
+		"setargv.obj",
+	}
+
+	configuration "Debug"
+		libdirs
 		{
-			"4091", -- dbghelp.dll antics
-			"4996", -- deprecation
+			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/mdd"
 		}
 
-		defines
+	configuration "not Debug"
+		libdirs
 		{
-			"WIN32_LEAN_AND_MEAN", -- necessary for <rpc.h> debacle
-			"OS_NT",
-			"ID_OS=\"NTX64\"",
-			"ID_REL=\"2018.1\"",
-			"ID_PATCH=\"gorlak\"",
-			"ID_Y=\"0\"",
-			"ID_M=\"0\"",
-			"ID_D=\"0\"",
-			"Z_PREFIX",
-			"USE_SSL",
+			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/md"
 		}
-
-		includedirs
-		{
-			"Dependencies/openssl-install/include",
-			"Dependencies/p4/client",
-			"Dependencies/p4/diff",
-			"Dependencies/p4/i18n",
-			"Dependencies/p4/map",
-			"Dependencies/p4/msgs",
-			"Dependencies/p4/net",
-			"Dependencies/p4/rpc",
-			"Dependencies/p4/support",
-			"Dependencies/p4/sys",
-			"Dependencies/p4/zlib",
-		}
-
-		local platform = "x64"
-		if _OPTIONS[ "architecture" ] == "x86" then
-			platform = "Win32"
-		end
-
-		files
-		{
-			"Dependencies/p4/client/clientmain.*",
-		}
-
-		links
-		{
-			"P4API",
-			"ssleay32",
-			"libeay32",
-			"dbghelp",
-			"ws2_32",
-			"wininet",
-			"setargv.obj",
-		}
-
-		configuration "Debug"
-			libdirs
-			{
-				"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/mdd"
-			}
-
-		configuration "not Debug"
-			libdirs
-			{
-				"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/md"
-			}
-end
