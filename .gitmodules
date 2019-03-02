@@ -7,3 +7,6 @@
 [submodule "Dependencies/openssl"]
 	path = Dependencies/openssl
 	url = https://github.com/gorlak/openssl.git
+[submodule "Dependencies/StrawberryPerl"]
+	path = Dependencies/StrawberryPerl
+	url = https://github.com/HeliumProject/StrawberryPerl.git

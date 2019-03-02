@@ -11,8 +11,6 @@ configuration:
 
 install:
   - git submodule update --init
-  - cinst strawberryperl
-  - set PATH=%PATH%;C:\Strawberry\perl\bin
   - if "%PLATFORM%" equ "x86" set BITS=32
   - if "%PLATFORM%" equ "x64" set BITS=64
   - if "%PLATFORM%" equ "x86" set ARCH=x86

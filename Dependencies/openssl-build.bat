@@ -6,7 +6,7 @@ if "%VisualStudioVersion%" equ "" echo Please run this script from a Visual Stud
 if "%VisualStudioVersion%" equ "" exit /b 1
 
 :: make perl.exe available via %PATH%
-set PATH=%PATH%;%ProgramFiles%\EShell Menu\StrawberryPerl\perl\bin
+set PATH=%PATH%;%~dp0StrawberryPerl\perl\bin
 
 if "%VSCMD_ARG_TGT_ARCH%" equ "x64" (
     set PLATFORM=x64
