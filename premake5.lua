@@ -202,8 +202,10 @@ project "P4Win"
 
 	files
 	{
-		"Source/**.cpp",
-		"Source/**.h",
+		"Source/common/**.cpp",
+		"Source/common/**.h",
+		"Source/gui/**.cpp",
+		"Source/gui/**.h",
 		"Source/gui/res/P4Win.manifest",
 	}
 
