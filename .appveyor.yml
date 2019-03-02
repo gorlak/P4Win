@@ -10,8 +10,6 @@ configuration:
 
 install:
   - git submodule update --init
-  - cinst strawberryperl
-  - set PATH=%PATH%;C:\Strawberry\perl\bin
 
 build_script:
   - cmd: cd Dependencies
