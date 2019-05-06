@@ -287,7 +287,7 @@ void CFileType::OnOK()
 		if (GET_SERVERLEVEL() >= 23)
 		{
 			TCHAR buf[8];
-			_stprintf(buf, _T("%lld"), m_NbrRevs);
+			_stprintf(buf, _T("%zd"), m_NbrRevs);
 			m_fileType += buf;
 		}
 	}
