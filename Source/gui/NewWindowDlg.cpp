@@ -411,7 +411,7 @@ void CNewWindowDlg::OnNewWindow()	// Spawn a new P4win with the requested PCU
     si.cb = sizeof(si);
     PROCESS_INFORMATION pi;
     if( !GetModuleFileName(GetModuleHandle(NULL), path, sizeof(path)/sizeof(TCHAR)-1) ||
-        !_stprintf(path + lstrlen(path), _T(" -q -p %s -c %s -u %s"), m_port, m_client, m_user) ||
+        !_stprintf(path + lstrlen(path), _T(" -q -p %s -c %s -u %s"), m_port.GetString(), m_client.GetString(), m_user.GetString() ) ||
         !CreateProcess(NULL, path, 
             NULL, NULL, 
 #ifdef UNICODE
@@ -628,7 +628,7 @@ LRESULT CNewWindowDlg::OnP4ClientList(WPARAM wParam, LPARAM lParam)
 				GET_P4REGPTR()->SetP4Port(m_port, TRUE, FALSE, FALSE);
 				GET_P4REGPTR()->SetP4User(_T(""), TRUE, FALSE, FALSE);
 			}
-			int retcode= dlg.DoModal();
+			INT_PTR retcode= dlg.DoModal();
 			if (!m_bSamePort)
 			{
 				GET_P4REGPTR()->SetP4Port(old_port, TRUE, FALSE, FALSE);
@@ -851,7 +851,7 @@ LRESULT CNewWindowDlg::OnP4UserList(WPARAM wParam, LPARAM lParam)
 			GET_P4REGPTR()->SetP4Port(m_port, TRUE, FALSE, FALSE);
 			GET_P4REGPTR()->SetP4User(_T(""), TRUE, FALSE, FALSE);
 		}
-		int retcode= dlg.DoModal();
+		INT_PTR retcode= dlg.DoModal();
 		if (!m_bSamePort)
 		{
 			GET_P4REGPTR()->SetP4Port(old_port, TRUE, FALSE, FALSE);

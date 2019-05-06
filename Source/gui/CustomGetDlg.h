@@ -24,7 +24,7 @@ public:
 	BOOL	m_Force;
 	//}}AFX_DATA
 
-	int m_NbrSel;
+	INT_PTR m_NbrSel;
 
 
 // Overrides

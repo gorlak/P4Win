@@ -917,7 +917,7 @@ BOOL CP4SpecDlg::OnToolTipNotify( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
     int i;
 
     TOOLTIPTEXT *pTTT = (TOOLTIPTEXT *)pNMHDR;    
-    UINT nID =pNMHDR->idFrom;
+    UINT_PTR nID =pNMHDR->idFrom;
 
     if (pTTT->uFlags & TTF_IDISHWND)    
     {
@@ -1240,7 +1240,7 @@ void CP4SpecDlg::AddComboBox( const CString &prompt, const CStringArray &values
 	DWORD style = SetBasicWinStyles( readOnly );
 	style |= CBS_DROPDOWNLIST | WS_VSCROLL ;
 	CComboBox * pCombo = sc.CreateCombo(this, rect, style, 
-		(HMENU)IDC( m_SpecType, specCode ));
+		(HMENU)IDC( INT_PTR(m_SpecType), specCode ));
 	if(!pCombo)
 	{
 		AddToStatus( LoadStringResource(IDS_UNABLE_TO_ADD_CHILD_WINDOW_TO_SPECIFICATION_DIALOG), 
@@ -1394,7 +1394,7 @@ void CP4SpecDlg::AddList(const CString &prompt, const CStringArray &list, int sp
     if( scrollWidth > width )
         style |= WS_HSCROLL;
 
-	CReviewList *pList = sc.CreateList(this, rect, style, (HMENU) IDC(m_SpecType, specCode), specCode);
+	CReviewList *pList = sc.CreateList(this, rect, style, (HMENU) IDC(INT_PTR(m_SpecType), specCode), specCode);
 	m_childControls.Add(CChildWindow(sc.control, CHILD_CHECKLISTBOX, &rect));
 	pList->SetCheckStyle(BS_AUTOCHECKBOX);
 
@@ -1587,7 +1587,7 @@ void CP4SpecDlg::AddInput(const CString &prompt, const CString &editText,
 			width += browseRect.Width() + m_StdSpaceH;
 		else
 			width -= browseRect.Width() + m_StdSpaceH;
-		m_BrowseFldCtrlID = m_childControls.GetCount();
+		m_BrowseFldCtrlID = int(m_childControls.GetCount());
 	}
 
 	if ((m_SpecType != P4CHANGE_SPEC && m_SpecType != P4JOB_SPEC && prompt == g_tagDescription)
@@ -1642,7 +1642,7 @@ void CP4SpecDlg::AddInput(const CString &prompt, const CString &editText,
 	}
 
 	CP4EditBox * pEdit = sc.CreateEdit(this, rect, style, 
-        (HMENU) IDC(m_SpecType, specCode), specCode, allowDD, m_SpecType);
+        (HMENU) IDC(INT_PTR(m_SpecType), specCode), specCode, allowDD, m_SpecType);
 	m_childControls.Add(CChildWindow(sc.control, 
 		multiLine ? CHILD_MULTILINEEDIT : CHILD_SINGLELINEEDIT, 
 		&rect, !readOnly, maxLines, wCode == _T('H'), indent == _T('M'), indent == _T('R')));
@@ -1672,7 +1672,7 @@ void CP4SpecDlg::AddInput(const CString &prompt, const CString &editText,
 
 	if (showBrowse)
 	{
-		m_BrowseBtnCtrlID = m_childControls.GetCount();
+		m_BrowseBtnCtrlID = int(m_childControls.GetCount());
 		browseRect.SetRect(rect.right + m_StdSpaceH, rect.top, 
 						   rect.right + m_StdSpaceH + browseRect.Width(),
 						   rect.top + browseRect.Height());
@@ -2873,7 +2873,7 @@ BOOL CP4SpecDlg::UpdateSpec( )
 	if (m_SpecType == P4CLIENT_SPEC && !newRoot.IsEmpty())
 	{
 		ASSERT(m_ReadOrigRoot);
-		int n;
+		INT_PTR n;
 		if ((n = m_SpecData.m_aList.GetSize()) > 0)
 		{
 			for (int j = -1; ++j < n; )
@@ -3545,7 +3545,7 @@ void CP4SpecDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	CPropertyPage::OnShowWindow(bShow, nStatus);
 	
 	OnSize(SIZE_RESTORED, m_MinSize.cx, m_MinSize.cy);
-	int i;
+	INT_PTR i;
 	if ((i = m_childControls.GetSize()) > 0)
 	{
 		CRect rectWindow, rectChild;

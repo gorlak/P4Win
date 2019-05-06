@@ -99,8 +99,7 @@ BOOL CCmd_Delete::HandledCmdSpecificError(LPCTSTR errBuf, LPCTSTR errMsg)
     if( StrStr(errBuf, _T("use -f to force delete")))
 	{
 		CString m;
-        m.FormatMessage(IDS_CANT_DELETE_PRIVELEGE_s, 
-            CString(errBuf, StrStr(errBuf, _T("; use -f")) - errBuf ));
+        m.FormatMessage(IDS_CANT_DELETE_PRIVELEGE_s, CString(errBuf, (int)(StrStr(errBuf, _T("; use -f")) - errBuf )));
 		TheApp()->StatusAdd( m, SV_ERROR);
 		return m_FatalError;
 	}

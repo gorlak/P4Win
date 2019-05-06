@@ -347,8 +347,7 @@ void CP4GuiApp::OnAppEmail()
 {
     CString addr = LoadStringResource(IDS_EMAIL_ADDRESS);
 	HWND hwnd = m_pMainWnd ? m_pMainWnd->m_hWnd : NULL;
-	if (32 < (int)ShellExecute( hwnd, _T("open"), 
-            _T("mailto:")+addr, NULL, NULL, SW_SHOWNORMAL))
+	if (32 < (INT_PTR)ShellExecute( hwnd, _T("open"), _T("mailto:")+addr, NULL, NULL, SW_SHOWNORMAL))
 		return;	// it worked - don't bother with this other stuff
 
 	HINSTANCE	hlibMAPI = NULL;

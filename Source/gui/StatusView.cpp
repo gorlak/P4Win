@@ -930,10 +930,10 @@ BOOL CStatusView::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	// first, check for my tooltip text request
 	// and handle it here
     TOOLTIPTEXT *pTTT = (TOOLTIPTEXT *)pNMHDR;    
-    UINT nID =pNMHDR->idFrom;
+    UINT_PTR nID =pNMHDR->idFrom;
     if (pTTT->uFlags & TTF_IDISHWND)    
     {
-		if(nID == (UINT)m_hWnd)
+		if(nID == (UINT_PTR)m_hWnd)
 		{
 			TCHAR buf[1024];
 			CRect rect;

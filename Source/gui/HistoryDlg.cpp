@@ -260,8 +260,7 @@ void CHistoryDlg::OnContextMenu(CPoint screen, int index)
 							  LoadStringResource ( IDS_FILE_ANNOTATECHGALL ) );
 				}
 			}
-			popMenu.AppendMenu(MF_POPUP, (UINT) viewMenu.GetSafeHmenu(), 
-						  LoadStringResource(IDS_VIEW_THIS_REVISION_USING));
+			popMenu.AppendMenu(MF_POPUP, (UINT_PTR) viewMenu.GetSafeHmenu(), LoadStringResource(IDS_VIEW_THIS_REVISION_USING));
 		}
 
 		if (rev->m_FName == m_LatestName)
@@ -754,16 +753,16 @@ LRESULT CHistoryDlg::OnP4ViewFile(WPARAM wParam, LPARAM lParam)
 						// first try the non-standard M$ IDE's - Have to be done first they're so BAAAD
 						// give VS .NET (non-standard!) a try.
 						hinst= ShellExecute( m_hWnd, _T("Open.VisualStudio.7.1"), m_ViewFilePath, NULL, NULL, SW_SHOWNORMAL);
-						if( (int) hinst > 32 ) 
+						if( (INT_PTR) hinst > 32 ) 
 							break;  // successfull VS .NET editor launch
-						if( (int) hinst == SE_ERR_NOASSOC)	// give MSDEV (non-standard!) a try
+						if( (INT_PTR) hinst == SE_ERR_NOASSOC)	// give MSDEV (non-standard!) a try
 						{
 							hinst= ShellExecute( m_hWnd, _T("&Open with MSDEV"), m_ViewFilePath, NULL, NULL, SW_SHOWNORMAL);
-							if( (int) hinst > 32 ) 
+							if( (INT_PTR) hinst > 32 )
 								break;  // successfull MSDEV editor launch
 						}
 						hinst= ShellExecute( m_hWnd, _T("open"), m_ViewFilePath, NULL, NULL, SW_SHOWNORMAL);
-						if( (int) hinst > 32)
+						if( (INT_PTR) hinst > 32)
 						{
 							break;  // successfull viewer launch
 						}
@@ -810,7 +809,7 @@ LRESULT CHistoryDlg::OnP4ViewFile(WPARAM wParam, LPARAM lParam)
 LRESULT CHistoryDlg::OnUpdateHaveRev(WPARAM wParam, LPARAM lParam) 
 {
 	int ctr=2;
-	m_HaveRev = lParam;
+	m_HaveRev = (int)lParam;
 	CString revStr;
 	revStr.Format(_T("%d"), m_HaveRev);
 	for(int iItem=0; ctr && iItem < m_pHistory->GetRevisionCount(); iItem++)
@@ -1145,7 +1144,7 @@ LRESULT CHistoryDlg::OnP4EndDescribe(WPARAM wParam, LPARAM lParam)
 	case ID_SHOWDIFFS_NONE:
 	{
 		long l = _ttol(ref);
-		OnDescribeChgLong(l, wParam);
+		OnDescribeChgLong(l, (int)wParam);
 		break;
 	}
 	case IDC_NEXTITEM:
@@ -1321,7 +1320,7 @@ BOOL CHistoryDlg::OnInitDialog()
 	SetWindowText(caption);
 
 	// Modify the list control style so that the entire selected row is highlighted
-	DWORD dwStyle = ::SendMessage(m_ListCtl.m_hWnd,LVM_GETEXTENDEDLISTVIEWSTYLE,0,0);
+	LRESULT dwStyle = ::SendMessage(m_ListCtl.m_hWnd,LVM_GETEXTENDEDLISTVIEWSTYLE,0,0);
 	dwStyle |= LVS_EX_FULLROWSELECT;
 	::SendMessage(m_ListCtl.m_hWnd,LVM_SETEXTENDEDLISTVIEWSTYLE,0,dwStyle);
 

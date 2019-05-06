@@ -631,7 +631,7 @@ int CP4ListCtrl::FindInList( const CString &name )
 
 int CP4ListCtrl::FindInListAll( const CString &name )
 {
-	int cnt = m_ListAll.column[0].GetCount();
+	INT_PTR cnt = m_ListAll.column[0].GetCount();
 
 	for( int i = 0; i < cnt; i++ )
 	{

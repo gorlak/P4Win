@@ -166,7 +166,7 @@ void CJobListCtrl::Clear()
 
 LRESULT CJobListCtrl::OnFetchJobs( WPARAM wParam, LPARAM lParam )
 {
-    m_PostListToChangeNum= wParam;
+    m_PostListToChangeNum= (int)wParam;
 	m_PostListToChangeWnd= (HWND)lParam;
 
     if( GetItemCount() > 0 )
@@ -252,7 +252,7 @@ LRESULT CJobListCtrl::OnP4JobSpecColumnNames( WPARAM wParam, LPARAM lParam )
 	{
         // Delete the old column names
 		int i;
-        for( i= m_ColCodes.GetUpperBound(); i>=0; i-- )
+        for( i= (int)m_ColCodes.GetUpperBound(); i>=0; i-- )
             DeleteColumn(i);
 
 		pCmd->GetSpec( m_Spec );
@@ -263,7 +263,7 @@ LRESULT CJobListCtrl::OnP4JobSpecColumnNames( WPARAM wParam, LPARAM lParam )
 		//
 		int width[MAX_JOBS_COLUMNS] = { 90,80,60,90,200 };
 
-		RestoreSavedWidths( width, max(MAX_JOBS_COLUMNS, m_ColCodes.GetSize()), _T("Job List") );
+		RestoreSavedWidths( width, max(MAX_JOBS_COLUMNS, (int)m_ColCodes.GetSize()), _T("Job List") );
 		for (i = -1; ++i < MAX_JOBS_COLUMNS; )
 		{
 			if (width[i] > 5000)
@@ -340,7 +340,7 @@ BOOL CJobListCtrl::GetFldNames( CStringArray &fldNames, const CString &spec )
 	    
 	    int code;
 	    CString field;
-		int max = m_ColNames.GetSize();
+		int max = (int)m_ColNames.GetSize();
     	do  
 	    {
 		    //		get the field spec (e.g., "101 Job word 32")
@@ -425,7 +425,7 @@ void CJobListCtrl::InsertJob(CP4Job *job, int index)
 	ASSERT(job != NULL);
 	m_iImage = CP4ViewImageList::VI_JOB;
 
-	int maxcols = m_ColNames.GetSize();
+	int maxcols = (int)m_ColNames.GetSize();
 	for(int subItem=0; subItem < maxcols; subItem++)
 	{
 		lvItem.mask=LVIF_TEXT | 
@@ -467,7 +467,7 @@ void CJobListCtrl::UpdateJob(CP4Job *job, int index)
 	CString colName;
 
     // Then update the text for any fields that are present
-	int maxCols = m_ColNames.GetSize();
+	int maxCols = (int)m_ColNames.GetSize();
     for( int subItem=0; subItem < maxCols; subItem++ )
     {
 		txt=PadCRs(job->GetJobField(subItem));
@@ -613,7 +613,7 @@ void CJobListCtrl::OnViewUpdate( )
 		//
 		int width[ MAX_JOBS_COLUMNS ] = { 90,80,60,90,200 };
 
-		RestoreSavedWidths( width, m_ColCodes.GetSize(), _T("Job List") );
+		RestoreSavedWidths( width, (int)m_ColCodes.GetSize(), _T("Job List") );
 		for (i = -1; ++i < MAX_JOBS_COLUMNS; )
 		{
 			if (width[i] > 5000)
@@ -650,8 +650,8 @@ void CJobListCtrl::GetJobs( )
     	pCmd->SetFilter( !m_sFilter.IsEmpty( ) );
 
 	ASSERT(m_bAlreadyGotColumns);
-	int maxFlds = m_FieldNames.GetSize();
-	int maxCols = m_ColNames.GetSize();
+	int maxFlds = (int)m_FieldNames.GetSize();
+	int maxCols = (int)m_ColNames.GetSize();
 	int i;
 	for (i = -1; ++i < maxCols; )	// add the fields desired in column order
 	{
@@ -1128,7 +1128,7 @@ void CJobListCtrl::OnJobConfigure()
 {
 	int rc;
 	CJobsConfigure dlg;
-	int maxcols = m_ColNames.GetSize();
+	int maxcols = (int)m_ColNames.GetSize();
 	if (!maxcols && !m_Need2CallOnJobConfigure)
 	{
 		m_Need2CallOnJobConfigure = TRUE;
@@ -1148,10 +1148,10 @@ void CJobListCtrl::OnJobConfigure()
 		colWidths.SetAt(subItem, GetColumnWidth(subItem));
 		colNames.SetAt(subItem, m_ColNames.GetAt(subItem));
 	}
-	int maxflds = m_SpecNames.GetSize();
+	int maxflds = (int)m_SpecNames.GetSize();
 	for(subItem=0; subItem < maxflds; subItem++)
 		dlg.m_SpecNames += m_SpecNames.GetAt(subItem) + _T(' ');
-	if ((rc = dlg.DoModal( )) != IDCANCEL)
+	if ((rc = (int)dlg.DoModal( )) != IDCANCEL)
 	{
 		BOOL need2save = FALSE;
 		CString newWidths;

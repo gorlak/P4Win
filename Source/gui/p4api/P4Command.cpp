@@ -244,7 +244,7 @@ int CP4Command::AddArg( LPCTSTR arg )
  	ASSERT( m_args.GetSize() < MAX_P4ARGS );
 
     m_args.Add(arg);
-    return m_args.GetSize();
+    return int(m_args.GetSize());
 }
 
 int CP4Command::AddArg( int arg )
@@ -255,7 +255,7 @@ int CP4Command::AddArg( int arg )
     sArg.Format(_T("%d"),arg);
 
     m_args.Add(sArg);
-    return m_args.GetSize();
+    return int(m_args.GetSize());
 }
 
 void CP4Command::ClearArgs( int baseArgs)
@@ -465,7 +465,7 @@ void CP4Command::ExecCommand()
 		do
 		{
 			restart = m_RetryUnicodeMode = false;
-			m_pClient->SetArgv( m_args.GetSize() - 1, m_argsA.GetData() + 1 );
+			m_pClient->SetArgv( int(m_args.GetSize()) - 1, m_argsA.GetData() + 1 );
 			m_pClient->Run( CharFromCString(m_Function) );
 #ifdef UNICODE
 			if(m_RetryUnicodeMode)
@@ -959,7 +959,7 @@ CString CP4Command::GetP4Command( )
 		msg= _T("p4 passwd");
 	else
 	{
-		int args = m_args.GetSize() ;
+		INT_PTR args = m_args.GetSize() ;
 		
 		while ( args-- )
 			msg = CString ( _T(" ") ) + m_args[ args ] + msg;

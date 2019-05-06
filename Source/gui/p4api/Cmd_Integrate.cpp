@@ -402,13 +402,13 @@ void CCmd_Integrate::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
 
 			if ((i = StrStr(data, _T(" without -i flag"))) != 0)
 			{
-				msgD = CString(data, i - data) + LoadStringResource(IDS_ENABLE_BASELESS_MERGES);
+				msgD = CString(data, int(i - data)) + LoadStringResource(IDS_ENABLE_BASELESS_MERGES);
 				if (msg != data)
 					msgM += LoadStringResource(IDS_ENABLE_BASELESS_MERGES);
 			}
 			else if ((i = StrStr(data, _T(" without -d flag"))) != 0)
 			{
-				msgD = CString(data, i - data) + LoadStringResource(IDS_ENABLE_DELETE_READD);
+				msgD = CString(data, int(i - data)) + LoadStringResource(IDS_ENABLE_DELETE_READD);
 				if (msg != data)
 					msgM += LoadStringResource(IDS_ENABLE_DELETE_READD);
 			}

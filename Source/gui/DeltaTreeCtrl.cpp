@@ -1035,7 +1035,8 @@ LRESULT CDeltaTreeCtrl::OnP4Merge2(WPARAM wParam, LPARAM lParam)
 		MainFrame()->DoNotAutoPoll();
 		CGuiClientMerge *merge= (CGuiClientMerge *) wParam;
 		CMerge2Dlg dlg;
-		dlg.SetKey(lParam);
+		int key = (int)lParam;
+		dlg.SetKey(key);
 		dlg.SetMergeInfo(merge);
 		if (dlg.DoModal() == IDC_CANCEL_ALL)
 			m_ResolveList.RemoveAll();
@@ -1059,7 +1060,8 @@ LRESULT CDeltaTreeCtrl::OnP4Merge3(WPARAM wParam, LPARAM lParam)
 		dlg.SetForceFlag(m_ForcedResolve);
 		dlg.SetTextualFlag(m_TextualMerge);
 		dlg.SetRunMerge(m_bRunMerge);
-		dlg.SetKey(lParam);
+		int key = (int)lParam;
+		dlg.SetKey(key);
 		if (dlg.DoModal() == IDC_CANCEL_ALL)
 			m_ResolveList.RemoveAll();
 		merge->Signal();
@@ -1124,7 +1126,7 @@ LRESULT CDeltaTreeCtrl::OnP4UnResolved(WPARAM wParam, LPARAM lParam)
 
 			if( item != NULL )
 			{
-				int lParam= GetLParam(item);
+				LPARAM lParam= GetLParam(item);
 				if( lParam > 0 )
 				{
 					CP4FileStats *fs= (CP4FileStats *) lParam;
@@ -1175,7 +1177,7 @@ LRESULT CDeltaTreeCtrl::OnP4Resolved(WPARAM wParam, LPARAM lParam)
 
 			if( item != NULL )
 			{
-				int lParam= GetLParam(item);
+				LPARAM lParam= GetLParam(item);
 				if( lParam > 0 )
 				{
 					CP4FileStats *fs= (CP4FileStats *) lParam;
@@ -1502,12 +1504,11 @@ LRESULT CDeltaTreeCtrl::OnP4ListOp(WPARAM wParam, LPARAM lParam)
 		iRedoOpenedFilter = pCmd->GetRedoOpenedFilter();
 		if( pCmd->GetChkForSyncs() )
 		{
-			int rc;
+			INT_PTR rc;
 
 			key = pCmd->GetServerKey();
 			chainedCommands = TRUE;
-			if((rc = MsgBox(IDS_ONE_OR_MORE_FILES_IS_NOT_THE_HEAD_REVISION, 
-						MB_ICONEXCLAMATION | MB_DEFBUTTON3)) == IDC_BUTTON1)
+			if((rc = MsgBox(IDS_ONE_OR_MORE_FILES_IS_NOT_THE_HEAD_REVISION, MB_ICONEXCLAMATION | MB_DEFBUTTON3)) == IDC_BUTTON1)
 			{
 				if(pCmd->GetRevertAdds()->GetCount())
 					bRevertAdds = TRUE;
@@ -1778,7 +1779,7 @@ BOOL CDeltaTreeCtrl::OnP4RevertFile(CStringList *list, BOOL notifyDepotWnd/*=TRU
 	{
 		CCmd_ListOpStat *pCmd2= new CCmd_ListOpStat;
 		pCmd2->Init( m_hWnd, RUN_ASYNC, HOLD_LOCK, key );
-		pCmd2->SetNbrChgedFilesReverted(list->GetCount());
+		pCmd2->SetNbrChgedFilesReverted((int)list->GetCount());
 		pCmd2->SetRedoOpenedFilter(redoOpenedFilter);
 		if( pCmd2->Run( &m_StringList2, P4REVERTUNCHG ) )
 		{
@@ -2247,7 +2248,7 @@ BOOL CDeltaTreeCtrl::ExpandTree( const HTREEITEM item )
     if( APP_HALTED() || !item )
         return FALSE;
 
-	int lParam= GetLParam( item );
+	LPARAM lParam= GetLParam( item );
 
 	//  A) See if OtherPendingChanges just got expanded for first time, and
 	//     if so, go handle that special case
@@ -3574,7 +3575,7 @@ BOOL CDeltaTreeCtrl::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, 
 			// Build a list of changes and a list of jobs
 			m_DroppedFileList.RemoveAll();
 			m_DroppedJobList.RemoveAll();
-			for(int i=GetSelectedCount()-1; i>=0; i--)
+			for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 			{
 				item=GetSelectedItem(i);
 				if(!IsAFile(item))
@@ -4417,7 +4418,7 @@ void CDeltaTreeCtrl::OnFileDiff()
 			int tot;
 			if (SelectChgUnchg(TRUE, &tot))		// any file(s) get selected?
 			{
-				int i = tot - GetSelectedCount();	// compute nbr not selected (i.e. unchged)
+				INT_PTR i = tot - GetSelectedCount();	// compute nbr not selected (i.e. unchged)
 				if (i)								// any unchanged? if so, tell user
 				{
 					CString txt;
@@ -4504,7 +4505,7 @@ void CDeltaTreeCtrl::OnFiletype()
 		CP4FileStats *stats;
 		stats= (CP4FileStats *) GetLParam(item);
 		dlg.m_itemStr = stats->GetFormattedChangeFile(TRUE, TRUE);
-		int i=GetSelectedCount();
+		INT_PTR i=GetSelectedCount();
 		if (i > 1)
 		{
 			CString str = GetItemText(item);
@@ -4578,7 +4579,7 @@ void CDeltaTreeCtrl::OnMoveFiles()
 			// Build a list of files and a list of jobs
 			m_DroppedFileList.RemoveAll();
 			m_DroppedJobList.RemoveAll();
-			for(int i=GetSelectedCount()-1; i>=0; i--)
+			for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 			{
 				item=GetSelectedItem(i);
 				if(!IsAFile(item))
@@ -5018,7 +5019,7 @@ void CDeltaTreeCtrl::OnAddjobfix()
 
 LRESULT CDeltaTreeCtrl::OnP4JobList(WPARAM wParam, LPARAM lParam)
 {
-    m_EditChangeNum= wParam;
+    m_EditChangeNum= (long)wParam;
 
     // Get the list of jobs
     CObList *jobs= (CObList *) ::SendMessage( m_jobWnd, WM_QUERYJOBS, 0, 0);
@@ -5042,7 +5043,7 @@ LRESULT CDeltaTreeCtrl::OnP4JobList(WPARAM wParam, LPARAM lParam)
 	CStringList *jobnames= dlg.GetSelectedJobs();
 
 	EnumChildWindows(AfxGetMainWnd()->m_hWnd, ChildSetRedraw, TRUE);
-	int retcode= dlg.DoModal();
+	INT_PTR retcode= dlg.DoModal();
     SET_APP_HALTED(FALSE);
 
 	// Delete the job list
@@ -5137,7 +5138,7 @@ void CDeltaTreeCtrl::OnChgListRevert()
 		BOOL b = SelectChgUnchg(TRUE, &tot);
 		if (b)
 		{
-			int n = GetSelectionSetSize();
+			INT_PTR n = GetSelectionSetSize();
 			text.FormatMessage(IDS_n_CHGED_REVERT_YESNO, n);
 		}
 		UnselectAll();
@@ -5168,7 +5169,7 @@ void CDeltaTreeCtrl::OnChgListRevert()
 
 void CDeltaTreeCtrl::OnFileRevert() 
 {
-	int cnt = GetSelectedCount();
+	INT_PTR cnt = GetSelectedCount();
 	if(!cnt)
 	{
 		ASSERT(0);
@@ -5201,7 +5202,7 @@ void CDeltaTreeCtrl::OnFileRevert()
 		CCmd_Revert *pCmd= new CCmd_Revert;
 		pCmd->Init( m_hWnd, RUN_ASYNC);
 		pCmd->SetAlternateReplyMsg( WM_P4FILEREVERT );
-		pCmd->SetNbrNonEdits(m_StringList.GetCount() - m_SelectionList.GetCount());
+		pCmd->SetNbrNonEdits(int(m_StringList.GetCount() - m_SelectionList.GetCount()));
 		if (m_SelectionList.IsEmpty())
 		{
 			pCmd->ClearError();
@@ -5241,7 +5242,7 @@ LRESULT CDeltaTreeCtrl::OnP4Revert( WPARAM wParam, LPARAM lParam )
         }
 		else
 		{
-			int cnt = pCmd->GetFileList()->GetCount();
+			INT_PTR cnt = pCmd->GetFileList()->GetCount();
 			if (cnt > MAX_FILESEEKS)
 			{
 				int key= pCmd->GetServerKey();
@@ -5441,7 +5442,7 @@ int CDeltaTreeCtrl::RenderFileNames(LPTSTR p)
 	static DWORD	uFN = 0;	// amt of buffer at pFN actually in use
 	static DWORD	ddCtr = 0;	// counter to validate contents of buffer at pFN
 	LPTSTR ptr;
-	int		i;
+	INT_PTR i;
 
 	// If the change list pane is the drop target, don't provide a list of files
 	// because files from the chglist pane to the chglist pane are NOT in CF_HDROP format.
@@ -5641,7 +5642,7 @@ void CDeltaTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 
 					if(!SERVER_BUSY() && viewMenu.GetMenuItemCount() > 0)
 					{
-						popMenu.AppendMenu(MF_POPUP, (UINT) viewMenu.GetSafeHmenu(), 
+						popMenu.AppendMenu(MF_POPUP, (UINT_PTR) viewMenu.GetSafeHmenu(), 
 							LoadStringResource( IDS_VIEWUSING ));
 					}
 				}
@@ -5670,7 +5671,7 @@ void CDeltaTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 
 			if(!SERVER_BUSY() && editMenu.GetMenuItemCount() > 0)
 			{
-				popMenu.AppendMenu(MF_POPUP, (UINT) editMenu.GetSafeHmenu(), 
+				popMenu.AppendMenu(MF_POPUP, (UINT_PTR) editMenu.GetSafeHmenu(),
 					LoadStringResource( IDS_EDITUSING ));
 			}
 
@@ -5714,7 +5715,7 @@ void CDeltaTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 			}
 		}
 		if(!SERVER_BUSY())
-			popMenu.AppendMenu(MF_POPUP, (UINT) resolveMenu.GetSafeHmenu(), 
+			popMenu.AppendMenu(MF_POPUP, (UINT_PTR) resolveMenu.GetSafeHmenu(),
 				LoadStringResource ( (Level==1) ? IDS_MENU_RESOLVE_FILES : IDS_MENU_RESOLVE ) );
 	}
 
@@ -5741,7 +5742,7 @@ void CDeltaTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 					annotateMenu.AppendMenu( stringsON, ID_FILE_ANNOTATEALL, LoadStringResource ( IDS_FILE_ANNOTATEALL ) );
 					annotateMenu.AppendMenu( stringsON, ID_FILE_ANNOTATECHG, LoadStringResource ( IDS_FILE_ANNOTATECHG ) );
 					annotateMenu.AppendMenu( stringsON, ID_FILE_ANNOTATECHGALL, LoadStringResource ( IDS_FILE_ANNOTATECHGALL ) );
-					popMenu.AppendMenu(MF_POPUP, (UINT) annotateMenu.GetSafeHmenu(), 
+					popMenu.AppendMenu(MF_POPUP, (UINT_PTR) annotateMenu.GetSafeHmenu(),
 						LoadStringResource( IDS_ANNOTATEFILE ));
 				}
 			}
@@ -6028,7 +6029,7 @@ void CDeltaTreeCtrl::OnUpdateJobEditspec( CCmdUI* pCmdUI )
 BOOL CDeltaTreeCtrl::OnUpdateJob(CCmdUI* pCmdUI, int msgnbr)
 {
 	BOOL bEnable = FALSE;
-	int cnt = GetSelectedCount();
+	INT_PTR cnt = GetSelectedCount();
 	if (!SERVER_BUSY() && cnt >= 1 && AnyJobs())
 	{
 		HTREEITEM item= GetSelectedItem(0);
@@ -6087,7 +6088,7 @@ void CDeltaTreeCtrl::OnUpdateRemovefix(CCmdUI* pCmdUI)
 
 void CDeltaTreeCtrl::OnUpdateFileRevert(CCmdUI* pCmdUI) 
 {
-	int cnt = GetSelectedCount();
+	INT_PTR cnt = GetSelectedCount();
 	HTREEITEM currentItem = GetSelectedItem(0);
 	pCmdUI->Enable( MainFrame()->SetMenuIcon(pCmdUI, !SERVER_BUSY() && cnt > 0 
 		&& (AnyMyPendingChangeFiles() || (cnt == 1 
@@ -6216,7 +6217,7 @@ BOOL CDeltaTreeCtrl::AnyMyPendingChangeFiles()
 {
 	BOOL myChangeFile=FALSE;
 	
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		if(IsMyPendingChangeFile(GetSelectedItem(i)))
 		{
@@ -6241,7 +6242,7 @@ BOOL CDeltaTreeCtrl::AnyJobs()
 
 	if(level ==2)
 	{
-		for(int i=GetSelectedCount()-1; i>=0; i--)
+		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
 			if(GetLParam(GetSelectedItem(i)) == NULL)
 			{
@@ -6286,7 +6287,7 @@ BOOL CDeltaTreeCtrl::AnyMyInteg()
 		
 	if(IsMyPendingChangeItem( firstItem ))
 	{
-		for(int i=GetSelectedCount()-1; i>=0; i--)
+		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
 			if(IsOpenedForInteg(GetSelectedItem(i)))
 			{
@@ -6310,7 +6311,7 @@ BOOL CDeltaTreeCtrl::AnyMyBranch()
 		
 	if(IsMyPendingChangeItem( firstItem ))
 	{
-		for(int i=GetSelectedCount()-1; i>=0; i--)
+		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
 			if(IsOpenedForBranch(GetSelectedItem(i)))
 			{
@@ -6335,7 +6336,7 @@ BOOL CDeltaTreeCtrl::AnyMyLock()
 		
 	if(IsMyPendingChangeItem( firstItem ))
 	{
-		for(int i=GetSelectedCount()-1; i>=0; i--)
+		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
 			stats= (CP4FileStats *) GetLParam(GetSelectedItem(i));
 			if(stats != NULL)
@@ -6365,7 +6366,7 @@ BOOL CDeltaTreeCtrl::AnyMyUnLocked()
 	
 	if(IsMyPendingChangeItem(firstItem))
 	{
-		for(int i=GetSelectedCount()-1; i>=0; i--)
+		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
 			stats= (CP4FileStats *) GetLParam(GetSelectedItem(i));
 			if(stats != NULL)
@@ -6406,7 +6407,7 @@ BOOL CDeltaTreeCtrl::AnyBinaryFiles(BOOL bAnyResolvable/*=FALSE*/)
 		BOOL	typeS;
 		DWORD_PTR		nbrrevs;
 		BOOL	unknown;
-		for(int i=GetSelectedCount()-1; i>=0; i--)
+		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
 			TheApp()->GetFileType(GetItemText(GetSelectedItem(i)), 
 							baseType, storeType, typeK, typeW, typeX, 
@@ -6446,7 +6447,7 @@ BOOL CDeltaTreeCtrl::AnyUnresolvedFiles()
 	
 	if(IsMyPendingChangeItem(firstItem))
 	{
-		for(int i=GetSelectedCount()-1; i>=0; i--)
+		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
 			stats= (CP4FileStats *) GetLParam(GetSelectedItem(i));
 			if(stats != NULL)
@@ -6477,7 +6478,7 @@ BOOL CDeltaTreeCtrl::AnyResolvedFiles(BOOL bList/*=FALSE*/)
 	
 	if(IsMyPendingChangeItem(firstItem))
 	{
-		for(int i=GetSelectedCount()-1; i>=0; i--)
+		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
 			stats= (CP4FileStats *) GetLParam(GetSelectedItem(i));
 			if(stats != NULL)
@@ -6808,7 +6809,7 @@ void CDeltaTreeCtrl::OnFileMergeResolve(BOOL bRunMerge)
 		b = FALSE;
 		textualMerge = TRUE;
 		CString appName;
-		for(int i=GetSelectedCount()-1; i>=0; i--)
+		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
 			int		baseType;
 			int		storeType;
@@ -6916,7 +6917,7 @@ void CDeltaTreeCtrl::OnFileMergeResolve(BOOL bRunMerge)
 	}
 
 	m_ResolveList.RemoveAll();
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item = GetSelectedItem(i);
 		m_ResolveList.AddHead((CObject *)item);
@@ -7329,7 +7330,7 @@ BOOL CDeltaTreeCtrl::AssembleStringList( CStringList *list /*=NULL*/, BOOL inclu
  
 	list->RemoveAll();
 
-	for( int i = GetSelectedCount()-1; i >= 0; i--)
+	for(INT_PTR i = GetSelectedCount()-1; i >= 0; i--)
 	{
 		itemStr = GetItemText( GetSelectedItem( i ) );
 		if (itemStr.Right(5) == _T("<add>"))
@@ -7356,7 +7357,7 @@ BOOL CDeltaTreeCtrl::GetSelectedFiles( CStringList *list )
 	CString itemStr;
 	CString clientPath;
 
-	for( int i = GetSelectedCount() - 1; i >= 0; i-- )
+	for( INT_PTR i = GetSelectedCount() - 1; i >= 0; i-- )
 	{
 		cItem = GetSelectedItem( i );
 		itemStr = GetItemText( cItem );
@@ -7527,7 +7528,7 @@ void CDeltaTreeCtrl::OnFileOpenedit()
  
 	m_StringList.RemoveAll();
 
-	for( int i = GetSelectedCount()-1; i >= 0; i--)
+	for(INT_PTR i = GetSelectedCount()-1; i >= 0; i--)
 	{
 		if(IsOpenedForInteg(GetSelectedItem(i)) || IsOpenedForBranch(GetSelectedItem(i)))
 		{
@@ -7552,7 +7553,7 @@ void CDeltaTreeCtrl::OnUpdatePositionDepot(CCmdUI* pCmdUI)
 	BOOL underMyRoot=FALSE;
 	int level = GetItemLevel(GetSelectedItem(0), &underMyRoot);
 
-	int n = GetSelectedCount();
+	INT_PTR n = GetSelectedCount();
 	BOOL b = pCmdUI->m_pParentMenu == MainFrame()->GetMenu();
 	if (level == 1)
 	{
@@ -7590,8 +7591,8 @@ void CDeltaTreeCtrl::OnPositionDepot()
 		}
 	}
 
-	int n;
-	int count = 0;
+	INT_PTR n;
+	INT_PTR count = 0;
 	if( (n = GetSelectedCount()) >=1 )
 	{
 		MainFrame()->SetAdd2ExpandItemList(TRUE);
@@ -8485,7 +8486,7 @@ void CDeltaTreeCtrl::OnUpdateSelectChanged(CCmdUI* pCmdUI)
 	BOOL selectable=FALSE;
 	if( GET_SERVERLEVEL() >= 19 )
 	{
-		int cnt;
+		INT_PTR cnt;
 		BOOL underMyRoot;
 		HTREEITEM curitem = GetSelectedItem(0);
 		if( (cnt = GetSelectedCount()) == 1 && IsMyPendingChange( curitem ))

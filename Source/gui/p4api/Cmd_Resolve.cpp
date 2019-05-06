@@ -65,7 +65,7 @@ void CCmd_Resolve::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
 	if(pMerging)
 	{
 		TheApp()->StatusAdd(orgmsg);
-		m_YourMergeFileName= CString(data, pMerging - data);
+		m_YourMergeFileName= CString(data, int(pMerging - data));
 		m_TheirMergeFileName= pMerging + StrLen(_T(" - merging"));
 	}
 	else if( HandleBinaryMergeMessage(data) )
@@ -73,7 +73,7 @@ void CCmd_Resolve::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
 	else if((pVs = StrStr(data, _T(" - vs"))) != 0)
 	{
 		TheApp()->StatusAdd(orgmsg);
-		m_YourMergeFileName= CString(data, pVs - data);
+		m_YourMergeFileName= CString(data, int(pVs - data));
 		m_TheirMergeFileName= pVs + StrLen(_T(" - vs"));
 	}
 	else if(IsValidMergeMessage(data))

@@ -33,7 +33,7 @@ void CTokenString::Create(LPCTSTR str)
 	ASSERT(str != NULL);
 	ASSERT(_tcslen(str) > 0);
 
-	m_Len= _tcslen(str);
+	m_Len= (int)_tcslen(str);
 	m_pStr= new TCHAR[m_Len+1];
 	_tcscpy(m_pStr, str);
 	m_pNext= m_pStr;

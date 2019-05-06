@@ -162,7 +162,7 @@ project "P4Win"
 	flags
 	{
 		"MFC",
-		-- "FatalWarnings",
+		"FatalWarnings",
 	}
 
 	disablewarnings

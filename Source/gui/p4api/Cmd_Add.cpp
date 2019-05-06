@@ -169,13 +169,13 @@ void CCmd_Add::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
         LPCTSTR pos;
 		if ((pos = StrStr(data, _T(" - can't add existing file"))) != 0)
 		{
-			m_Str2Edit.AddHead(CString(data, pos-data));
+			m_Str2Edit.AddHead(CString(data, (int)(pos-data)));
 			return;
 		}
 		else if ((pos = StrStr(data, _T("can't add (already opened for edit)"))) != 0)
 		{
             // remove "can't add(" and ")", leaving only "already opened for edit"
-			CString txt(data, pos-data-1);
+			CString txt(data, (int)(pos-data-1));
 			txt += _T("already opened for edit");
             CP4Command::OnOutputInfo(level, txt, data == msg ? txt : msg);
             return;

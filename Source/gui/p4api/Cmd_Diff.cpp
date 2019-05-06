@@ -255,7 +255,7 @@ CString CCmd_Diff::RenameFileExt(CString file1, LPCTSTR ext1, LPCTSTR ext2)
 
 int CCmd_Diff::GetDiffNbrFiles() const
 {
-	return( m_StrListOut.GetCount() );
+	return (int) m_StrListOut.GetCount();
 }
 
 LPCTSTR CCmd_Diff::GetDiffFileName() const

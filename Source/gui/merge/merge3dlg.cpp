@@ -600,24 +600,24 @@ BOOL CMerge3Dlg::Edit(FileSys *file)
 					extension.CompareNoCase(_T("bat")) != 0 && extension.CompareNoCase(_T("cmd")) != 0)
 				{										// give VS .NET 7.1 (non-standard!) a try
 					hinst= ShellExecute( m_hWnd, _T("Open.VisualStudio.7.1"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-					if( (int) hinst > 32)
+					if( (INT_PTR) hinst > 32)
 					{
 						bLaunched = TRUE;
 						break;  // successfull viewer launch
 					}
-					if( (int) hinst == SE_ERR_NOASSOC)	// give MSDEV (non-standard!) a try
+					if( (INT_PTR) hinst == SE_ERR_NOASSOC)	// give MSDEV (non-standard!) a try
 					{
 						hinst= ShellExecute( m_hWnd, _T("&Open with MSDEV"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-						if( (int) hinst > 32 ) 
+						if( (INT_PTR) hinst > 32 ) 
 						{
 							bLaunched = TRUE;
 							break;  // successfull MSDEV viewer launch
 						}
 					}
-					if( (int) hinst == SE_ERR_NOASSOC)	// give standard "open" a try
+					if( (INT_PTR) hinst == SE_ERR_NOASSOC)	// give standard "open" a try
 					{
 						hinst= ShellExecute( m_hWnd, _T("open"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-						if( (int) hinst > 32 ) 
+						if( (INT_PTR) hinst > 32 ) 
 						{
 							bLaunched = TRUE;
 							break;  // successfull MSDEV viewer launch

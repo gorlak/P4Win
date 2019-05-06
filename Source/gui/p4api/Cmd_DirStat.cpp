@@ -404,7 +404,7 @@ void CCmd_DirStat::PreProcess(BOOL& done)
 					{
 						CString ifistr = (*ifi).c_str();
 						CString ifsstr = (*ifs).c_str();
-						int i = fstatarray.size();
+						size_t i = fstatarray.size();
 						i--;	// to shutup the compiler
 					}
 #endif
@@ -546,7 +546,7 @@ void CCmd_DirStat::PreProcess(BOOL& done)
 					// get the fstat of files opened for add
 					CObList *list = (CObList *)::SendMessage(m_ReplyWnd, WM_GETADDFSTATS, 0, 0);
 					ASSERT_KINDOF(CObList, list);
-					int listcount = list->GetCount();
+					INT_PTR listcount = list->GetCount();
 
 					// now walk the 'p4 where' output
 					CString localprev = _T("");

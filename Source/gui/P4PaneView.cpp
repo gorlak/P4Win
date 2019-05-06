@@ -197,7 +197,7 @@ BOOL CP4PaneView::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	// first, check for special case of caption control
 	// and handle it here
     TOOLTIPTEXT *pTTT = (TOOLTIPTEXT *)pNMHDR;    
-    UINT nID =pNMHDR->idFrom;
+    UINT_PTR nID =pNMHDR->idFrom;
     if (pTTT->uFlags & TTF_IDISHWND)    
     {
         // idFrom is actually the HWND of the tool

@@ -33,7 +33,7 @@ protected:
 		FOLDER_ALREADY_EXPANDED = -2,
 	};
 private:
-	CPtrArray m_SelectionSet;
+	CArray<HTREEITEM> m_SelectionSet;
 	HTREEITEM m_LastParent;
 	HTREEITEM m_LastSelect;
 	HTREEITEM m_AnchorItem;
@@ -57,7 +57,7 @@ protected:
     BOOL m_ViewIsActive;
 	CToolTipCtrl * m_ToolTip;
 	int m_ToolState;
-	UINT m_Timer;
+	UINT_PTR m_Timer;
 	BOOL m_SortByFilename;
 	BOOL m_SortByAction;
 	BOOL m_SortByExtension;
@@ -172,7 +172,7 @@ protected:
 
 public:
 	void SetMultiSelect(BOOL b) { m_MultiSelect = b; }
-	HTREEITEM GetSelectedItem(int index);
+	HTREEITEM GetSelectedItem(INT_PTR index);
 	CString GetItemText(HTREEITEM curr_item);
 	INT_PTR GetSelectedCount();
 

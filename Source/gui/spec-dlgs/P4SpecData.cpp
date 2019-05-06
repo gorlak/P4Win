@@ -583,10 +583,10 @@ void CSpecData::AddElem( const CString &tag, const CString &value, int isReadOnl
 
 void CSpecData::CheckForStragglers( )
 {
-    int numItems = GetNumItems( );
+    INT_PTR numItems = GetNumItems( );
 	if ( m_numParsed < numItems )
 	{
-		int missing = numItems - m_numParsed;
+		INT_PTR missing = numItems - m_numParsed;
 
 		while ( missing-- )
 			AddElemForEmptyItems( );
@@ -602,7 +602,7 @@ int CSpecData::Get( SpecElem *sd, int x, char **wv, char **cmt )
 {
 	int ret = DONE_FETCHING;
 
-	int numElems = m_aTags.GetSize( );//no, should change this test to numelems
+	INT_PTR numElems = m_aTags.GetSize( );//no, should change this test to numelems
 	for ( int i = 0; i < numElems; i++ )
 	{
 		if ( sd->tag == CharFromCString(m_aTags.GetAt( i )) )

@@ -385,7 +385,7 @@ HTREEITEM CDepotTreeCtrl::CheckItem(CString lookingfor, HTREEITEM item, BOOL use
 			BOOL b;
 			HTREEITEM prevItem;
 
-			CP4FileStats *stats= m_FSColl.GetStats(GetLParam(item));
+			CP4FileStats *stats= m_FSColl.GetStats((long)GetLParam(item));
 			if (IsBadWritePtr(stats, sizeof(CP4FileStats)))
 			{
 				b = FALSE;
@@ -952,7 +952,7 @@ CString CDepotTreeCtrl::GetItemDepotSyntax(HTREEITEM item, CString *localPath)
 
 	if( item && ITEM_IS_FILE(item) )
 	{
-		CP4FileStats *fs= m_FSColl.GetStats(GetLParam(item));
+		CP4FileStats *fs= m_FSColl.GetStats((long)GetLParam(item));
 		if( fs->InClientView() )
 			return(fs->GetFullDepotPath());
 	}
@@ -1284,7 +1284,7 @@ LRESULT CDepotTreeCtrl::OnP4Get(WPARAM wParam, LPARAM lParam)
 				// May have to reslect all that were selected when sync command fired.
 				// This undoes any fiddling the user might have done while waiting.
 				CPtrArray *selset = pCmd->GetSelectionSet();	// get original sel set
-				int cnt = selset->GetSize();
+				int cnt = (int)selset->GetSize();
 				BOOL b = cnt == GetSelectedCount();
 				if (b)
 				{	// same number in each list; are the lists the same?
@@ -1328,7 +1328,7 @@ LRESULT CDepotTreeCtrl::OnP4Get(WPARAM wParam, LPARAM lParam)
 		}
 		HWND hwnd = pCmd->GetRevHistWnd();
 		if (hwnd)
-			::PostMessage(hwnd, WM_UPDATEHAVEREV, 0, pCmd->GetRevReq());
+			::PostMessage(hwnd, WM_UPDATEHAVEREV, 0, (LPARAM)pCmd->GetRevReq());
 	}
 	else if (pCmd->IsRunIntegAfterSync())	// got an error; do we need to re-enable integ dialog?
 	{
@@ -1577,7 +1577,7 @@ LRESULT CDepotTreeCtrl::OnP4Integ(WPARAM wParam, LPARAM lParam)
 				else
 				{
 					// Update its properties
-					int index=GetLParam(item);
+					int index=(int)GetLParam(item);
 					CP4FileStats *fs=m_FSColl.GetStats(index);
 					
 					// Note that the open action could be a delete, since integ
@@ -1694,7 +1694,7 @@ LRESULT CDepotTreeCtrl::OnP4Add(WPARAM wParam, LPARAM lParam)
 				// that CCmd_ListOpStat will return a sparse set of information.
 				// In general only the file name and revision are present.
 
-				CP4FileStats *treefs= m_FSColl.GetStats(GetLParam(item));
+				CP4FileStats *treefs= m_FSColl.GetStats((long)GetLParam(item));
 						
 				treefs->SetNotInDepot(TRUE);
 				treefs->SetOpenAction(fs->GetMyOpenAction(), FALSE);
@@ -1783,7 +1783,7 @@ LRESULT CDepotTreeCtrl::OnP4Recover(WPARAM wParam, LPARAM lParam)
 				// rev is not present for LOCK, UNLOCK.  For EDIT and DELETE we will
 				// have additional info as returned by a call to ostat.
 
-				CP4FileStats *treefs= m_FSColl.GetStats(GetLParam(item));
+				CP4FileStats *treefs= m_FSColl.GetStats((long)GetLParam(item));
 						
 				treefs->SetNotInDepot(fs->IsNotInDepot());
 				treefs->SetOpenAction(fs->GetMyOpenAction(), FALSE);
@@ -1960,7 +1960,7 @@ void CDepotTreeCtrl::ProcessStatListResults(WPARAM wParam)
 			// rev is not present for LOCK, UNLOCK.  For EDIT and DELETE we will
 			// have additional info as returned by a call to ostat.
 
-			CP4FileStats *treefs= m_FSColl.GetStats(GetLParam(item));
+			CP4FileStats *treefs= m_FSColl.GetStats((long)GetLParam(item));
 					
 			switch(pCmd->GetCommand())
 			{
@@ -2079,7 +2079,7 @@ void CDepotTreeCtrl::ProcessGetListResults(UINT command, CStringList *list)
 		else
 		{
 			// Update its properties
-			index=GetLParam(item);
+			index=(DWORD)GetLParam(item);
 			fs=m_FSColl.GetStats(index);
 			// We need to do this because depot paths are not stored after
 			// files are added to the tree
@@ -2154,7 +2154,7 @@ LRESULT CDepotTreeCtrl::OnP4UpdateOpen(WPARAM wParam, LPARAM lParam)
 		// F_ADD and some F_INTEG files wont be in this view! 
 		return 0;
 		
-	DWORD index=GetLParam(item);	
+	DWORD index=(DWORD)GetLParam(item);	
 	CP4FileStats *fs=m_FSColl.GetStats(index);
 	
 	if(fs->GetHeadRev() || GET_P4REGPTR()->ShowEntireDepot() == SDF_LOCALTREE)
@@ -2213,7 +2213,7 @@ BOOL CDepotTreeCtrl::OnP4RevertFile(CCmd_ListOpStat *pCmd)
 	{
 		CCmd_ListOpStat *pCmd2= new CCmd_ListOpStat;
 		pCmd2->Init( m_hWnd, RUN_ASYNC, HOLD_LOCK, pCmd->GetServerKey() );
-		pCmd2->SetNbrChgedFilesReverted(list->GetCount());
+		pCmd2->SetNbrChgedFilesReverted((int)list->GetCount());
 		pCmd2->SetRedoOpenedFilter(pCmd->GetRedoOpenedFilter());
 		if( pCmd2->Run( &m_StringList2, P4REVERTUNCHG ) )
 		{
@@ -2611,11 +2611,11 @@ LRESULT CDepotTreeCtrl::OnP4DirStat(WPARAM wParam, LPARAM lParam)
 	if  (!m_SavedSelectionSet.IsEmpty())
 	{
 		int i;
-		int count = m_SavedSelectionSet.GetCount();
+		int count = (int)m_SavedSelectionSet.GetCount();
 		CView* pView = MainFrame()->GetActiveView ();
 		HTREEITEM item = NULL;
 		HTREEITEM itemPrv = NULL;
-		CDWordArray treeItems;
+		CArray<HTREEITEM> treeItems;
 		TCHAR   lastSlashChr = m_SavedSelectionSet.GetTail().GetAt(0) == _T('/') ? _T('/') : _T('\\');
 		int     lastSlashCur = -2;
 		int     lastSlashPrv = -2;
@@ -2662,7 +2662,7 @@ LRESULT CDepotTreeCtrl::OnP4DirStat(WPARAM wParam, LPARAM lParam)
 				BOOL bUp = itemPath.CompareNoCase(prevPath) < 0;
 				if ((itemPrv = FindDepotSibling(itemPath, itemPrv, bUp)) != NULL)
 				{
-					treeItems.Add((DWORD)itemPrv);
+					treeItems.Add(itemPrv);
 					prevPath = itemPath;
 					continue;
 				}
@@ -2693,7 +2693,7 @@ LRESULT CDepotTreeCtrl::OnP4DirStat(WPARAM wParam, LPARAM lParam)
 			lastElem.TrimRight();
 			if (lastElem == itemText)		 // Did we actually find the thing we were looking for?
 			{
-				treeItems.Add((DWORD)item ); //  remember it cuz future calls to ExpandDepotString() will deselect it
+				treeItems.Add( item ); //  remember it cuz future calls to ExpandDepotString() will deselect it
 				itemPrv  = item;
 				prevPath = itemPath;
 			}
@@ -2705,7 +2705,7 @@ LRESULT CDepotTreeCtrl::OnP4DirStat(WPARAM wParam, LPARAM lParam)
 		if (count > 1)
 		{
 			UnselectAll();
-			for (i = treeItems.GetSize(); i--; )
+			for (i = (int)treeItems.GetSize(); i--; )
 			{
 				item = (HTREEITEM)treeItems.GetAt(i);
 				SetSelectState( item, TRUE );
@@ -2832,7 +2832,7 @@ void CDepotTreeCtrl::DeleteLeaf(HTREEITEM item)
     
     if( ITEM_IS_FILE(item) )
     {
-        CP4FileStats *fs= (CP4FileStats *) m_FSColl.GetStats( GetLParam(item) );
+        CP4FileStats *fs= (CP4FileStats *) m_FSColl.GetStats( (int)GetLParam(item) );
         ASSERT_KINDOF(CP4FileStats, fs);
         fs->SetUserParam( NULL );
     }
@@ -3599,7 +3599,7 @@ void CDepotTreeCtrl::OnFileDiffhead()
 		CString itemStr=GetItemPath(item);
 		if (GET_P4REGPTR( )->ShowEntireDepot( ) > SDF_DEPOT)
 		{
-			CP4FileStats *fs = m_FSColl.GetStats(GetLParam(item));
+			CP4FileStats *fs = m_FSColl.GetStats((int)GetLParam(item));
 			itemStr = fs->GetFullDepotPath();
 		}
 		m_StringList.RemoveAll();
@@ -3648,7 +3648,7 @@ void CDepotTreeCtrl::OnFileDiff2()
 		rev2 = GetItemHeadRev(item2);
 
 		CP4FileStats *fs;
-		fs = m_FSColl.GetStats(GetLParam(item1));
+		fs = m_FSColl.GetStats((long)GetLParam(item1));
 		dlg.m_HeadRev1 = (fs->GetHeadAction() == F_DELETE) ? 0 : _tstoi(rev1);
 		if (GET_P4REGPTR( )->ShowEntireDepot( ) > SDF_DEPOT)
 		{
@@ -3656,7 +3656,7 @@ void CDepotTreeCtrl::OnFileDiff2()
 			if (dPath.Find(_T('%')))
 				dlg.m_Edit1 = dPath;
 		}
-		fs = m_FSColl.GetStats(GetLParam(item2));
+		fs = m_FSColl.GetStats((long)GetLParam(item2));
 		dlg.m_HeadRev2 = (fs->GetHeadAction() == F_DELETE) ? 0 : _tstoi(rev2);
 		if (GET_P4REGPTR( )->ShowEntireDepot( ) > SDF_DEPOT)
 		{
@@ -3694,7 +3694,7 @@ void CDepotTreeCtrl::OnFileDiff2()
 	}
 
 	SET_APP_HALTED(TRUE);
-	int rc=dlg.DoModal();  
+	int rc=(int)dlg.DoModal();
 	SET_APP_HALTED(FALSE);
 	if (rc == IDOK)
 	{
@@ -3878,7 +3878,7 @@ void CDepotTreeCtrl::OnFileRevisionTree()
 		if (GET_P4REGPTR( )->ShowEntireDepot( ) > SDF_DEPOT)
 		{
 			// use depot syntax
-			CP4FileStats *fs=m_FSColl.GetStats(GetLParam(item));
+			CP4FileStats *fs=m_FSColl.GetStats((long)GetLParam(item));
 			itemStr = fs->GetFullDepotPath();
 		}
 
@@ -3916,9 +3916,8 @@ void CDepotTreeCtrl::OnFiledropEdit()
 			return;
 		}
 		
-		int rc;
-		if((rc = MsgBox(IDS_ONE_OR_MORE_FILES_IS_NOT_THE_HEAD_REVISION,
-					MB_ICONEXCLAMATION | MB_DEFBUTTON3, IDC_BUTTON3)) == IDC_BUTTON3)
+		INT_PTR rc;
+		if((rc = MsgBox(IDS_ONE_OR_MORE_FILES_IS_NOT_THE_HEAD_REVISION, MB_ICONEXCLAMATION | MB_DEFBUTTON3, IDC_BUTTON3)) == IDC_BUTTON3)
 		{
 			RELEASE_SERVER_LOCK(key);
 			return;
@@ -3933,7 +3932,7 @@ void CDepotTreeCtrl::OnFiledropEdit()
 			CP4FileStats *fs;
 			int i, j;
 
-			for(i=GetSelectedCount()-1; i>=0; i--)
+			for(i=(int)GetSelectedCount()-1; i>=0; i--)
 			{
 				cItem=GetSelectedItem(i);	// Next selected item
 
@@ -3959,7 +3958,7 @@ void CDepotTreeCtrl::OnFiledropEdit()
 				CCmd_Get *pCmd= new CCmd_Get;
 				pCmd->Init( m_hWnd, RUN_ASYNC);
 				pCmd->SetOpenAfterSync(TRUE);
-				for(i=-1, j=GetSelectedCount(); ++i < j; )
+				for(i=-1, j=(int)GetSelectedCount(); ++i < j; )
 					pCmd->Add2SelSet(GetSelectedItem(i));	// Save list of selected items in cmd
 				if( pCmd->Run( &m_StringList, FALSE ) )
 					MainFrame()->UpdateStatus( LoadStringResource(IDS_FILE_SYNC) );
@@ -4028,8 +4027,7 @@ void CDepotTreeCtrl::OnFiledropEdit()
 			pCmd->Init( m_hWnd, RUN_ASYNC, HOLD_LOCK, key );
 		pCmd->SetOpenAction(2);
 		pCmd->SetHitMaxFileSeeks(FALSE);
-		if( pCmd->Run( m_OpenUnderChangeNumber, &m_StringList2,  
-							m_SelectionList.IsEmpty() ? NULL : &m_SelectionList) )
+		if( pCmd->Run( (int)m_OpenUnderChangeNumber, &m_StringList2, m_SelectionList.IsEmpty() ? NULL : &m_SelectionList) )
 			MainFrame()->UpdateStatus( LoadStringResource(IDS_ADDING_FILES) );
 		else
 			delete pCmd;
@@ -4045,7 +4043,7 @@ void CDepotTreeCtrl::OnFiledropEdit()
 			pCmd->Init( m_hWnd, RUN_ASYNC, HOLD_LOCK, key );
 
 		pCmd->SetHitMaxFileSeeks(hitMax);
-		if( pCmd->Run( &m_StringList, P4EDIT, m_OpenUnderChangeNumber ) )
+		if( pCmd->Run( &m_StringList, P4EDIT, (int)m_OpenUnderChangeNumber ) )
 			MainFrame()->UpdateStatus( LoadStringResource(IDS_REQUEST_OPEN_EDIT) );
 		else
 		{
@@ -4097,7 +4095,7 @@ void CDepotTreeCtrl::OnFileRecover()
 	CP4FileStats *fs;
 	int warnCount=0;
 
-	for( int i = GetSelectedCount() - 1; i >= 0; i-- )
+	for( int i = (int)GetSelectedCount() - 1; i >= 0; i-- )
 	{
 		item = GetSelectedItem( i );
 		if( HasChildren( item ) )
@@ -4105,7 +4103,7 @@ void CDepotTreeCtrl::OnFileRecover()
 		else
 		{
 			itemStr = GetItemPath( item );
-			fs=m_FSColl.GetStats( GetLParam(item) );
+			fs=m_FSColl.GetStats( (long)GetLParam(item) );
 			if( fs->GetHeadAction() == F_DELETE && 
 				fs->GetMyOpenAction()==0 && 
 				fs->GetHeadRev() > 0 &&
@@ -4194,7 +4192,7 @@ BOOL CDepotTreeCtrl::AllOpenedForAdd()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(int i=(int)GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE| TVIF_CHILDREN | TVIF_PARAM;
@@ -4394,7 +4392,7 @@ void CDepotTreeCtrl::OnFiledropDelete()
         // Pass in the server lock if we have it
         pCmd->Init( m_hWnd, RUN_ASYNC, HOLD_LOCK, key);
 
-	if( pCmd->Run( &m_StringList, P4DELETE, m_OpenUnderChangeNumber ) )
+	if( pCmd->Run( &m_StringList, P4DELETE, (int)m_OpenUnderChangeNumber ) )
 		MainFrame()->UpdateStatus( LoadStringResource(IDS_REQUESTING_DELETE) );
 	else
     {
@@ -4435,7 +4433,7 @@ void CDepotTreeCtrl::OnFileTimeLapseView()
 		if (GET_P4REGPTR( )->ShowEntireDepot( ) > SDF_DEPOT)
 		{
 			// use depot syntax
-			CP4FileStats *fs=m_FSColl.GetStats(GetLParam(currentItem));
+			CP4FileStats *fs=m_FSColl.GetStats((long)GetLParam(currentItem));
 			itemStr = fs->GetFullDepotPath();
 		}
 
@@ -4477,11 +4475,11 @@ void CDepotTreeCtrl::FileAnnotate(BOOL bAll, BOOL bChg/*=FALSE*/)
 		if (GET_P4REGPTR( )->ShowEntireDepot( ) > SDF_DEPOT)
 		{
 			// use depot syntax
-			CP4FileStats *fs=m_FSColl.GetStats(GetLParam(currentItem));
+			CP4FileStats *fs=m_FSColl.GetStats((long)GetLParam(currentItem));
 			itemStr = fs->GetFullDepotPath();
 		}
 
-		DWORD index=GetLParam(currentItem);
+		DWORD index=(long)GetLParam(currentItem);
 		CP4FileStats *fs=m_FSColl.GetStats(index);
 		CCmd_PrepBrowse *pCmd= new CCmd_PrepBrowse;
 		pCmd->Init( m_hWnd, RUN_ASYNC);
@@ -4531,7 +4529,7 @@ void CDepotTreeCtrl::OnFileRevisionhistory()
 		if (GET_P4REGPTR( )->ShowEntireDepot( ) > SDF_DEPOT && isAfile)
 		{
 			// use depot syntax
-			CP4FileStats *fs=m_FSColl.GetStats(GetLParam(currentItem));
+			CP4FileStats *fs=m_FSColl.GetStats((long)GetLParam(currentItem));
 			itemStr = fs->GetFullDepotPath();
 		}
 
@@ -4575,7 +4573,7 @@ void CDepotTreeCtrl::OnPositionChgs()
 	}
 	else
 	{
-		CP4FileStats *fs=m_FSColl.GetStats( GetLParam(currentItem) );
+		CP4FileStats *fs=m_FSColl.GetStats( (long)GetLParam(currentItem) );
 		ASSERT_KINDOF(CP4FileStats, fs);
 		MainFrame()->PositionChgs( fs->GetFullDepotPath(), fs->GetMyOpenAction() );
 	}
@@ -4831,7 +4829,7 @@ LRESULT CDepotTreeCtrl::OnP4Files(WPARAM wParam, LPARAM lParam)
 
 LRESULT CDepotTreeCtrl::OnDropTarget(WPARAM wParam, LPARAM lParam)
 {
-	m_DropTargetFlag = wParam;
+	m_DropTargetFlag = (int)wParam;
 	m_DropTargetPt.x = LOWORD(lParam);
 	m_DropTargetPt.y = HIWORD(lParam);
 	return 0;
@@ -4881,7 +4879,7 @@ void CDepotTreeCtrl::OnWinExplore()
 	}
 	else if (ITEM_IS_FILE(currentItem))
 	{
-		DWORD index=GetLParam(currentItem);
+		DWORD index=(int)GetLParam(currentItem);
 		CP4FileStats *fs=m_FSColl.GetStats(index);
 		itemStr= fs->GetFullClientPath();
 		itemStr.Replace(_T('/'), _T('\\'));
@@ -4995,7 +4993,7 @@ void CDepotTreeCtrl::OnCmdPrompt()
 
 	if (ITEM_IS_FILE(currentItem))
 	{
-		DWORD index=GetLParam(currentItem);
+		DWORD index=(int)GetLParam(currentItem);
 		CP4FileStats *fs=m_FSColl.GetStats(index);
 		itemStr= fs->GetFullClientPath();
 		itemStr.Replace(_T('/'), _T('\\'));
@@ -5090,7 +5088,7 @@ void CDepotTreeCtrl::OnFileGetcustom()
 	if (MainFrame()->IsModlessUp())
 		return;
 
-	int cnt;
+	INT_PTR cnt;
 	if((cnt = GetSelectedCount()) == 0)
 	{
 		ASSERT(0);
@@ -5169,7 +5167,7 @@ void CDepotTreeCtrl::FileGet(BOOL whatIf, BOOL force, BOOL removeFiles, LPCTSTR 
 	HTREEITEM cItem;
 	CString itemStr;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		cItem=GetSelectedItem(i);  // Next selected item
 
@@ -5191,7 +5189,7 @@ void CDepotTreeCtrl::FileGet(BOOL whatIf, BOOL force, BOOL removeFiles, LPCTSTR 
 			}
 			else
 			{
-				CP4FileStats *stats= m_FSColl.GetStats(GetLParam(cItem));
+				CP4FileStats *stats= m_FSColl.GetStats((long)GetLParam(cItem));
 				BOOL b =  TheApp()->m_HasPlusMapping;
 				CString dPath = stats->GetFullDepotPath();
 				if (!b && dPath.Find(_T('%')) != -1)
@@ -5350,11 +5348,11 @@ BOOL CDepotTreeCtrl::TryDragDrop( HTREEITEM currentItem )
 			CString itemStr;
 			// changes view accepted a drop - so get the target change number
 			CPoint point;
-			m_OpenUnderChangeNumber= ::SendMessage(m_changeWnd, WM_GETDRAGTOCHANGENUM, (WPARAM) &point, 0);
+			m_OpenUnderChangeNumber= (long)::SendMessage(m_changeWnd, WM_GETDRAGTOCHANGENUM, (WPARAM) &point, 0);
 
 			// and make a list of args for p4 add to use
 			m_StringList.RemoveAll();
-			for(int i=GetSelectedCount()-1; i>=0; i--)
+			for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 			{
 				item=GetSelectedItem(i);
 				itemStr= GetItemPath(item);
@@ -5700,7 +5698,7 @@ void CDepotTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 				getMenu.AppendMenu( stringsON, ID_FILE_GETCUSTOM );
 				getMenu.AppendMenu( stringsON, ID_FILE_REFRESH );
 				getMenu.AppendMenu( stringsON, ID_FILE_FORCESYNCTOHEAD, LoadStringResource( IDS_FILE_FORCESYNCTOHEAD ) );
-				showdelMenu.AppendMenu(MF_POPUP, (UINT) getMenu.GetSafeHmenu(), LoadStringResource( IDS_SYNC ) );
+				showdelMenu.AppendMenu(MF_POPUP, (UINT_PTR) getMenu.GetSafeHmenu(), LoadStringResource( IDS_SYNC ) );
 				showdelMenu.AppendMenu(MF_SEPARATOR);
 			}
 			showdelMenu.AppendMenu( stringsON, ID_SHOWDELETED, LoadStringResource( IDS_SHOWDELITEMS ) );
@@ -5746,7 +5744,7 @@ void CDepotTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 				needToAddSeparator = FALSE;
 				popMenu.AppendMenu(MF_SEPARATOR);
 			}
-			popMenu.AppendMenu(MF_POPUP, (UINT) getMenu.GetSafeHmenu(), LoadStringResource( IDS_SYNC ) );
+			popMenu.AppendMenu(MF_POPUP, (UINT_PTR) getMenu.GetSafeHmenu(), LoadStringResource( IDS_SYNC ) );
 			okToAddSeparator = TRUE;
 		}
 
@@ -5786,7 +5784,7 @@ void CDepotTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 				needToAddSeparator = FALSE;
 				popMenu.AppendMenu(MF_SEPARATOR);
 			}
-			popMenu.AppendMenu(MF_POPUP, (UINT) integMenu.GetSafeHmenu(), LoadStringResource( IDS_INTEGRATE ) );
+			popMenu.AppendMenu(MF_POPUP, (UINT_PTR) integMenu.GetSafeHmenu(), LoadStringResource( IDS_INTEGRATE ) );
 			if ((anyChildren || (anyEditable && anyInview)) && !isRemoteFolder)
 				popMenu.AppendMenu( stringsON, ID_FILE_RENAME, LoadStringResource( IDS_RENAME_DOTS ) );
 		}
@@ -5794,7 +5792,7 @@ void CDepotTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 		if(GetSelectedCount()==1 && !anyChildren && ITEM_IS_FILE(GetSelectedItem(0)))
 		{
 		    HTREEITEM item = GetSelectedItem(0);
-			int index=GetLParam(item);
+			INT_PTR index=GetLParam(item);
 			CP4FileStats *fs=m_FSColl.GetStats(index);
 			if (fs->GetMyOpenAction())
 				popMenu.AppendMenu( stringsON, ID_CHANGE_SUBMIT, LoadStringResource( IDS_SUBMIT_DOTS ) );
@@ -5913,7 +5911,7 @@ void CDepotTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 			{
 				UINT i = !fs->IsMyOpen() && (fs->GetHaveRev() < fs->GetHeadRev())
 					   ? IDS_VIEWDEPOTVERUSING : IDS_VIEWDEPOTVERUSINGHEAD;
-				popMenu.AppendMenu(uFlags, (UINT)viewMenu.GetSafeHmenu(), LoadStringResource(i));
+				popMenu.AppendMenu(uFlags, (UINT_PTR)viewMenu.GetSafeHmenu(), LoadStringResource(i));
 			}
 
 			uFlags = IsDeleted(currentItem) ? MF_GRAYED | MF_DISABLED | MF_POPUP : MF_POPUP;
@@ -5927,7 +5925,7 @@ void CDepotTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 						b = !IsInRemoteDepot(&(CString(fs->GetFullDepotPath())));
 				}
 				if(b)
-					popMenu.AppendMenu(uFlags, (UINT) editMenu.GetSafeHmenu(), 
+					popMenu.AppendMenu(uFlags, (UINT_PTR) editMenu.GetSafeHmenu(),
 							LoadStringResource(anyEditable || anyAddable 
 												? IDS_OPENANDEDITUSING : IDS_EDITUSING));
 			}
@@ -6328,7 +6326,7 @@ void CDepotTreeCtrl::UpdateFileAnnotate(CCmdUI* pCmdUI, BOOL bUnicodeOK)
 					&& !AllNotInDepot();
 	if( enable )
 	{
-		CP4FileStats *fs=m_FSColl.GetStats(GetLParam(GetSelectedItem(0)));
+		CP4FileStats *fs=m_FSColl.GetStats((long)GetLParam(GetSelectedItem(0)));
 		CString fileType = fs->GetHeadType();
 		enable = ((fileType.Find(_T("text")) != -1) 
 			   || (fileType.Find(_T("symlink")) != -1)
@@ -6412,7 +6410,7 @@ void CDepotTreeCtrl::OnUpdateFileDiffhead(CCmdUI* pCmdUI)
 
 void CDepotTreeCtrl::OnUpdateFileDiff2(CCmdUI* pCmdUI) 
 {
-	int cnt = GetSelectedCount();
+	INT_PTR cnt = GetSelectedCount();
 	pCmdUI->Enable(!SERVER_BUSY() && cnt && !IsSelected(m_Root) && !IsDepot(GetSelectedItem(0))
 		        && ((cnt==1)
 				 || (cnt==2 && !IsDepot(GetSelectedItem(1))
@@ -6459,7 +6457,7 @@ void CDepotTreeCtrl::OnUpdateFileSubmit(CCmdUI* pCmdUI)
 	HTREEITEM item;
 	if(GetSelectedCount()==1 && ITEM_IS_FILE(item = GetSelectedItem(0)) && !AnyHaveChildren())
 	{
-		int index=GetLParam(item);
+		INT_PTR index=GetLParam(item);
 		CP4FileStats *fs=m_FSColl.GetStats(index);
 		if (fs->GetMyOpenAction())
 			b = !SERVER_BUSY();
@@ -6476,7 +6474,7 @@ int CDepotTreeCtrl::LeafSelectedCount()
 	int rc;
 	int count=0;
 
-	for(int i=GetSelectedCount()-1; i >= 0; i--)
+	for( INT_PTR i=GetSelectedCount()-1; i >= 0; i--)
 	{
 		HTREEITEM item= GetSelectedItem(i);
 		rc= GetLeafCount(item);
@@ -6524,7 +6522,7 @@ BOOL CDepotTreeCtrl::AnyHaveChildren()
 	m_AnyHaveChildren=FALSE;
 	TV_ITEM item;
 
-	for( int i=GetSelectedCount()-1; i>=0; i-- )
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i-- )
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE| TVIF_CHILDREN | TVIF_PARAM;
@@ -6560,7 +6558,7 @@ BOOL CDepotTreeCtrl::AnyRemoveable()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE | TVIF_PARAM;
@@ -6590,7 +6588,7 @@ BOOL CDepotTreeCtrl::AnyInView()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE | TVIF_PARAM;
@@ -6620,7 +6618,7 @@ BOOL CDepotTreeCtrl::AllInView()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE | TVIF_PARAM;
@@ -6650,7 +6648,7 @@ BOOL CDepotTreeCtrl::AnyNotCurrent()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE | TVIF_PARAM;
@@ -6684,7 +6682,7 @@ BOOL CDepotTreeCtrl::AllNotInDepot()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE | TVIF_PARAM;
@@ -6712,7 +6710,7 @@ BOOL CDepotTreeCtrl::AnyInRemoteDepot()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE | TVIF_PARAM;
@@ -6747,7 +6745,7 @@ BOOL CDepotTreeCtrl::AnyAddable()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE| TVIF_CHILDREN | TVIF_PARAM;
@@ -6781,7 +6779,7 @@ BOOL CDepotTreeCtrl::AllAddable()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE | TVIF_PARAM;
@@ -6817,7 +6815,7 @@ BOOL CDepotTreeCtrl::AnyEditable()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE| TVIF_CHILDREN | TVIF_PARAM;
@@ -6845,7 +6843,7 @@ BOOL CDepotTreeCtrl::AnyOpenedForInteg()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE| TVIF_CHILDREN | TVIF_PARAM;
@@ -6877,7 +6875,7 @@ BOOL CDepotTreeCtrl::AnyLockable()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE| TVIF_CHILDREN | TVIF_PARAM;
@@ -6901,7 +6899,7 @@ BOOL CDepotTreeCtrl::AnyRecoverable()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE| TVIF_CHILDREN | TVIF_PARAM;
@@ -6935,7 +6933,7 @@ BOOL CDepotTreeCtrl::AnyUnlockable()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE| TVIF_CHILDREN | TVIF_PARAM;
@@ -6965,7 +6963,7 @@ BOOL CDepotTreeCtrl::AnyOpened()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE| TVIF_CHILDREN | TVIF_PARAM;
@@ -6989,7 +6987,7 @@ BOOL CDepotTreeCtrl::AnyDeleted()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE | TVIF_PARAM;
@@ -7055,7 +7053,7 @@ BOOL CDepotTreeCtrl::AnyOtherOpened()
 	TV_ITEM item;
 	CP4FileStats *fs;
 
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		item.hItem=GetSelectedItem(i);
 		item.mask=TVIF_HANDLE| TVIF_CHILDREN | TVIF_PARAM;
@@ -7142,7 +7140,7 @@ LRESULT CDepotTreeCtrl::OnP4FileInformation( WPARAM wParam, LPARAM lParam )
 		// Initialize the file info dialog
 		CFileInfoDlg *dlg = new CFileInfoDlg(this);
 
-		CP4FileStats *stats= m_FSColl.GetStats(GetLParam(currentItem));
+		CP4FileStats *stats= m_FSColl.GetStats((long)GetLParam(currentItem));
 		dlg->m_DepotPath= stats->GetFullDepotPath();
 		dlg->m_ClientPath= stats->GetFullClientPath();
 		if(dlg->m_ClientPath.GetLength() == 0)
@@ -7627,7 +7625,7 @@ void CDepotTreeCtrl::PrepareForViewer()
 	}
 
 	ASSERT(m_ViewItem != NULL);
-	DWORD index=GetLParam(m_ViewItem);
+	LPARAM index=GetLParam(m_ViewItem);
 	CP4FileStats *fs=m_FSColl.GetStats(index);
 	if ((fs->GetHeadAction() == F_DELETE) && (fs->GetHaveRev() == 0))
 	{
@@ -7904,12 +7902,12 @@ void CDepotTreeCtrl::RunViewer()
 					if(!extension.IsEmpty())
 					{	// give VS .NET (non-standard!) a try.
 						hinst= ShellExecute( m_hWnd, _T("Open.VisualStudio.7.1"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-						if( (int) hinst > 32 ) 
+						if( (INT_PTR) hinst > 32 ) 
 							break;  // successfull VS .NET editor launch
-						if( (int) hinst == SE_ERR_NOASSOC)	// give MSDEV (non-standard!) a try
+						if( (INT_PTR) hinst == SE_ERR_NOASSOC)	// give MSDEV (non-standard!) a try
 						{
 							hinst= ShellExecute( m_hWnd, _T("&Open with MSDEV"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-							if( (int) hinst > 32 ) 
+							if( (INT_PTR) hinst > 32 ) 
 								break;  // successfull MSDEV editor launch
 						}
 					}
@@ -7917,13 +7915,13 @@ void CDepotTreeCtrl::RunViewer()
 								   || !extUsesOpen(extension)))
 					{
 						hinst= ShellExecute( m_hWnd, _T("edit"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-						if( (int) hinst > 32 ) 
+						if( (INT_PTR) hinst > 32 ) 
 							break;  // successfull editor launch
 					}
 					if(!extension.IsEmpty() || !m_Editing)
 					{
 						hinst= ShellExecute( m_hWnd, _T("open"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-						if( (int) hinst > 32)
+						if( (INT_PTR) hinst > 32)
 							break;  // successfull viewer launch
 					}
 				}
@@ -7933,7 +7931,7 @@ void CDepotTreeCtrl::RunViewer()
 					// because it gives better messages in case of an error
 					// Also this appears to be what WindosExplorer uses.
 					hinst= ShellExecute( m_hWnd, _T("open"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-					if( (int) hinst > 32)
+					if( (INT_PTR) hinst > 32)
 						break;	// successfully spawned program
 				}
 			}
@@ -8109,7 +8107,7 @@ void CDepotTreeCtrl::OnLButtonDblClk(HTREEITEM currentItem)
 		case 3:	// view head revision
 		{
 			CString itemStr= GetItemPath(currentItem);
-			DWORD index=GetLParam(currentItem);
+			LPARAM index=GetLParam(currentItem);
 			CP4FileStats *fs=m_FSColl.GetStats(index);
 			SendMessage(WM_VIEWHEAD, (WPARAM)(itemStr.GetBuffer(32)), (LPARAM)fs);
 			itemStr.ReleaseBuffer();
@@ -8168,7 +8166,7 @@ LRESULT CDepotTreeCtrl::OnEditFile(WPARAM wParam, LPARAM lParam)
 	else if(lParam==EDIT_ASSOCVIEWER)
 		RunAssocViewer();
 	else if(lParam >= 0 && lParam < MAX_MRU_VIEWERS)
-		RunMRUViewer(lParam);
+		RunMRUViewer((UINT)lParam);
 	else
 	{
 		ASSERT(0);
@@ -8211,7 +8209,7 @@ LRESULT CDepotTreeCtrl::OnBrowseFile(WPARAM wParam, LPARAM lParam)
 	else if(lParam==EDIT_ASSOCVIEWER)
 		RunAssocViewer();
 	else if(lParam >= 0 && lParam < MAX_MRU_VIEWERS)
-		RunMRUViewer(lParam);
+		RunMRUViewer((UINT)lParam);
 	else
 	{
 		ASSERT(0);
@@ -8423,7 +8421,7 @@ void CDepotTreeCtrl::OnFileSubmit()
 	HTREEITEM item;
 	if(ITEM_IS_FILE(item = GetSelectedItem(0)) && !AnyHaveChildren())
 	{
-		int index=GetLParam(item);
+		LPARAM index=GetLParam(item);
 		CP4FileStats *fs=m_FSColl.GetStats(index);
 		if (fs->GetMyOpenAction())
 		{
@@ -8949,7 +8947,7 @@ void CDepotTreeCtrl::AssembleStringList(CStringList *list,
 	HTREEITEM cItem;
 	CString itemStr;
 
-	for( int i = GetSelectedCount() - 1; i >= 0; i-- )
+	for( INT_PTR i = GetSelectedCount() - 1; i >= 0; i-- )
 	{
 		cItem = GetSelectedItem( i );
 		itemStr = GetItemPath( cItem );
@@ -8975,7 +8973,7 @@ void CDepotTreeCtrl::AssembleStringList(CStringList *list,
 			itemStr += _T("...");
 		else if (ITEM_IS_FILE(cItem) && !bWildOK)
 		{
-			CP4FileStats *fs= m_FSColl.GetStats(GetLParam(cItem));
+			CP4FileStats *fs= m_FSColl.GetStats((long)GetLParam(cItem));
 			CString dPath = fs->GetFullDepotPath();
 			if (bDepotSyntax4Files || dPath.Find(_T('%')) != -1)
 				itemStr = fs->GetFullDepotPath();
@@ -8991,13 +8989,13 @@ BOOL CDepotTreeCtrl::GetSelectedFiles( CStringList *list )
 
 	HTREEITEM cItem;
 
-	for( int i = GetSelectedCount() - 1; i >= 0; i-- )
+	for( INT_PTR i = GetSelectedCount() - 1; i >= 0; i-- )
 	{
 		cItem = GetSelectedItem( i );
 
 		if( ITEM_IS_FILE(cItem) )
 		{
-			CP4FileStats *fs= m_FSColl.GetStats(GetLParam(cItem));
+			CP4FileStats *fs= m_FSColl.GetStats((long)GetLParam(cItem));
 			if( fs->InClientView() )
 				list->AddHead( fs->GetFullClientPath() );
 			else
@@ -9013,13 +9011,13 @@ BOOL CDepotTreeCtrl::GetSelectedFStats( CObList *list )
 
 	HTREEITEM cItem;
 
-	for( int i = GetSelectedCount() - 1; i >= 0; i-- )
+	for( INT_PTR i = GetSelectedCount() - 1; i >= 0; i-- )
 	{
 		cItem = GetSelectedItem( i );
 
 		if( ITEM_IS_FILE(cItem) )
 		{
-			CP4FileStats *fs= m_FSColl.GetStats(GetLParam(cItem));
+			CP4FileStats *fs= m_FSColl.GetStats((long)GetLParam(cItem));
 			if( fs->InClientView() )
 				list->AddHead( fs );
 			else
@@ -9200,7 +9198,7 @@ void CDepotTreeCtrl::OnUpdateEditCopyclientpath(CCmdUI* pCmdUI)
 
 void CDepotTreeCtrl::OnUpdateEditSelectAll(CCmdUI* pCmdUI) 
 {
-	int i;
+	INT_PTR i;
 	BOOL b = (i = GetSelectedCount()) > 0;
 	if (i > 1)
 	{
@@ -9221,7 +9219,7 @@ void CDepotTreeCtrl::OnEditCopyclientpath()
 		{
 			if( ITEM_IS_FILE(item) )
 			{
-				CP4FileStats *fs= m_FSColl.GetStats(GetLParam(item));
+				CP4FileStats *fs= m_FSColl.GetStats((long)GetLParam(item));
 				if( fs->InClientView() )
 				{
 					if (i)
@@ -9258,7 +9256,7 @@ void CDepotTreeCtrl::OnEditCopy()
 		{
 			if( ITEM_IS_FILE(item) )
 			{
-				CP4FileStats *fs= m_FSColl.GetStats(GetLParam(item));
+				CP4FileStats *fs= m_FSColl.GetStats((long)GetLParam(item));
 				if( fs->InClientView() )
 				{
 					if (i)
@@ -9590,7 +9588,7 @@ void CDepotTreeCtrl::ExpandDepotString(const CString &path, BOOL newPath,
 				TheApp()->m_bFindInChg = FALSE;
 				if (ITEM_IS_FILE(m_ExpandItem))
 				{
-					CP4FileStats *fs= m_FSColl.GetStats(GetLParam(m_ExpandItem));
+					CP4FileStats *fs= m_FSColl.GetStats((long)GetLParam(m_ExpandItem));
 					if (fs->GetMyOpenAction())
 						MainFrame()->PositionChgs( fs->GetFullDepotPath(), fs->GetMyOpenAction() );
 				}
@@ -9706,7 +9704,7 @@ void CDepotTreeCtrl::OnUpdateDiff_sd_se(CCmdUI* pCmdUI)
 void CDepotTreeCtrl::OnDiff_sd_se() 
 {
 	m_StringList.RemoveAll();
-	for(int i=GetSelectedCount()-1; i>=0; i--)
+	for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 	{
 		HTREEITEM cItem=GetSelectedItem(i);
 		CString itemStr= GetItemPath(cItem);
@@ -9714,7 +9712,7 @@ void CDepotTreeCtrl::OnDiff_sd_se()
 			itemStr += _T("...");
 		else if (ITEM_IS_FILE(cItem))
 		{
-			CP4FileStats *fs= m_FSColl.GetStats(GetLParam(cItem));
+			CP4FileStats *fs= m_FSColl.GetStats((long)GetLParam(cItem));
 			itemStr = fs->GetFullDepotPath();
 		}
 		m_StringList.AddHead(itemStr);
@@ -9769,7 +9767,7 @@ LRESULT CDepotTreeCtrl::OnP4Diff_sd_se(WPARAM wParam, LPARAM lParam)
 	if (sFlag == _T('d'))
 	{
 		m_StringList2.RemoveAll();
-		for(int i=GetSelectedCount()-1; i>=0; i--)
+		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
 			HTREEITEM cItem=GetSelectedItem(i);
 			CString itemStr= GetItemPath(cItem);
@@ -9777,7 +9775,7 @@ LRESULT CDepotTreeCtrl::OnP4Diff_sd_se(WPARAM wParam, LPARAM lParam)
 				itemStr += _T("...");
 			else if (ITEM_IS_FILE(cItem))
 			{
-				CP4FileStats *fs= m_FSColl.GetStats(GetLParam(cItem));
+				CP4FileStats *fs= m_FSColl.GetStats((long)GetLParam(cItem));
 				itemStr = fs->GetFullDepotPath();
 			}
 			m_StringList2.AddHead(itemStr);
@@ -10214,7 +10212,7 @@ LRESULT CDepotTreeCtrl::OnSetAddFstats(WPARAM wParam, LPARAM lParam)
 		else
 		{
 			// Update its properties
-			int index=GetLParam(item);
+			LPARAM index=GetLParam(item);
 			CP4FileStats *fs=m_FSColl.GetStats(index);
 			
 			if (!stats->GetOtherUsers()[0])
@@ -10293,7 +10291,7 @@ void CDepotTreeCtrl::OnUpdateFileDelete(CCmdUI* pCmdUI)
 
 void CDepotTreeCtrl::OnFileDelete()
 {
-	int selcount;
+	INT_PTR selcount;
 	if ((selcount = GetSelectedCount()) == 0)
 		return;
 
@@ -10307,7 +10305,7 @@ void CDepotTreeCtrl::OnFileDelete()
 	if (IDYES == AfxMessageBox(txt, MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2))
 	{
 		int i, count;
-		CDWordArray unselectionSet;
+		CArray<HTREEITEM> unselectionSet;
 		unselectionSet.SetSize(selcount);
 		for( i = -1, count = 0; ++i < selcount; )
 		{
@@ -10319,7 +10317,7 @@ void CDepotTreeCtrl::OnFileDelete()
 			int rc;
 			if ((rc = _tunlink(filename)) == 0)
 			{
-				unselectionSet.SetAt(count++, (DWORD)hItem);
+				unselectionSet.SetAt(count++, hItem);
 				txt.FormatMessage(IDS_s_DELETED, filename);
 				TheApp()->StatusAdd( txt );
 			}

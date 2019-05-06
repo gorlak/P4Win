@@ -28,7 +28,7 @@ CP4StatColl::~CP4StatColl()
 	DestroyAll();
 }
 
-void CP4StatColl::SetStats(long rowIndex, CP4FileStats *fs)
+void CP4StatColl::SetStats(LONG_PTR rowIndex, CP4FileStats *fs)
 {
 	while(rowIndex >= m_BlockCount * BLOCK_ROWS)
 	{
@@ -37,8 +37,8 @@ void CP4StatColl::SetStats(long rowIndex, CP4FileStats *fs)
 		m_BlockCount++;
 	}
 
-	int block=rowIndex/BLOCK_ROWS;
-	int offset=rowIndex%BLOCK_ROWS;
+	LONG_PTR block=rowIndex/BLOCK_ROWS;
+	LONG_PTR offset=rowIndex%BLOCK_ROWS;
 
 	if(m_fs[block][offset] != 0)
 		delete m_fs[block][offset];
@@ -47,10 +47,10 @@ void CP4StatColl::SetStats(long rowIndex, CP4FileStats *fs)
 	
 }
 
-CP4FileStats *CP4StatColl::GetStats(long rowIndex)
+CP4FileStats *CP4StatColl::GetStats(LONG_PTR rowIndex)
 {
-	int block=rowIndex/BLOCK_ROWS;
-	int offset=rowIndex%BLOCK_ROWS;
+	LONG_PTR block=rowIndex/BLOCK_ROWS;
+	LONG_PTR offset=rowIndex%BLOCK_ROWS;
 
 	return m_fs[block][offset];
 }

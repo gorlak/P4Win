@@ -158,7 +158,7 @@ void CCmd_Get::OnOutputError(char level, LPCTSTR errBuf, LPCTSTR errMsg)
 
 int CCmd_Get::ReiterateWarnings()
 {
-	int i;
+	INT_PTR i;
 
 	if( (i = m_Warnings.GetSize()) > 0 )
 	{
@@ -177,7 +177,8 @@ int CCmd_Get::ReiterateWarnings()
 	{
 		TheApp()->StatusAdd(_T("Sync completed with no warnings or errors"), SV_COMPLETION);
 	}
-	return(i);
+
+	return int(i);
 }
 
 

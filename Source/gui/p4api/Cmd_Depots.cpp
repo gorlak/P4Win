@@ -273,7 +273,7 @@ void CCmd_Depots::PostProcess()
 		return;
     }
 
-    int depotCount= m_LocalDepotList.GetCount() + m_RemoteDepotList.GetCount(); 
+    INT_PTR depotCount= m_LocalDepotList.GetCount() + m_RemoteDepotList.GetCount(); 
 
 	if (GET_P4REGPTR()->ShowEntireDepot() > SDF_DEPOT)
 	{

@@ -528,10 +528,10 @@ void CP4SpecSheet::OnRadioUnchg()
 
 LRESULT CP4SpecSheet::OnEnableDisable( WPARAM wParam, LPARAM lParam )
 {
-	GetDlgItem( IDC_STATICUNCHANGED )->EnableWindow(lParam);
-	GetDlgItem( IDC_RADIOREVERT )->EnableWindow(lParam);
-	GetDlgItem( IDC_RADIOSUBMIT )->EnableWindow(lParam);
-	GetDlgItem( IDC_RADIOLEAVE )->EnableWindow(lParam);
+	GetDlgItem( IDC_STATICUNCHANGED )->EnableWindow(!!lParam);
+	GetDlgItem( IDC_RADIOREVERT )->EnableWindow(!!lParam);
+	GetDlgItem( IDC_RADIOSUBMIT )->EnableWindow(!!lParam);
+	GetDlgItem( IDC_RADIOLEAVE )->EnableWindow(!!lParam);
 	return 0;
 }
 

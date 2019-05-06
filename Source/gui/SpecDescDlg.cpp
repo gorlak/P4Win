@@ -2043,20 +2043,20 @@ LRESULT CSpecDescDlg::OnP4ViewFile(WPARAM wParam, LPARAM lParam)
 						extension.CompareNoCase(_T("bat")) != 0 && extension.CompareNoCase(_T("cmd")) != 0)
 					{										// give VS .NET 7.1 (non-standard!) a try
 						hinst= ShellExecute( m_hWnd, _T("Open.VisualStudio.7.1"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-						if( (int) hinst > 32)
+						if( (INT_PTR) hinst > 32)
 						{
 							break;  // successfull viewer launch
 						}
-						if( (int) hinst == SE_ERR_NOASSOC)	// give MSDEV (non-standard!) a try
+						if( (INT_PTR) hinst == SE_ERR_NOASSOC)	// give MSDEV (non-standard!) a try
 						{
 							hinst= ShellExecute( m_hWnd, _T("&Open with MSDEV"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-							if( (int) hinst > 32 ) 
+							if( (INT_PTR) hinst > 32 ) 
 								break;  // successfull MSDEV viewer launch
 						}
-						if( (int) hinst == SE_ERR_NOASSOC)	// give standard "open" a try
+						if( (INT_PTR) hinst == SE_ERR_NOASSOC)	// give standard "open" a try
 						{
 							hinst= ShellExecute( m_hWnd, _T("open"), viewFilePath, NULL, NULL, SW_SHOWNORMAL);
-							if( (int) hinst > 32 ) 
+							if( (INT_PTR) hinst > 32 ) 
 								break;  // successfull MSDEV viewer launch
 						}
 					}
@@ -2360,7 +2360,7 @@ LRESULT CSpecDescDlg::OnP4EndDescribe(WPARAM wParam, LPARAM lParam)
 	case ID_SHOWDIFFS_RCS:
 	case ID_SHOWDIFFS_NONE:
 	{
-		OnDescChgLong(wParam);
+		OnDescChgLong(int(wParam));
 		break;
 	}
 	case IDC_EDITIT:
@@ -2386,7 +2386,7 @@ void CSpecDescDlg::OnEmail()
 	seltxt.TrimLeft(_T('<'));
 	seltxt.TrimLeft();
 	CString txt = _T("mailto:") + seltxt;
-	int s = (int)ShellExecute(m_hWnd,_T("open"), txt,NULL,NULL,SW_SHOWNORMAL);
+	INT_PTR s = (INT_PTR)ShellExecute(m_hWnd,_T("open"), txt,NULL,NULL,SW_SHOWNORMAL);
 	if (s <= 32)
 	{
 		txt.FormatMessage(IDS_UNABLE_TO_SEND_EMAIL_TO_s, m_Text.GetSelText());
@@ -2400,7 +2400,7 @@ void CSpecDescDlg::OnURL()
 	seltxt.TrimRight(_T(">\""));
 	seltxt.TrimLeft(_T("<\""));
 	seltxt.TrimLeft();
-	int s = (int)ShellExecute(m_hWnd, _T("open"), seltxt,NULL,NULL,SW_SHOWNORMAL);
+	INT_PTR s = (INT_PTR)ShellExecute(m_hWnd, _T("open"), seltxt,NULL,NULL,SW_SHOWNORMAL);
 	if (s <= 32)
 	{
 		seltxt.FormatMessage(IDS_UNABLE_TO_BROWSE_s, m_Text.GetSelText());
@@ -2412,7 +2412,7 @@ void CSpecDescDlg::OnCallTrack()
 {
 	CString host = AfxGetApp()->GetProfileString(_T("Settings"), _T("CallTrackHost"), _T("calltrack"));
 	CString txt = "http://" + host + _T("/cgi-bin/detail?call=") + m_Text.GetSelText();
-	int s = (int)ShellExecute(m_hWnd,_T("open"), txt,NULL,NULL,SW_SHOWNORMAL);
+	INT_PTR s = (INT_PTR)ShellExecute(m_hWnd,_T("open"), txt,NULL,NULL,SW_SHOWNORMAL);
 	if (s <= 32)
 	{
 		txt = _T("Unable to display CallTrack number ") + m_Text.GetSelText();
@@ -2665,8 +2665,8 @@ CSpecDescDlg::AddHotSpotWord(int idx, int offset, int lineStart, int lgth, BOOL 
         pEnd--;
 
     // calculate indexes, and add hotspot
-    int b = pBegin - line + lineStart;
-    int e = pEnd - line + lineStart;
+    int b = int(pBegin - line) + lineStart;
+    int e = int(pEnd - line) + lineStart;
 	m_HotSpotBgn.InsertAt(idx, b);
 	m_HotSpotEnd.InsertAt(idx, e);
 	return(e);
@@ -2678,7 +2678,7 @@ CSpecDescDlg::AddHotSpotFile(int idx, int offset, int lineStart, int lgth, BOOL 
     // b points to either "// or -// or //
 
     int b = offset;
-	int n = wcslen(m_TO_);
+	size_t n = wcslen(m_TO_);
     if(m_DescriptionW[b] != '/')
         b++;
 
@@ -2730,7 +2730,7 @@ CSpecDescDlg::AddHotSpotFile(int idx, int offset, int lineStart, int lgth, BOOL 
 				break;
     	}
     }
-    int e = pEnd - m_DescriptionW;
+    int e = int(pEnd - m_DescriptionW);
 	m_HotSpotBgn.InsertAt(idx, b);
 	m_HotSpotEnd.InsertAt(idx, e);
 	return(e);
@@ -2739,7 +2739,7 @@ CSpecDescDlg::AddHotSpotFile(int idx, int offset, int lineStart, int lgth, BOOL 
 
 void CSpecDescDlg::SetHotSpots()
 {
-    int lgth = wcslen(m_DescriptionW);
+    int lgth = int(wcslen(m_DescriptionW));
     LPCWSTR pLastMinus1 = m_DescriptionW + (lgth ? lgth - 1 : 0);
 	BOOL bInJobs = FALSE;
 	BOOL bInFixes = FALSE;
@@ -2815,10 +2815,10 @@ void CSpecDescDlg::SetHotSpots()
             ASSERT(strReportedByR.GetLength() < strReportedByLen);
             MultiByteToWideChar(CP_ACP, 0, strReportedByR, -1, strReportedBy, strReportedByLen);
 #endif
-            strAffectedFilesLen = wcslen(strAffectedFiles);
-            strFixesLen = wcslen(strFixes);
-            strChangeLen = wcslen(strChange);
-			strReportedByLen = wcslen(strReportedBy);
+            strAffectedFilesLen = int(wcslen(strAffectedFiles));
+            strFixesLen = int(wcslen(strFixes));
+            strChangeLen = int(wcslen(strChange));
+			strReportedByLen = int(wcslen(strReportedBy));
         }
 
         // if at end of line, skip to start of next line
@@ -2829,10 +2829,10 @@ void CSpecDescDlg::SetHotSpots()
             if(!*pAt)
                 break;
 
-            beginChar = pAt - m_DescriptionW;
+            beginChar = int(pAt - m_DescriptionW);
         }
 
-        int i = pAt - m_DescriptionW;
+        int i = int(pAt - m_DescriptionW);
 
         if(bInDiffs && i == beginChar)
         {
@@ -2992,7 +2992,7 @@ void CSpecDescDlg::SetHotSpots()
 
             if(pChar > pAt)
             {
-			    i = AddHotSpotWord(m_numHotSpots, i, beginChar, pChar - pAt, FALSE);
+			    i = AddHotSpotWord(m_numHotSpots, i, beginChar, int(pChar - pAt), FALSE);
                 pAt = pChar;
 			    m_HotSpotType.InsertAt(m_numHotSpots++, HS_ISACHG);
             }
@@ -3005,7 +3005,7 @@ void CSpecDescDlg::SetHotSpots()
 		}
         // if at end of line, note start of next line
         if(*pAt == '\n')
-            beginChar = (pAt + 1) - m_DescriptionW;
+            beginChar = int((pAt + 1) - m_DescriptionW);
 	}
 	if (m_numHotSpots == 0)
 		return;

@@ -295,7 +295,7 @@ protected:
 	};
 
 	// For use in timer update
-	UINT m_Timer;
+	UINT_PTR m_Timer;
 	long m_LastUpdateTime;
     BOOL m_LastUpdateResult;
 	BOOL m_ClientError;

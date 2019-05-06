@@ -235,9 +235,9 @@ void CCmd_Ostat::PreProcess(BOOL& done)
 
 	if(!m_FatalError && ((m_UnresolvedArray.GetSize() > 0) || (m_ResolvedArray.GetSize() > 0)))
 	{
-        int maxR= m_ResolvedArray.GetSize();
-        int maxU= m_UnresolvedArray.GetSize();
-        int maxO= m_OpenArray.GetSize();
+        INT_PTR maxR= m_ResolvedArray.GetSize();
+        INT_PTR maxU= m_UnresolvedArray.GetSize();
+        INT_PTR maxO= m_OpenArray.GetSize();
 
         CString fName;
         CP4FileStats *stats;
@@ -325,7 +325,7 @@ void CCmd_Ostat::SortOpened()
     // 2) change number
     // 3) file name
 
-    unsigned int size= m_OpenArray.GetSize();
+    INT_PTR size= m_OpenArray.GetSize();
     CObject **array= m_OpenArray.GetData();
 
     setupCompare();
@@ -339,7 +339,7 @@ void CCmd_Ostat::SortUnresolved()
     // 2) change number
     // 3) file name
 
-    unsigned int size= m_UnresolvedArray.GetSize();
+    INT_PTR size= m_UnresolvedArray.GetSize();
     CString *array= m_UnresolvedArray.GetData();
 
     setupCompare();
@@ -354,7 +354,7 @@ void CCmd_Ostat::SortResolved()
     // 2) change number
     // 3) file name
 
-    unsigned int size= m_ResolvedArray.GetSize();
+    INT_PTR size= m_ResolvedArray.GetSize();
     CString *array= m_ResolvedArray.GetData();
 
     setupCompare();

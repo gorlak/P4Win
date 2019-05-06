@@ -566,10 +566,10 @@ void CMultiSelTreeCtrl::SetItemAndPoint( HTREEITEM &item, CPoint &point )
     }
 }
 
-HTREEITEM CMultiSelTreeCtrl::GetSelectedItem(int index)
+HTREEITEM CMultiSelTreeCtrl::GetSelectedItem(INT_PTR index)
 {
 	if (index < m_SelectionSet.GetSize())
-		return (HTREEITEM) m_SelectionSet.GetAt(index);
+		return m_SelectionSet.GetAt(index);
 	return NULL;
 }
 

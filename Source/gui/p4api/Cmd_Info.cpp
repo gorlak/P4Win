@@ -42,7 +42,7 @@ void CCmd_Info::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
     if(pSep)
     {
         ASSERT(pSep[1] == _T(' '));
-        tag = CString(data).Left(pSep - data);
+        tag = CString(data).Left(int(pSep - data));
         value = pSep+2;
     }
     else

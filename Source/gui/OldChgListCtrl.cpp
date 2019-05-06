@@ -458,7 +458,7 @@ LRESULT COldChgListCtrl::OnP4EndDescribe( WPARAM wParam, LPARAM lParam )
 	case ID_SHOWDIFFS_NONE:
 	{
 		long l = _ttol(ref);
-		OnDescribeLong(l, wParam);
+		OnDescribeLong(l, (int)wParam);
 		break;
 	}
 	case IDC_NEXTITEM:
@@ -690,7 +690,7 @@ void COldChgListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 		popMenu.AppendMenu(MF_ENABLED | MF_STRING, ID_POSITIONDEPOT, LoadStringResource( IDS_FINDCHGFILESINDEPOT ) );
 		integMenu.AppendMenu( stringsON, ID_FILE_INTEGSPEC, LoadStringResource( IDS_USINGFILESPEC ) );
 		integMenu.AppendMenu( stringsON, ID_FILE_INTEGRATE, LoadStringResource( IDS_USINGBRANCHSPEC ) );
-		popMenu.AppendMenu(MF_POPUP, (UINT) integMenu.GetSafeHmenu(), LoadStringResource( IDS_INTEGRATE ) );
+		popMenu.AppendMenu(MF_POPUP, (UINT_PTR) integMenu.GetSafeHmenu(), LoadStringResource( IDS_INTEGRATE ) );
 		popMenu.AppendMenu(MF_SEPARATOR);
 	}
 
@@ -1618,7 +1618,7 @@ void COldChgListCtrl::OnAddjobfix()
 
 LRESULT COldChgListCtrl::OnP4JobList(WPARAM wParam, LPARAM lParam)
 {
-    long changeNumber= wParam;
+    long changeNumber= (long)wParam;
 
     // Get the list of jobs
     CObList *jobs= (CObList *) ::SendMessage( m_jobWnd, WM_QUERYJOBS, 0, 0);
@@ -1638,7 +1638,7 @@ LRESULT COldChgListCtrl::OnP4JobList(WPARAM wParam, LPARAM lParam)
 	CStringList *jobnames= dlg.GetSelectedJobs();
 
 	EnumChildWindows(AfxGetMainWnd()->m_hWnd, ChildSetRedraw, TRUE);
-	int retcode= dlg.DoModal();
+	int retcode= (int)dlg.DoModal();
     SET_APP_HALTED(FALSE);
 
 	// Delete the job list
@@ -1881,7 +1881,7 @@ LRESULT COldChgListCtrl::OnP4DescribeAlt(WPARAM wParam, LPARAM lParam)
 				if (MainFrame()->GetExpandItemListCount() < count)
 				{
 					CString txt;
-					int n = count - MainFrame()->GetExpandItemListCount();
+					int n = count - (int)MainFrame()->GetExpandItemListCount();
 					txt.FormatMessage(IDS_NOTALLITEMSSELECTED_d, n, n==1 ? _T("") : _T("s"));
 					TheApp()->StatusAdd( txt, SV_WARNING );
 				}

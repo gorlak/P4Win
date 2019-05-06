@@ -238,7 +238,7 @@ BOOL CCmd_SendSpec::HandledCmdSpecificError(LPCTSTR errBuf, LPCTSTR errMsg)
         LPCTSTR pEndOmit = StrChr(pStartOmit+1, _T('\n'));
 
         if( pEndOmit )
-            m_ErrorTxt = CString(errMsg).Left(pStartOmit - errMsg) + pEndOmit;
+            m_ErrorTxt = CString(errMsg).Left(int(pStartOmit - errMsg)) + pEndOmit;
     }
     else
         m_ErrorTxt = errMsg;

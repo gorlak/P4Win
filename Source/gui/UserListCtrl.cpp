@@ -816,7 +816,7 @@ int CUserListCtrl::OnUserPasswordDlg(BOOL bLogin, int key)
 	dlg.m_Key = key;
 	if (bLogin)
 		dlg.m_Caption = LoadStringResource(IDS_MUST_SET_PASSWORD);
-	return dlg.DoModal();
+	return int(dlg.DoModal());
 }
 
 
@@ -889,7 +889,7 @@ int CUserListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	colnames.Add ( LoadStringResource(IDS_ACCESS) );
 	ASSERT( USER_MAXCOL == colnames.GetSize( ) );
 	int width[ USER_MAXCOL ]={90,150,150,90};
-	RestoreSavedWidths( width, colnames.GetSize( ), sRegValue_UserList );
+	RestoreSavedWidths( width, int(colnames.GetSize( )), sRegValue_UserList );
 	InsertColumnHeaders( colnames, width );
 
 	return 0;

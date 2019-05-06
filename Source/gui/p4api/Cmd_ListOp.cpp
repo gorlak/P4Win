@@ -129,7 +129,7 @@ void CCmd_ListOp::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
         {
             LPCTSTR p = StrStr(data, _T(" - must sync/resolve "));
             if(p)
-    			m_StrListSync.AddHead(CString(data, p - data));
+    			m_StrListSync.AddHead(CString(data, int(p - data)));
 		}
 		break;
 		
@@ -209,7 +209,7 @@ BOOL CCmd_ListOp::HandledCmdSpecificError(LPCTSTR errBuf, LPCTSTR errMsg)
         // Format a message for display
         CString msg;
         msg.FormatMessage( IDS_UNABLE_TO_FIND_FILE_s_ON_CLIENT,
-                    CString(errBuf+chmodLen, end-errBuf-chmodLen) );
+                    CString(errBuf+chmodLen, int(end-errBuf)-chmodLen) );
         TheApp()->StatusAdd( msg, SV_WARNING );
 
         handledError=TRUE;

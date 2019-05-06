@@ -265,7 +265,7 @@ void CCmd_Integrate2::PreProcess(BOOL& done)
 		}
 	}
 
-	m_ActualCount = targetList.GetCount();
+	m_ActualCount = int(targetList.GetCount());
 
 	///////////////
 	// Run 'opened' for the change number, because this will usually be
@@ -394,7 +394,7 @@ void CCmd_Integrate2::PreProcess(BOOL& done)
 		{
 			for (pos=targetList.GetHeadPosition(); pos != NULL; )
 				m_PreviewTargetList.AddHead(targetList.GetNext(pos));
-			m_ActualCount = m_PreviewTargetList.GetCount();
+			m_ActualCount = int(m_PreviewTargetList.GetCount());
 		}
 	}
 
@@ -424,62 +424,62 @@ BOOL CCmd_Integrate2::ParseIntegResults( CString& line, CString& source, CString
 	if( (x=line.Find(_T(" - branch/sync from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - branch/sync from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - branch/sync from "))));
 		gotBranchSync = TRUE;
 	}
 	else if( (x=line.Find(_T(" - import/sync from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - import/sync from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - import/sync from "))));
 	}
 	else if( (x=line.Find(_T(" - sync/integrate from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - sync/integrate from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - sync/integrate from "))));
 	}
 	else if( (x=line.Find(_T(" - sync/delete from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - sync/delete from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - sync/delete from "))));
 	}
 	else if( (x=line.Find(_T(" - sync/edit from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - sync/edit from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - sync/edit from "))));
 	}
 	else if( (x=line.Find(_T(" - branch from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - branch from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - branch from "))));
 		if (m_IsNoCopy && m_IsRename)
 			gotBranchSync = TRUE;
 	}
 	else if( (x=line.Find(_T(" - add from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - add from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - add from "))));
 		if (m_IsNoCopy && m_IsRename)
 			gotBranchSync = TRUE;
 	}
 	else if( (x=line.Find(_T(" - integrate from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - integrate from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - integrate from "))));
 	}
 	else if( (x=line.Find(_T(" - delete from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - delete from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - delete from "))));
 	}
 	else if( (x=line.Find(_T(" - import from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - import from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - import from "))));
 	}
 	else if( (x=line.Find(_T(" - edit from "))) != -1)
 	{
 		dest=line.Left(x);
-		source=line.Mid(x+_tcslen(_T(" - edit from ")));
+		source=line.Mid(x+int(_tcslen(_T(" - edit from "))));
 	}
 	else if (( line.Find(_T(" - can't ")) != -1)
 		  || ( line.Find(_T(" - is already opened by ")) != -1)

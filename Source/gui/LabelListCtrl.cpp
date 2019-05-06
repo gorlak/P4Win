@@ -239,7 +239,7 @@ LRESULT CLabelListCtrl::OnDoLabelSync(WPARAM wParam, LPARAM lParam)
 	BOOL preview = FALSE;
 	if (wParam == IDOK)
 	{
-		preview = lParam;
+		preview = !!lParam;
 		if (!preview)
 			GET_P4REGPTR()->SetLabelAddRplDefault(m_AddReplaceDlg->m_DefaultFlag);
 		if (m_AddReplaceList.GetCount())
@@ -312,7 +312,7 @@ LRESULT CLabelListCtrl::OnDoLabelSyncCli(WPARAM wParam, LPARAM lParam)
 	BOOL preview = FALSE;
 	if (wParam == IDOK)
 	{
-		preview = lParam;
+		preview = !!lParam;
 		if (m_DelSyncList.GetCount())
 		{
 			CCmd_Get *pCmd= new CCmd_Get;
@@ -381,7 +381,7 @@ LRESULT CLabelListCtrl::OnDoLabelDelFiles(WPARAM wParam, LPARAM lParam)
 	BOOL preview = FALSE;
 	if (wParam == IDOK)
 	{
-		preview = lParam;
+		preview = !!lParam;
 		if (m_DelSyncList.GetCount())
 		{
 			POSITION pos2;
@@ -806,7 +806,7 @@ LRESULT CLabelListCtrl::OnP4LabelSync(WPARAM wParam, LPARAM lParam)
 	CStringList *list= pCmd->GetList();
 	ASSERT_KINDOF(CStringList, list);
 
-	int numFiles=list->GetCount();
+	INT_PTR numFiles=list->GetCount();
 	if (numFiles && GET_P4REGPTR()->LabelShowPreviewDetail() && pCmd->GetPreview())
 	{
 		POSITION pos=list->GetHeadPosition();
@@ -934,7 +934,7 @@ LRESULT CLabelListCtrl::OnP4LabelList(WPARAM wParam, LPARAM lParam)
 		CString msg;
 		CString filterowner;
     	CObList const *labels = pCmd->GetList();
-		int count = labels->GetCount();
+		INT_PTR count = labels->GetCount();
 
         SetRedraw(FALSE);
     	int index = 0;
@@ -1368,7 +1368,7 @@ int CLabelListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	colnames.Add ( LoadStringResource(IDS_DESCRIPTION) );
 	ASSERT( LABEL_MAXCOL == colnames.GetSize( ) );
 	int width[LABEL_MAXCOL]={90,90,60,90,250};
-	RestoreSavedWidths(width, colnames.GetSize( ) , _T("Label List"));
+	RestoreSavedWidths(width, (int)colnames.GetSize( ) , _T("Label List"));
 	if (width[3] > 5000 && width[4] > 5000)
 		width[2] = width[3] = width[4] = 90;
 	InsertColumnHeaders( colnames, width );
@@ -1523,7 +1523,7 @@ void CLabelListCtrl::OnDiff2Labels()
 	if (!m_Active.IsEmpty())
 		dlg.m_Edit1 = m_Active;
 	SET_APP_HALTED(TRUE);
-	int rc=dlg.DoModal();  
+	INT_PTR rc=dlg.DoModal();  
 	SET_APP_HALTED(FALSE);
 	if (rc == IDOK)
 	{

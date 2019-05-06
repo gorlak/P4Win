@@ -1766,7 +1766,7 @@ void CMainFrame::OnPerforceOptions( BOOL m_ShowOptionsDlg,
 
 LRESULT CMainFrame::OnP4OptionsDlg(WPARAM wParam, LPARAM lParam)
 {
-	OnPerforceOptions( TRUE, FALSE, wParam, lParam );
+	OnPerforceOptions( TRUE, FALSE, int(wParam), int(lParam) );
 	return TRUE;
 }
 
@@ -1786,7 +1786,7 @@ void CMainFrame::OnClose()
 {
 	if(SERVER_BUSY())
 	{
-		int rc = IDC_BUTTON3;
+		INT_PTR rc = IDC_BUTTON3;
 		if (!m_Quitting)
 		{
 			if (m_DlgWndList.GetCount() && APP_HALTED())
@@ -2337,7 +2337,8 @@ LRESULT CMainFrame::OnClientError(WPARAM wParam, LPARAM lParam)
 	dlg.SetPort(port);
 	if (TheApp()->m_RunClientWizOnly)
 		dlg.AllowBrowse(FALSE);
-	int i, rc;
+	int i;
+	INT_PTR rc;
 	while(1)
 	{
 		rc = dlg.DoModal();	// display the Wizard and get the return code
@@ -3838,7 +3839,7 @@ void CMainFrame::LoadBkMkMenu()
 					j++;
 				}
 			}
-			pBkMkMenu->AppendMenu(MF_POPUP, (UINT) pSubMenu->GetSafeHmenu(), name);
+			pBkMkMenu->AppendMenu(MF_POPUP, (UINT_PTR) pSubMenu->GetSafeHmenu(), name);
 		}
 	}
 }
@@ -4093,7 +4094,7 @@ void CMainFrame::LoadFavMenu()
 					j++;
 				}
 			}
-			pFavMenu->AppendMenu(MF_POPUP, (UINT) pSubMenu->GetSafeHmenu(), name);
+			pFavMenu->AppendMenu(MF_POPUP, (UINT_PTR) pSubMenu->GetSafeHmenu(), name);
 		}
 	}
 }
@@ -4397,7 +4398,7 @@ void CMainFrame::LoadToolsMenu()
 					j++;
 				}
 			}
-			pToolsMenu->AppendMenu(MF_POPUP, (UINT) pSubMenu->GetSafeHmenu(), name);
+			pToolsMenu->AppendMenu(MF_POPUP, (UINT_PTR) pSubMenu->GetSafeHmenu(), name);
 		}
 	}
 }
@@ -4989,7 +4990,7 @@ void CMainFrame::OnTool(UINT nID)
         txt.FormatMessage(IDS_TOOLS_s_ARGUMENTS_s, command, args);
 		dlg.SetStatusText(txt);
 		dlg.SetShowBrowse(isShowBrowse);
-		int rc = dlg.DoModal();
+		INT_PTR rc = dlg.DoModal();
 		SetMessageText(_T(""));
 		if (rc == IDCANCEL)
 			return;
@@ -5171,20 +5172,20 @@ dof:		ExecOnceForEachFile(i, commandLine, sw,
 		}
 		commandLine.TrimLeft(_T(" \"")); 
 		commandLine.TrimRight(_T(" \""));
-		success=((int)(ShellExecute( m_hWnd, _T("Open.VisualStudio.7.1"), 
+		success=((INT_PTR)(ShellExecute( m_hWnd, _T("Open.VisualStudio.7.1"), 
 						commandLine, NULL, 
 						initDir.IsEmpty() ? (LPCTSTR)NULL : initDir,
 						SW_SHOWNORMAL)) > 32) ? TRUE : FALSE;
 		if (!success && (ERROR_NO_ASSOCIATION == GetLastError()))
 		{
-			success=((int)(ShellExecute(m_hWnd, _T("&Open with MSDEV"), 
+			success=((INT_PTR)(ShellExecute(m_hWnd, _T("&Open with MSDEV"), 
 						commandLine, NULL, 
 						initDir.IsEmpty() ? (LPCTSTR)NULL : initDir,
 						SW_SHOWNORMAL)) > 32) ? TRUE : FALSE;
 		}
 		if (!success && (ERROR_NO_ASSOCIATION == GetLastError()))
 		{
-			success=((int)(ShellExecute(m_hWnd, _T("open"), 
+			success=((INT_PTR)(ShellExecute(m_hWnd, _T("open"), 
 						commandLine, NULL, 
 						initDir.IsEmpty() ? (LPCTSTR)NULL : initDir,
 						SW_SHOWNORMAL)) > 32) ? TRUE : FALSE;
@@ -5288,14 +5289,14 @@ dof:		ExecOnceForEachFile(i, commandLine, sw,
 			{
 				if (!PumpMessages( ))
 					break;
-				if (!ReadFile(hChildStdoutRdDup, p, BUFSIZE-4-(p-chBuf), &dwRead, NULL) 
+				if (!ReadFile(hChildStdoutRdDup, p, BUFSIZE-4-int(p-chBuf), &dwRead, NULL) 
 					|| dwRead == 0)
 				{
 					if (*chBuf)	// any last bits to be written?
 					{
 #ifdef UNICODE
 						memset(tchBuf, 0, BUFSIZE);
-						MultiByteToWideChar(CP_ACP, 0, (LPCSTR)chBuf, strlen(chBuf), tchBuf, BUFSIZE);
+						MultiByteToWideChar(CP_ACP, 0, (LPCSTR)chBuf, int(strlen(chBuf)), tchBuf, BUFSIZE);
 						AddToStatus(tchBuf, SV_MSG);
 #else
 						AddToStatus(chBuf, SV_MSG);
@@ -5309,7 +5310,7 @@ dof:		ExecOnceForEachFile(i, commandLine, sw,
 				{
 #ifdef UNICODE
 					memset(tchBuf, 0, BUFSIZE);
-					MultiByteToWideChar(CP_ACP, 0, (LPCSTR)xxBuf, strlen(xxBuf), tchBuf, BUFSIZE);
+					MultiByteToWideChar(CP_ACP, 0, (LPCSTR)xxBuf, int(strlen(xxBuf)), tchBuf, BUFSIZE);
 					AddToStatus(tchBuf, SV_MSG);
 #else
 					AddToStatus(xxBuf, SV_MSG);
@@ -5349,7 +5350,7 @@ dof:		ExecOnceForEachFile(i, commandLine, sw,
 						lchBuf[q-qbgn] = '\0';
 #ifdef UNICODE
 						memset(tchBuf, 0, BUFSIZE);
-						MultiByteToWideChar(CP_ACP, 0, (LPCSTR)lchBuf, strlen(lchBuf), tchBuf, BUFSIZE);
+						MultiByteToWideChar(CP_ACP, 0, (LPCSTR)lchBuf, int(strlen(lchBuf)), tchBuf, BUFSIZE);
 						AddToStatus(tchBuf, SV_MSG);
 #else
 						AddToStatus(lchBuf, SV_MSG);
@@ -5373,7 +5374,7 @@ dof:		ExecOnceForEachFile(i, commandLine, sw,
 						// if so, we better output what we've got and clear the buffer
 #ifdef UNICODE
 						memset(tchBuf, 0, BUFSIZE);
-						MultiByteToWideChar(CP_ACP, 0, (LPCSTR)chBuf, strlen(chBuf), tchBuf, BUFSIZE);
+						MultiByteToWideChar(CP_ACP, 0, (LPCSTR)chBuf, int(strlen(chBuf)), tchBuf, BUFSIZE);
 						AddToStatus(tchBuf, SV_MSG);
 #else
 						AddToStatus(chBuf, SV_MSG);
@@ -5539,7 +5540,7 @@ int CMainFrame::GetOpenedFiles( CStringList *list )
 			delete fs;
 		}
 	    RELEASE_SERVER_LOCK(key);
-		rc = list->GetCount();
+		rc = int(list->GetCount());
 	}
 	delete pCmd;
 	return rc;
@@ -5587,7 +5588,7 @@ int CMainFrame::InsertAllSelectedFilesIntoCmdline(CString &cmdLine, int offset,
 		if (pView == (CView *) m_pDepotView)
 		{
 			m_pDepotView->GetTreeCtrl().AssembleStringList(&list);
-			rc = list.GetCount();
+			rc = list.GetCount() != 0;
 		}
 		else
 		{
@@ -5604,7 +5605,7 @@ int CMainFrame::InsertAllSelectedFilesIntoCmdline(CString &cmdLine, int offset,
 		if (bDepotSyntax)
 		{
 			m_pDepotView->GetTreeCtrl().AssembleStringList(&list);
-			rc = list.GetCount();
+			rc = list.GetCount() != 0;
 		}
 		else rc = m_pDepotView->GetTreeCtrl().GetSelectedFiles(&list);
 	}
@@ -5617,7 +5618,7 @@ int CMainFrame::InsertAllSelectedFilesIntoCmdline(CString &cmdLine, int offset,
 				return(-1);
 			while (list.GetTail().IsEmpty())	// remove any jobs that snuck in
 				list.RemoveTail();
-			rc = list.GetCount();
+			rc = list.GetCount() != 0;
 		}
 		else rc = m_pDeltaView->GetTreeCtrl().GetSelectedFiles(&list);
 	}
@@ -5635,7 +5636,7 @@ int CMainFrame::InsertAllSelectedFilesIntoCmdline(CString &cmdLine, int offset,
 	}
 
 	cmdLine = cmdliBefore + cmdli + cmdliAfter;
-	return list.GetCount();
+	return list.GetCount() != 0;
 }
 
 void CMainFrame::ExecOnceForEachFile(int offset, CString &cmdLine, 
@@ -5665,7 +5666,7 @@ void CMainFrame::ExecOnceForEachFile(int offset, CString &cmdLine,
 		if (pView == (CView *) m_pDepotView)
 		{
 			m_pDepotView->GetTreeCtrl().AssembleStringList(&list);
-			rc = list.GetCount();
+			rc = list.GetCount() != 0;
 		}
 		else
 		{
@@ -5680,7 +5681,7 @@ void CMainFrame::ExecOnceForEachFile(int offset, CString &cmdLine,
 		if (sw == _T('d'))	// depot syntax
 		{
 			m_pDepotView->GetTreeCtrl().AssembleStringList(&list);
-			rc = list.GetCount();
+			rc = list.GetCount() != 0;
 		}
 		else rc = m_pDepotView->GetTreeCtrl().GetSelectedFiles(&list);
 	}
@@ -5691,18 +5692,18 @@ void CMainFrame::ExecOnceForEachFile(int offset, CString &cmdLine,
 			m_pDeltaView->GetTreeCtrl().AssembleStringList(&list);
 			while (list.GetTail().IsEmpty())	// remove any jobs that snuck in
 				list.RemoveTail();
-			rc = list.GetCount();
+			rc = list.GetCount() != 0;
 		}
 		else if (sw == _T('j'))	// jobs
 		{
 			list.RemoveAll();
-			for( int i = m_pDeltaView->GetTreeCtrl().GetSelectedCount()-1; i >= 0; i--)
+			for( INT_PTR i = m_pDeltaView->GetTreeCtrl().GetSelectedCount()-1; i >= 0; i--)
 			{
-				txt = m_pDeltaView->GetTreeCtrl().GetItemText( m_pDeltaView->GetSelectedItem( i ) );
+				txt = m_pDeltaView->GetTreeCtrl().GetItemText( m_pDeltaView->GetSelectedItem( int(i) ) );
 				if( txt.ReverseFind( _T('#') ) == -1)	// don't add any files that snuck in
 					list.AddHead( txt );
 			}
-			rc = list.GetCount();
+			rc = list.GetCount() != 0;
 		}
 		else if ((sw == 'p') || (sw == 'c'))	// pending change
 		{
@@ -5724,7 +5725,7 @@ void CMainFrame::ExecOnceForEachFile(int offset, CString &cmdLine,
 					txt = txt.Left(i);
 			}
 			list.AddHead( txt );
-			rc = list.GetCount();
+			rc = list.GetCount() != 0;
 		}
 		else rc = m_pDeltaView->GetTreeCtrl().GetSelectedFiles(&list);
 	}
@@ -5763,18 +5764,18 @@ void CMainFrame::ExecOnceForEachFile(int offset, CString &cmdLine,
 			cmdli = listItem;
 			cmdli.TrimLeft(_T(" \"")); 
 			cmdli.TrimRight(_T(" \""));
-			rc=((int)(ShellExecute(m_hWnd, _T("Open.VisualStudio.7.1"), 
+			rc=((INT_PTR)(ShellExecute(m_hWnd, _T("Open.VisualStudio.7.1"), 
 						cmdli, NULL, initDir,
 						SW_SHOWNORMAL)) > 32) ? TRUE : FALSE;
 			if (!rc && (ERROR_NO_ASSOCIATION == GetLastError()))
 			{
-				rc=((int)(ShellExecute(m_hWnd, _T("&Open with MSDEV"), 
+				rc=((INT_PTR)(ShellExecute(m_hWnd, _T("&Open with MSDEV"), 
 							cmdli, NULL, initDir,
 							SW_SHOWNORMAL)) > 32) ? TRUE : FALSE;
 			}
 			if (!rc && (ERROR_NO_ASSOCIATION == GetLastError()))
 			{
-				rc=((int)(ShellExecute(m_hWnd, _T("open"), 
+				rc=((INT_PTR)(ShellExecute(m_hWnd, _T("open"), 
 							cmdli, NULL, initDir,
 							SW_SHOWNORMAL)) > 32) ? TRUE : FALSE;
 			}
@@ -5880,14 +5881,14 @@ void CMainFrame::ExecOnceForEachFile(int offset, CString &cmdLine,
 				{
 					if (!PumpMessages( ))
 						break;
-					if (!ReadFile(hChildStdoutRdDup, p, BUFSIZE-4-(p-chBuf), &dwRead, NULL) 
+					if (!ReadFile(hChildStdoutRdDup, p, BUFSIZE-4-int(p-chBuf), &dwRead, NULL) 
 						|| dwRead == 0)
 					{
 						if (*chBuf)	// any last bits to be written?
 						{
 #ifdef UNICODE
 							memset(tchBuf, 0, BUFSIZE);
-							MultiByteToWideChar(CP_ACP, 0, (LPCSTR)chBuf, strlen(chBuf), tchBuf, BUFSIZE);
+							MultiByteToWideChar(CP_ACP, 0, (LPCSTR)chBuf, int(strlen(chBuf)), tchBuf, BUFSIZE);
 							AddToStatus(tchBuf, SV_MSG);
 #else
 							AddToStatus(chBuf, SV_MSG);
@@ -5901,7 +5902,7 @@ void CMainFrame::ExecOnceForEachFile(int offset, CString &cmdLine,
 					{
 	#ifdef UNICODE
 						memset(tchBuf, 0, BUFSIZE);
-						MultiByteToWideChar(CP_ACP, 0, (LPCSTR)xxBuf, strlen(xxBuf), tchBuf, BUFSIZE);
+						MultiByteToWideChar(CP_ACP, 0, (LPCSTR)xxBuf, int(strlen(xxBuf)), tchBuf, BUFSIZE);
 						AddToStatus(tchBuf, SV_MSG);
 	#else
 						AddToStatus(xxBuf, SV_MSG);
@@ -5941,7 +5942,7 @@ void CMainFrame::ExecOnceForEachFile(int offset, CString &cmdLine,
 							lchBuf[q-qbgn] = '\0';
 #ifdef UNICODE
 							memset(tchBuf, 0, BUFSIZE);
-							MultiByteToWideChar(CP_ACP, 0, (LPCSTR)lchBuf, strlen(lchBuf), tchBuf, BUFSIZE);
+							MultiByteToWideChar(CP_ACP, 0, (LPCSTR)lchBuf, int(strlen(lchBuf)), tchBuf, BUFSIZE);
 							AddToStatus(tchBuf, SV_MSG);
 #else
 							AddToStatus(lchBuf, SV_MSG);
@@ -5965,7 +5966,7 @@ void CMainFrame::ExecOnceForEachFile(int offset, CString &cmdLine,
 							// if so, we better output what we've got and clear the buffer
 #ifdef UNICODE
 							memset(tchBuf, 0, BUFSIZE);
-							MultiByteToWideChar(CP_ACP, 0, (LPCSTR)chBuf, strlen(chBuf), tchBuf, BUFSIZE);
+							MultiByteToWideChar(CP_ACP, 0, (LPCSTR)chBuf, int(strlen(chBuf)), tchBuf, BUFSIZE);
 							AddToStatus(tchBuf, SV_MSG);
 #else
 							AddToStatus(chBuf, SV_MSG);
@@ -6313,7 +6314,7 @@ void CMainFrame::AddToolsToContextMenu(CP4Menu *pPopMenu)
 							pPopMenu->AppendMenu(MF_SEPARATOR);
 							bGotSep = TRUE;
 						}
-						pPopMenu->AppendMenu(MF_POPUP, (UINT) pSubMenu->GetSafeHmenu(), name);
+						pPopMenu->AppendMenu(MF_POPUP, (UINT_PTR) pSubMenu->GetSafeHmenu(), name);
 					}
 					else
 						pSubMenu->DestroyMenu( );
@@ -6572,7 +6573,7 @@ void CMainFrame::OnPageSetup()
 
 void CMainFrame::PageSetup()
 {
-	int rc;
+	INT_PTR rc;
 	CPageSetupDialog dlg;
 
 	// use any previous page info
@@ -6969,7 +6970,7 @@ LRESULT CMainFrame::OnNewUser( WPARAM wParam, LPARAM lParam )
 
 LRESULT CMainFrame::OnUserPasswordDlg( WPARAM wParam, LPARAM lParam ) 
 {
-	return m_pUserView->GetListCtrl().OnUserPasswordDlg( wParam, lParam );
+	return m_pUserView->GetListCtrl().OnUserPasswordDlg( int(wParam), int(lParam) );
 }
 
 void CMainFrame::GetClients(CStringArray *list)
@@ -7232,9 +7233,9 @@ void CMainFrame::OnGettingStartedWithP4win()
 	{
 		str = str.Left(i) + _T("-gs.pdf");
 		hinst = ShellExecute( m_hWnd, _T("open"), str, NULL, NULL, SW_SHOWNORMAL);
-		if( (int) hinst > 32)
+		if( (INT_PTR) hinst > 32)
 			return;  // successfull launch
-		switch( (int) hinst )
+		switch( (INT_PTR) hinst )
 		{
 		case SE_ERR_NOASSOC:
 			i = IDS_SE_ERR_NOASSOC;
@@ -7246,7 +7247,7 @@ void CMainFrame::OnGettingStartedWithP4win()
 				hinst = ShellExecute( m_hWnd, _T("open"), 
 							LoadStringResource(IDS_P4DOCS_URL),
 						NULL, NULL, SW_SHOWNORMAL);
-				if( (int) hinst > 32)
+				if( (INT_PTR) hinst > 32)
 					return;  // successfull launch
 			}
 			i = IDS_SE_ERR_FNF;

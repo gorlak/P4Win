@@ -164,7 +164,7 @@ protected:
 	UINT        m_SelectOnDrag;
 
 	// Context for p4 edit in response to a drop
-	long m_OpenUnderChangeNumber;
+	LONG_PTR m_OpenUnderChangeNumber;
 
 	// Depot lists
     CStringList m_LocalDepotList;

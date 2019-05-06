@@ -29,8 +29,8 @@ protected:
 	long m_BlockCount;
 
 public:
-	void SetStats(long rowIndex, CP4FileStats *fs);
-	CP4FileStats *GetStats(long rowIndex);
+	void SetStats(LONG_PTR rowIndex, CP4FileStats *fs);
+	CP4FileStats *GetStats(LONG_PTR rowIndex);
 	void DestroyAll();
 	
 };
