@@ -10,3 +10,6 @@
 [submodule "Dependencies/StrawberryPerl"]
 	path = Dependencies/StrawberryPerl
 	url = https://github.com/HeliumProject/StrawberryPerl.git
+[submodule "Dependencies/InnoSetup"]
+	path = Dependencies/InnoSetup
+	url = https://github.com/HeliumProject/InnoSetup.git
