@@ -2,6 +2,16 @@
 // Microsoft Visual C++ generated include file.
 // Used by c:\workspac\main\p4-win\gui\P4Win409\P4Win409.rc
 //
+#define VERSION_MAJOR			2008
+#define VERSION_MINOR			1
+#define VERSION_PATCH			1
+#define VERSION_STRINGIFY(major, minor, patch) _T(#major) _T(".") _T(#minor) _T(".") _T(#patch)
+#define VERSION_TOSTRING(major, minor, patch) VERSION_STRINGIFY(major,minor,patch)
+#define VERSION_STRING VERSION_TOSTRING( VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH )
+#define RESOURCE_VERSION VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH, 0
+#define RESOURCE_VERSION_STRINGIFY(major, minor, patch) #major "," #minor "," #patch ",0"
+#define RESOURCE_VERSION_TOSTRING(major, minor, patch) RESOURCE_VERSION_STRINGIFY(major, minor, patch)
+#define RESOURCE_VERSION_STRING RESOURCE_VERSION_TOSTRING( VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH )
 #define IDC_NOT_USED                    1
 #define P4_INT_MINOR                    1
 #define IDC_NEXT                        2

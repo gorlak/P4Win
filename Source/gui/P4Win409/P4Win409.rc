@@ -3235,8 +3235,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2008,1,17,6239
- PRODUCTVERSION 2008,1,0,0
+ FILEVERSION RESOURCE_VERSION
+ PRODUCTVERSION RESOURCE_VERSION
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -3254,12 +3254,12 @@ BEGIN
             VALUE "Comments", "Requires Perforce 98.2.7488 or higher server"
             VALUE "CompanyName", "Perforce Software"
             VALUE "FileDescription", "Perforce Windows Client, English (U.S.) resource dll"
-            VALUE "FileVersion", "2008.1 BETA 17.6239"
+            VALUE "FileVersion", RESOURCE_VERSION_STRING
             VALUE "InternalName", "P4Win409"
             VALUE "LegalCopyright", "Copyright © 1997, 2008 Perforce Software"
             VALUE "OriginalFilename", "P4Win409.DLL"
             VALUE "ProductName", "Perforce Windows GUI Client "
-            VALUE "ProductVersion", "2008.1 BETA 17.6239"
+            VALUE "ProductVersion", RESOURCE_VERSION_STRING
         END
     END
     BLOCK "VarFileInfo"
