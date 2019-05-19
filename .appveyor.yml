@@ -37,4 +37,6 @@ deploy:
   artifact: Bin\Release\P4WinSetup.exe
   draft: true
   on:
-    APPVEYOR_REPO_TAG: true
+      platform: x64
+      configuration: Release
+      APPVEYOR_REPO_TAG: true
