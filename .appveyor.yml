@@ -25,7 +25,13 @@ build_script:
   - cmd: cd ..
   - cmd: premake --architecture=%ARCH% vs2017
   - cmd: msbuild Build\P4Win.sln /p:Configuration=%CONFIGURATION% /p:Platform=%PLAT% /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:minimal
-  - cmd: if "%CONFIGURATION%" equ "Release" if "%PLATFORM%" equ "x64" installer && appveyor PushArtifact Bin\Release\P4WinSetup.exe
+  - cmd: if "%CONFIGURATION%" equ "Release" if "%PLATFORM%" equ "x64" installer
+
+artifacts:
+  - path: Bin\$(configuration)
+    name: binaries
+  - path: Bin\$(configuration)\P4WinSetup.exe
+    name: installer
 
 version: '2008.1.1.{build}'
 
@@ -34,7 +40,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: wXIf6Ia9KbgkOdlA1aV7mkrA4OPZDOdxGd1cIV4+JjSXsLyDFqx/ElzCdDAjhYjA
-  artifact: Bin\Release\P4WinSetup.exe
+  artifact: installer
   draft: true
   on:
       platform: x64
