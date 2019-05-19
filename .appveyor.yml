@@ -25,3 +25,8 @@ build_script:
   - cmd: cd ..
   - cmd: premake --architecture=%ARCH% vs2017
   - cmd: msbuild Build\P4Win.sln /p:Configuration=%CONFIGURATION% /p:Platform=%PLAT% /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:minimal
+  - cmd: installer
+
+artifacts:
+  - path: Bin\Release\P4WinSetup.exe
+    name: installer
