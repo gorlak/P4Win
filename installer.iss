@@ -2,7 +2,7 @@
 ; To download and install ISPP, get the Inno Setup QuickStart Pack from http://www.jrsoftware.org/isdl.php#qsp
 
 #define _AppName          	"P4Win"
-#define _AppMutex         	"EShellMenu"
+#define _AppMutex         	"Running P4Win Instance"
 #define _AppPublisher     	"gorlak"
 #define _AppPublisherURL  	"https://github.com/gorlak/P4Win"
 
@@ -26,7 +26,7 @@
 
 #define _VersionInfoComments    "P4Win is a Windows client for Perforce (Helix VCS) built in MFC."
 #define _VersionInfoCopyright   "Copyright (C) " + _AppPublisher
-#define _VersionInfoDescription "EShell Menu"
+#define _VersionInfoDescription "P4WIn"
 #define _VersionInfoVersion     _AppVersion
 
 [Setup]
