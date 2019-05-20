@@ -109,7 +109,7 @@ project "P4API"
 
 	defines
 	{
---		"WIN32_LEAN_AND_MEAN", -- necessary for <rpc.h> debacle
+		"WIN32_LEAN_AND_MEAN", -- necessary for <rpc.h> debacle
 		"OS_NT",
 		"ID_OS=\"NTX64\"",
 		"ID_REL=\"2018.1\"",
