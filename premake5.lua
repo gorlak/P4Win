@@ -110,6 +110,8 @@ project "P4API"
 	defines
 	{
 		"WIN32_LEAN_AND_MEAN", -- necessary for <rpc.h> debacle
+		"WINVER=0x0600",
+		"_WIN32_WINNT=0x0600",
 		"OS_NT",
 		"ID_OS=\"NTX64\"",
 		"ID_REL=\"2018.1\"",
@@ -131,6 +133,10 @@ project "P4API"
 		"Dependencies/p4/msgs",
 		"Dependencies/p4/net",
 		"Dependencies/p4/rpc",
+		"Dependencies/p4/script",
+		"Dependencies/p4/script/libs/cURL",
+		"Dependencies/p4/script/libs/lua-curlv3",
+		"Dependencies/p4/script/lua-5.3",
 		"Dependencies/p4/support",
 		"Dependencies/p4/sys",
 		"Dependencies/p4/zlib",
