@@ -2,6 +2,12 @@
 
 ### Releases
 
+#### 2008.1.2
+
+* Update to p4api 2018.2, a major release that includes the new client-side scripts (lua)
+* Update p4api build configuration to similar libs found in Perforce Software's build
+* Turn on warnings as errors
+
 #### 2008.1.1
 
 Initial release of the final release of P4Win from Perforce Software open source
