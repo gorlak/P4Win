@@ -23,6 +23,7 @@ architecture( _OPTIONS[ "architecture" ] )
 
 flags
 {
+	"FatalWarnings",
 	"NoMinimalRebuild",
 }
 
@@ -397,6 +398,7 @@ project "p4"
 	disablewarnings
 	{
 		"4005", -- macro redefinition, see WIN32_LEAN_AND_MEAN below
+		"4018", -- sized/unsigned mismatched
 		"4091", -- dbghelp.dll antics
 		"4101", -- unreferenced local
 		"4244", -- int conversion possible loss of data
@@ -473,7 +475,6 @@ project "P4Win"
 	flags
 	{
 		"MFC",
-		"FatalWarnings",
 	}
 
 	disablewarnings
