@@ -17,13 +17,9 @@ newoption
 	default = (function() if os.is64bit() then return 'x86_64' else return 'x86' end end)(),
 }
 
-workspace "P4Win"
-
 -- global options
 
 architecture( _OPTIONS[ "architecture" ] )
-
-floatingpoint "Fast"
 
 flags
 {
@@ -32,11 +28,30 @@ flags
 
 defines
 {
+	-- win32
 	"WIN32",
 	"_WIN32",
+	"_WINSOCK_DEPRECATED_NO_WARNINGS",
+
+	-- crt
 	"_CRT_SECURE_NO_DEPRECATE",
 	"_CRT_NON_CONFORMING_SWPRINTFS",
-	"_WINSOCK_DEPRECATED_NO_WARNINGS",
+	
+	-- p4 libs
+	"OS_NT",
+	"ID_OS=\"NTX64\"",
+	"ID_REL=\"2018.2\"",
+	"ID_PATCH=\"gorlak\"",
+	"ID_Y=\"0\"",
+	"ID_M=\"0\"",
+	"ID_D=\"0\"",
+	"USE_SSL",
+	"Z_PREFIX",
+}
+
+includedirs
+{
+	"Dependencies/openssl-install/include",
 }
 
 buildoptions
@@ -98,9 +113,115 @@ configuration "Release"
 
 configuration {}
 
+-- workspace
+
+workspace "P4Win"
+
 -- projects
 
-project "P4API"
+project "librpc"
+
+	kind "StaticLib"
+	language "C++"
+	characterset "MBCS"
+	-- staticruntime "On"
+
+	disablewarnings
+	{
+		"4018", -- sized/unsigned mismatched
+		"4099", -- class vs. struct
+		"4244", -- int conversion possible loss of data
+		"4267", -- size_t conversion possible loss of data
+		"4996", -- deprecation
+	}
+
+	includedirs
+	{
+		"Dependencies/p4/net",
+		"Dependencies/p4/msgs",
+		"Dependencies/p4/rpc",
+		"Dependencies/p4/support",
+		"Dependencies/p4/sys",
+		"Dependencies/p4/zlib",
+	}
+
+	files
+	{
+		"Dependencies/p4/net/**.c",
+		"Dependencies/p4/net/**.cc",
+		"Dependencies/p4/net/**.h",
+		"Dependencies/p4/rpc/**.c",
+		"Dependencies/p4/rpc/**.cc",
+		"Dependencies/p4/rpc/**.h",
+	}
+
+	excludes
+	{
+	}
+
+project "libsupp"
+
+	kind "StaticLib"
+	language "C++"
+	characterset "MBCS"
+	-- staticruntime "On"
+
+	disablewarnings
+	{
+		"4018", -- sized/unsigned mismatched
+		"4099", -- class vs. struct
+		"4101", -- unreferenced local
+		"4244", -- int conversion possible loss of data
+		"4267", -- size_t conversion possible loss of data
+		"4309", -- truncation of constant value
+		"4996", -- deprecation
+	}
+
+	includedirs
+	{
+		"Dependencies/p4/diff",
+		"Dependencies/p4/i18n",
+		"Dependencies/p4/map",
+		"Dependencies/p4/msgs",
+		"Dependencies/p4/net",
+		"Dependencies/p4/script",
+		"Dependencies/p4/support",
+		"Dependencies/p4/sys",
+		"Dependencies/p4/zlib",
+	}
+
+	files
+	{
+		"Dependencies/p4/diff/**.c",
+		"Dependencies/p4/diff/**.cc",
+		"Dependencies/p4/diff/**.h",
+		"Dependencies/p4/i18n/**.c",
+		"Dependencies/p4/i18n/**.cc",
+		"Dependencies/p4/i18n/**.h",
+		"Dependencies/p4/map/**.c",
+		"Dependencies/p4/map/**.cc",
+		"Dependencies/p4/map/**.h",
+		"Dependencies/p4/msgs/**.c",
+		"Dependencies/p4/msgs/**.cc",
+		"Dependencies/p4/msgs/**.h",
+		"Dependencies/p4/support/**.c",
+		"Dependencies/p4/support/**.cc",
+		"Dependencies/p4/support/**.h",
+		"Dependencies/p4/sys/**.c",
+		"Dependencies/p4/sys/**.cc",
+		"Dependencies/p4/sys/**.h",
+		"Dependencies/p4/zlib/**.c",
+		"Dependencies/p4/zlib/**.cc",
+		"Dependencies/p4/zlib/**.h",
+	}
+
+	excludes
+	{
+		"Dependencies/p4/sys/fileiovms.*",
+		"Dependencies/p4/sys/macfile.*",
+	}
+
+project "libscript-sqlite"
 
 	kind "StaticLib"
 	language "C++"
@@ -109,18 +230,182 @@ project "P4API"
 
 	defines
 	{
+		"SQLITE_THREADSAFE=0",
+		"SQLITE_DEFAULT_MEMSTATUS=0",
+		"SQLITE_DEFAULT_WAL_SYNCHRONOUS=1",
+		"SQLITE_LIKE_DOESNT_MATCH_BLOBS",
+		"SQLITE_OMIT_SHARED_CACHE",
+		"SQLITE_DEFAULT_FILE_PERMISSIONS=0600",
+		"SQLITE_ENABLE_API_ARMOR",
+		"SQLITE_ENABLE_JSON1",
+	}
+
+	files
+	{
+		"Dependencies/p4/script/sqlite3.*",
+	}
+
+project "libscript-curl"
+
+	kind "StaticLib"
+	language "C++"
+	characterset "MBCS"
+	-- staticruntime "On"
+
+	defines
+	{
+		"CURL_STATICLIB",
+		"BUILDING_LIBCURL",
+		"CURL_DISABLE_FTP",
+		"CURL_DISABLE_LDAP",
+		"CURL_DISABLE_TELNET",
+		"CURL_DISABLE_DICT",
+		"CURL_DISABLE_FILE",
+		"CURL_DISABLE_TFTP",
+		"CURL_DISABLE_IMAP",
+		"CURL_DISABLE_POP3",
+		"USE_OPENSSL",
+		"HAVE_ZLIB_H",
+		"HAVE_ZLIB",
+		"HAVE_LIBZ",
+		"USE_IPV6",
+		"CURL_DISABLE_NTLM",
+		"CURL_DISABLE_GOPHER",
+		"CURL_DISABLE_RTSP",
+	}
+
+	includedirs
+	{
+		"Dependencies/p4/script",
+		"Dependencies/p4/script/libs/cURL",
+		"Dependencies/p4/script/lua-5.3",
+		"Dependencies/p4/zlib",
+	}
+
+	files
+	{
+		"Dependencies/p4/script/libs/cURL/**.c",
+		"Dependencies/p4/script/libs/cURL/**.h",
+	}
+
+project "libscript"
+
+	kind "StaticLib"
+	language "C++"
+	characterset "MBCS"
+	-- staticruntime "On"
+
+	disablewarnings
+	{
+		"4018", -- sized/unsigned mismatched
+		"4099", -- class vs. struct
+		"4101", -- unreferenced local
+		"4244", -- int conversion possible loss of data
+		"4267", -- size_t conversion possible loss of data
+		"4302", -- type conversion truncation
+		"4311", -- truncation from pointer to long
+		"4996", -- deprecation
+	}
+
+	includedirs
+	{
+		"Dependencies/p4/client",
+		"Dependencies/p4/diff",
+		"Dependencies/p4/i18n",
+		"Dependencies/p4/map",
+		"Dependencies/p4/msgs",
+		"Dependencies/p4/net",
+		"Dependencies/p4/script",
+		"Dependencies/p4/script/lua-5.3",
+		"Dependencies/p4/support",
+		"Dependencies/p4/sys",
+		"Dependencies/p4/zlib",
+	}
+
+	files
+	{
+		"Dependencies/p4/script/libs/cjson/lua_cjson.cc",
+		"Dependencies/p4/script/*.c",
+		"Dependencies/p4/script/*.cc",
+		"Dependencies/p4/script/*.h",
+	}
+
+	excludes
+	{
+		"Dependencies/p4/script/sqlite3.*",
+	}
+
+project "libclient"
+
+	kind "StaticLib"
+	language "C++"
+	characterset "MBCS"
+	-- staticruntime "On"
+
+	disablewarnings
+	{
+		"4005", -- macro redefinition, see WIN32_LEAN_AND_MEAN below
+		"4018", -- sized/unsigned mismatched
+		"4099", -- class vs. struct
+		"4244", -- int conversion possible loss of data
+		"4267", -- size_t conversion possible loss of data
+		"4996", -- deprecation
+	}
+
+	defines
+	{
 		"WIN32_LEAN_AND_MEAN", -- necessary for <rpc.h> debacle
-		"WINVER=0x0600",
-		"_WIN32_WINNT=0x0600",
-		"OS_NT",
-		"ID_OS=\"NTX64\"",
-		"ID_REL=\"2018.1\"",
-		"ID_PATCH=\"gorlak\"",
-		"ID_Y=\"0\"",
-		"ID_M=\"0\"",
-		"ID_D=\"0\"",
-		"Z_PREFIX",
-		"USE_SSL",
+	}
+
+	includedirs
+	{
+		"Dependencies/p4/client",
+		"Dependencies/p4/diff",
+		"Dependencies/p4/i18n",
+		"Dependencies/p4/map",
+		"Dependencies/p4/msgs",
+		"Dependencies/p4/net",
+		"Dependencies/p4/rpc",
+		"Dependencies/p4/script",
+		"Dependencies/p4/support",
+		"Dependencies/p4/sys",
+		"Dependencies/p4/zlib",
+	}
+
+	files
+	{
+		"Dependencies/p4/client/**.c",
+		"Dependencies/p4/client/**.cc",
+		"Dependencies/p4/client/**.h",
+		"Dependencies/p4/web/**.c",
+		"Dependencies/p4/web/**.cc",
+		"Dependencies/p4/web/**.h",
+	}
+
+	excludes
+	{
+		"Dependencies/p4/client/clientmain.*",
+	}
+
+project "p4"
+
+	kind "ConsoleApp"
+	language "C++"
+	characterset "MBCS"
+	-- staticruntime "On"
+
+	disablewarnings
+	{
+		"4005", -- macro redefinition, see WIN32_LEAN_AND_MEAN below
+		"4091", -- dbghelp.dll antics
+		"4101", -- unreferenced local
+		"4244", -- int conversion possible loss of data
+		"4996", -- deprecation
+	}
+
+	defines
+	{
+		"WIN32_LEAN_AND_MEAN", -- necessary for <rpc.h> debacle
 	}
 
 	includedirs
@@ -134,29 +419,49 @@ project "P4API"
 		"Dependencies/p4/net",
 		"Dependencies/p4/rpc",
 		"Dependencies/p4/script",
-		"Dependencies/p4/script/libs/cURL",
-		"Dependencies/p4/script/libs/lua-curlv3",
-		"Dependencies/p4/script/lua-5.3",
 		"Dependencies/p4/support",
 		"Dependencies/p4/sys",
 		"Dependencies/p4/zlib",
 	}
 
+	local platform = "x64"
+	if _OPTIONS[ "architecture" ] == "x86" then
+		platform = "Win32"
+	end
+
 	files
 	{
-		"Dependencies/p4/**.c",
-		"Dependencies/p4/**.cc",
-		"Dependencies/p4/**.h",
+		"Dependencies/p4/client/clientmain.*",
+		"Source/p4/**"
 	}
 
-	excludes
+	links
 	{
-		"Dependencies/p4/api/p4dvcsapi.*",
-		"Dependencies/p4/client/clientmain.*",
-		"Dependencies/p4/sslstub/**",
-		"Dependencies/p4/sys/fileiovms.*",
-		"Dependencies/p4/sys/macfile.*",
+		"librpc",
+		"libsupp",
+		"libscript",
+		"libscript-curl",
+		"libscript-sqlite",
+		"libclient",
+		"ssleay32",
+		"libeay32",
+		"dbghelp",
+		"ws2_32",
+		"wininet",
+		"setargv.obj",
 	}
+
+	configuration "Debug"
+		libdirs
+		{
+			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/mdd"
+		}
+
+	configuration "not Debug"
+		libdirs
+		{
+			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/md"
+		}
 
 project "P4Win"
 
@@ -184,13 +489,13 @@ project "P4Win"
 
 	includedirs
 	{
-		"Dependencies/openssl-install/include",
 		"Dependencies/p4/client",
 		"Dependencies/p4/diff",
 		"Dependencies/p4/i18n",
 		"Dependencies/p4/map",
 		"Dependencies/p4/msgs",
 		"Dependencies/p4/net",
+		"Dependencies/p4/script",
 		"Dependencies/p4/support",
 		"Dependencies/p4/sys",
 		"Dependencies/p4/zlib",
@@ -237,89 +542,18 @@ project "P4Win"
 
 	links
 	{
-		"P4API",
+		"librpc",
+		"libsupp",
+		"libscript",
+		"libscript-curl",
+		"libscript-sqlite",
+		"libclient",
 		"ssleay32",
 		"libeay32",
 		"dbghelp",
 		"ws2_32",
 		"wininet",
 		"winmm",
-	}
-
-	configuration "Debug"
-		libdirs
-		{
-			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/mdd"
-		}
-
-	configuration "not Debug"
-		libdirs
-		{
-			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/md"
-		}
-
-project "P4"
-
-	kind "ConsoleApp"
-	language "C++"
-	characterset "MBCS"
-	-- staticruntime "On"
-
-	disablewarnings
-	{
-		"4091", -- dbghelp.dll antics
-		"4996", -- deprecation
-	}
-
-	defines
-	{
-		"WIN32_LEAN_AND_MEAN", -- necessary for <rpc.h> debacle
-		"OS_NT",
-		"ID_OS=\"NTX64\"",
-		"ID_REL=\"2018.1\"",
-		"ID_PATCH=\"gorlak\"",
-		"ID_Y=\"0\"",
-		"ID_M=\"0\"",
-		"ID_D=\"0\"",
-		"Z_PREFIX",
-		"USE_SSL",
-	}
-
-	includedirs
-	{
-		"Dependencies/openssl-install/include",
-		"Dependencies/p4/client",
-		"Dependencies/p4/diff",
-		"Dependencies/p4/i18n",
-		"Dependencies/p4/map",
-		"Dependencies/p4/msgs",
-		"Dependencies/p4/net",
-		"Dependencies/p4/rpc",
-		"Dependencies/p4/support",
-		"Dependencies/p4/sys",
-		"Dependencies/p4/zlib",
-	}
-
-	local platform = "x64"
-	if _OPTIONS[ "architecture" ] == "x86" then
-		platform = "Win32"
-	end
-
-	files
-	{
-		"Dependencies/p4/client/clientmain.*",
-		"Source/p4/**"
-	}
-
-	links
-	{
-		"P4API",
-		"ssleay32",
-		"libeay32",
-		"dbghelp",
-		"ws2_32",
-		"wininet",
-		"setargv.obj",
 	}
 
 	configuration "Debug"
