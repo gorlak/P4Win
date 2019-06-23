@@ -885,7 +885,6 @@ public:
 	void ReadDiffAssocList();
 	void ReadMergeAssocList();
 	CString GetPasswordfromReg( );
-	BOOL TestRegWrite2HKLM();
 
 protected:
 	POSITION FindAssociation(LPCTSTR extension);

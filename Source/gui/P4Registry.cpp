@@ -4931,33 +4931,6 @@ void CP4Registry::WriteVirginRegistry()
 		RegCloseKey(key);
 }
 
-BOOL CP4Registry::TestRegWrite2HKLM()
-{
-	HKEY	hKey = NULL;
-	CString sKey = _T("Software\\Perforce\\environment\\");
-	DWORD	disposition;
-	TCHAR   test[] = _T("test");
-	LONG	rc;
-	if ( (rc = RegCreateKeyEx( HKEY_LOCAL_MACHINE, sKey,
-								0, NULL,
-								REG_OPTION_NON_VOLATILE,
-								KEY_READ|KEY_WRITE, NULL,
-								&hKey, &disposition )) == ERROR_SUCCESS )
-	{
-		disposition = sizeof(test);
-		rc = RegSetValueEx(hKey, _T("P4Win"), NULL, REG_SZ,
-				(LPBYTE)test, disposition);
-	}
-
-	if (rc != ERROR_SUCCESS )
-	{
-		RegWriteFailed(rc);
-		return FALSE;
-	}
-	return TRUE;
-}
-
-
 void CP4Registry::RegWriteFailed(LONG rc)
 {
 	LPVOID lpMsgBuf;

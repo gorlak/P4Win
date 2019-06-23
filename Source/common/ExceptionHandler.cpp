@@ -817,7 +817,6 @@ static void WriteMiniDump(LPCTSTR pszPath, PEXCEPTION_POINTERS pExceptPtrs)
 
 void WriteRegistryDetails(LPCTSTR pszPath)
 {
-	WriteRegistryTreeToFile(_T("HKLM\\Software\\Perforce"), pszPath);
 	WriteRegistryTreeToFile(_T("HKCU\\Software\\Perforce"), pszPath);
 }
 
