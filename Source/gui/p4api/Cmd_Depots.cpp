@@ -261,9 +261,9 @@ void CCmd_Depots::PostProcess()
     {
         // get client spec, and set NOCRLF flag and Client root in app
         TheApp()->m_bNoCRLF = IsLFonly(cmd.GetDescription());
-        TheApp()->Set_m_ClientRoot(TheApp()->GetClientSpecField( _T("Root"), cmd.GetDescription()));
+        TheApp()->SetClientRoot(TheApp()->GetClientSpecField( _T("Root"), cmd.GetDescription()));
 		if (GET_SERVERLEVEL() >= 22)
-	        TheApp()->Set_m_ClientSubOpts(TheApp()->GetClientSpecField( _T("SubmitOptions"), cmd.GetDescription()));
+	        TheApp()->SetClientSubOpts(TheApp()->GetClientSpecField( _T("SubmitOptions"), cmd.GetDescription()));
     }
     else
     {

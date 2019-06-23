@@ -2627,7 +2627,7 @@ BOOL CP4winApp::CallP4A(CString annpath, CString logpath, int revnbr)
 // they can appear in all sorts of weird shapes and forms.
 // So always use this routune to set m_ClientRoot
 // and clean up any messes afterwards.
-BOOL CP4winApp::Set_m_ClientRoot(LPCTSTR clientroot)
+BOOL CP4winApp::SetClientRoot(LPCTSTR clientroot)
 {
 	m_ClientRoot = clientroot;
 
@@ -2671,7 +2671,7 @@ BOOL CP4winApp::Set_m_ClientRoot(LPCTSTR clientroot)
 	return TRUE;
 }
 
-BOOL CP4winApp::Set_m_ClientSubOpts(LPCTSTR clientSubOpts)
+BOOL CP4winApp::SetClientSubOpts(LPCTSTR clientSubOpts)
 {
 	m_ClientSubOpts = 0;
 

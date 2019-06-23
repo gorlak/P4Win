@@ -1139,7 +1139,7 @@ LRESULT CClientListCtrl::OnP4EndSpecEdit( WPARAM wParam, LPARAM lParam )
 			}
 		}
 		if (GET_SERVERLEVEL() >= 22)
-			TheApp()->Set_m_ClientSubOpts(TheApp()->GetClientSpecField( _T("SubmitOptions"), pCmd->GetSpecOut()));
+			TheApp()->SetClientSubOpts(TheApp()->GetClientSpecField( _T("SubmitOptions"), pCmd->GetSpecOut()));
     }
 	else
 	{

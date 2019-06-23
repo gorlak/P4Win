@@ -666,9 +666,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		if(cmdStarted && !pCmd->GetError())
 		{
 			// since we have the client spec, set Client root in app
-			TheApp()->Set_m_ClientRoot(TheApp()->GetClientSpecField( _T("Root"), pCmd->GetDescription()));
+			TheApp()->SetClientRoot(TheApp()->GetClientSpecField( _T("Root"), pCmd->GetDescription()));
 			if (GET_SERVERLEVEL() >= 22)
-		        TheApp()->Set_m_ClientSubOpts(TheApp()->GetClientSpecField( _T("SubmitOptions"), pCmd->GetDescription()));
+		        TheApp()->SetClientSubOpts(TheApp()->GetClientSpecField( _T("SubmitOptions"), pCmd->GetDescription()));
 		}
 		// now run the rev hist command
 		OnFileRevisionhistory();
@@ -700,9 +700,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		if(cmdStarted && !pCmd1->GetError())
 		{
 			// since we have the client spec, set Client root in app
-			TheApp()->Set_m_ClientRoot(TheApp()->GetClientSpecField( _T("Root"), pCmd1->GetDescription()));
+			TheApp()->SetClientRoot(TheApp()->GetClientSpecField( _T("Root"), pCmd1->GetDescription()));
 			if (GET_SERVERLEVEL() >= 22)
-		        TheApp()->Set_m_ClientSubOpts(TheApp()->GetClientSpecField( _T("SubmitOptions"), pCmd1->GetDescription()));
+		        TheApp()->SetClientSubOpts(TheApp()->GetClientSpecField( _T("SubmitOptions"), pCmd1->GetDescription()));
 		}
 		// now run the diff command
 		m_StringList.RemoveAll();
@@ -2012,7 +2012,7 @@ LRESULT CMainFrame::OnP4InitInfo( WPARAM wParam, LPARAM lParam )
 		CP4Info const &info = pCmd->GetInfo();
 		if (m_GetCliRootAndContinue)
 		{
-			TheApp()->Set_m_ClientRoot(info.m_ClientRoot);
+			TheApp()->SetClientRoot(info.m_ClientRoot);
 		}
 		else
 		{
@@ -4908,7 +4908,7 @@ void CMainFrame::OnTool(UINT nID)
 				CP4Info const &info = cmd.GetInfo();
 				if (!info.m_ClientRoot.IsEmpty( ))
 				{
-					TheApp()->Set_m_ClientRoot(info.m_ClientRoot);
+					TheApp()->SetClientRoot(info.m_ClientRoot);
 				}
 			}
 		}
@@ -5043,7 +5043,7 @@ void CMainFrame::OnTool(UINT nID)
 						CP4Info const &info = cmd.GetInfo();
 						if (!info.m_ClientRoot.IsEmpty( ))
 						{
-							TheApp()->Set_m_ClientRoot(info.m_ClientRoot);
+							TheApp()->SetClientRoot(info.m_ClientRoot);
 						}
 					}
 				}

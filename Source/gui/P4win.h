@@ -331,8 +331,8 @@ public:
 	CP4WinToolBarImageList *GetToolBarImageList() { return m_toolBarImageList; }
 	int GetFileImageIndex(CP4FileStats *fs, BOOL IsChangesWindow=FALSE);
 	void GetFileType(const CString &itemStr,int &BaseType,int &StoreType,BOOL &TypeK,BOOL &TypeW,BOOL &TypeX,BOOL &TypeO,BOOL &TypeM,BOOL &TypeL,BOOL &TypeS,DWORD_PTR &NbrRevs,BOOL &Unknown);
-	BOOL Set_m_ClientRoot(LPCTSTR clientroot);
-	BOOL Set_m_ClientSubOpts(LPCTSTR clientSubOpts);
+	BOOL SetClientRoot(LPCTSTR clientroot);
+	BOOL SetClientSubOpts(LPCTSTR clientSubOpts);
 	void OnSysColorChange();
 	CString BrowseForFolder(HWND hWnd, LPCTSTR startat, LPCTSTR lpszTitle, UINT nFlags);
 	BOOL digestIsSame(CP4FileStats *fs, BOOL retIfNotExist=FALSE, void *client=NULL);
