@@ -98,6 +98,12 @@ void CCmd_Info::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
         ;   // we know about it, but don't care about it
     else if(tag == _T("Broker address"))
         ;   // we know about it, but don't care about it
+    else if(tag == _T("Broker encryption"))
+        ;   // we know about it, but don't care about it
+    else if(tag == _T("Broker cert expires"))
+        ;   // we know about it, but don't care about it
+    else if(tag == _T("Broker version"))
+        ;   // we know about it, but don't care about it
     else
     {
         ASSERT(0);   // info not recognized
