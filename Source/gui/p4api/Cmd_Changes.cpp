@@ -38,7 +38,7 @@ CCmd_Changes::~CCmd_Changes()
 //	0 -> no, do not add -l or -L
 //	1 -> yes, use -l to get full descriptions
 //	2 -> yes, use -L to get max 250 byte descriptions (valid only on 2005.1 and later servers)
-BOOL CCmd_Changes::Run(int filter, int loquatious, CStringList *viewSpec/*=NULL*/, 
+BOOL CCmd_Changes::Run(ECmdChangesFilter filter, int loquatious, CStringList *viewSpec/*=NULL*/, 
 					   long numToFetch/*=0*/, BOOL inclInteg/*=FALSE*/, 
 					   CString *user/*=NULL*/, CString *client/*=NULL*/)
 {
