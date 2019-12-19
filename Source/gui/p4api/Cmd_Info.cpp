@@ -96,6 +96,8 @@ void CCmd_Info::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
         ;   // we know about it, but don't care about it
     else if(tag == _T("Changelist server"))
         ;   // we know about it, but don't care about it
+    else if(tag == _T("Broker address"))
+        ;   // we know about it, but don't care about it
     else
     {
         ASSERT(0);   // info not recognized
