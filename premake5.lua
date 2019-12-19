@@ -536,11 +536,6 @@ project "P4Win"
 	pchheader( "StdAfx.h" )
 	pchsource( "Source/gui/StdAfx.cpp" )
 
-	linkoptions
-	{
-		"/manifestuac:no"
-	}
-
 	links
 	{
 		"librpc",
