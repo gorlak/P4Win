@@ -53,6 +53,7 @@ enum SrcImages
 
 	// more simple images
 	SI_OPENFOLDER,
+	SI_SHELVED,
 };
 
 // convert from CUSB enum flag to image index
@@ -243,6 +244,20 @@ void CP4ViewImageList::MakeBitmap(CP4Image &dst, CP4Image &src, COLORREF bg)
 	dst.BlendImage(i,   src, CP4ViewImageList::VI_YOUROTHERCHANGE);
 	dst.BlendImage(i++, src, SI_NOT_SYNCED);
 
+	// create the pending with shelved files chglist ones
+	dst.BlendImage(i,   src, CP4ViewImageList::VI_YOURCHANGE);
+	dst.BlendImage(i++, src, SI_SHELVED);
+	dst.BlendImage(i,   src, CP4ViewImageList::VI_THEIRCHANGE);
+	dst.BlendImage(i++, src, SI_SHELVED);
+
+	// same, but for shelved + not synced case
+	dst.BlendImage(i,   src, CP4ViewImageList::VI_YOURCHANGE);
+	dst.BlendImage(i,   src, SI_SHELVED);
+	dst.BlendImage(i++, src, SI_NOT_SYNCED);
+	dst.BlendImage(i,   src, CP4ViewImageList::VI_THEIRCHANGE);
+	dst.BlendImage(i,   src, SI_SHELVED);
+	dst.BlendImage(i++, src, SI_NOT_SYNCED);
+
 	int x = i * 24;
 
 	// copy client, plus badges
@@ -278,7 +293,9 @@ bool CP4ViewImageList::Create()
 		3 +			// sync states: none, synced, not synced
 		1 +			// wierd ghost combo
 		1 +			// open folder
-		2 );		// 2 unresolved pending chglists
+		2 +			// 2 unresolved pending chglists
+		2 +			// 2 unresolved + shelved pending changelists
+		2 );		// your/their change with shelved files
 
 	CDC dc;
 	dc.CreateDC(_T("DISPLAY"), NULL, NULL, NULL);
