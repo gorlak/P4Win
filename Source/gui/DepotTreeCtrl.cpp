@@ -5730,8 +5730,8 @@ void CDepotTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 
 		if( anyChildren || ( anyInview && !allNotInDepot ))
 		{
-			getMenu.AppendMenu( stringsON, ID_FILE_GETCUSTOM );
-			getMenu.AppendMenu( stringsON, ID_FILE_REFRESH );
+			getMenu.AppendMenu( stringsON, ID_FILE_GETCUSTOM, LoadStringResource( SERVER_IS_982_ORMORE ? IDS_SYNCTORLCD : IDS_SYNCTORLC ) );
+			getMenu.AppendMenu( stringsON, ID_FILE_REFRESH, LoadStringResource( IDS_REDOSYNCTOSAME ) );
 			getMenu.AppendMenu( stringsON, ID_FILE_FORCESYNCTOHEAD, LoadStringResource( IDS_FILE_FORCESYNCTOHEAD ) );
 		}
 

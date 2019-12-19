@@ -23,6 +23,7 @@ protected:
 	CString m_User;
 	BOOL m_Initialized;
 	BOOL m_Pending;
+	BOOL m_Shelved;
 	BOOL m_MyChange;
 	CString m_Description;
 	

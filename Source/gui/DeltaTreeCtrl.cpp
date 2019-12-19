@@ -5589,7 +5589,7 @@ void CDeltaTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 		//
 		if(HasChildren(currentItem))
 		{
-			popMenu.AppendMenu( stringsON, ID_CHANGE_SUBMIT );
+			popMenu.AppendMenu( stringsON, ID_CHANGE_SUBMIT, LoadStringResource( IDS_SUBMIT ) );
 			popMenu.AppendMenu(MF_SEPARATOR);
 		}
 
