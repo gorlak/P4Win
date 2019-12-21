@@ -316,6 +316,10 @@ public:
 	BOOL GetSelectedFiles( CStringList *list );
 	int GetItemLevel(HTREEITEM currentItem, BOOL *underMyRoot);
 	BOOL IsAFile(HTREEITEM curr_item);
+	CObject * GetLParamObject(HTREEITEM curr_item);
+
+	template <typename TObject>
+	TObject * GetLParamTyped(HTREEITEM curr_item);
 
 	BOOL AnyInDefault();
 	BOOL AnyNbredChg();

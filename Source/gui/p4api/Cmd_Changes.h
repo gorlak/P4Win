@@ -13,6 +13,7 @@ enum ECmdChangesFilter
 	ALL_CHANGES = 1,
 	PENDING_CHANGES = 2,
 	SUBMITTED_CHANGES = 3,
+	SHELVED_CHANGES = 4,
 };
 
 
@@ -36,6 +37,7 @@ protected:
 
     // CP4Command overrides
     virtual void OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg);
+    virtual void OnOutputStat( StrDict *varList );
     virtual void PostProcess();
 };
 

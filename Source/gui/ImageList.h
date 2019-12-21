@@ -35,6 +35,7 @@ public:
 		VI_YOUROTHERCHGUNRES,
 		VI_YOURCHANGE_SHELVED,
 		VI_THEIRCHANGE_SHELVED,
+		VI_YOUROTHERCHANGE_SHELVED,
 		VI_YOURCHGUNRES_SHELVED,
 		VI_YOUROTHERCHGUNRES_SHELVED,
 		VI_CLIENT,
@@ -78,6 +79,7 @@ public:
 	static int GetClientIndex(bool isCurrent, bool isDefault);
 	static int GetUserIndex(bool isCurrent, bool isDefault);
 	static int GetFileIndex(int state);
+	static int GetChangeIndex(bool yourClient, bool yourUser, bool unresolved, bool shelved);
 };
 
 class CP4WinToolBarImageList : public CP4ToolBarImageList
