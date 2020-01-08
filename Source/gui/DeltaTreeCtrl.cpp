@@ -2270,6 +2270,18 @@ BOOL CDeltaTreeCtrl::ExpandTree( const HTREEITEM item )
        		MainFrame()->ClearStatus();
 		}
 	}
+	else
+	{
+		// If we aren't running the fixes command, we need to manually
+		// fix up our expansion state (this normally happens downstream
+		// of the fixes command coming back.)
+
+		SetLParam( item, FOLDER_ALREADY_EXPANDED);
+		if( GetChildItem( item ) == NULL )
+		{
+			SetChildCount( item, 0 );
+		}
+	}
 
 	return TRUE;
 }
