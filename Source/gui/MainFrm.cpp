@@ -615,13 +615,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	MainFrameCWnd = this;
 
-	// Vista sucks and won't let us write to HKEY_LOCAL_MACHINE
-	// unless we have elevated privilages. But those writes
-	// happen in the p4api and don't return status. So write
-	// a dummy key for testing and report any failure.
-
-	GET_P4REGPTR()->TestRegWrite2HKLM();
-
 	//	This timer is here to support auto-update and miscellaneous
 	//  tasks.  Will result in OnTimer() being called every .2 secs.  
 	//  The interval is a compromise between 

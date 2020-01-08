@@ -144,6 +144,7 @@
 #define FetchAllChanges     _T("FetchAllChanges")
 #define FetchJobCount		_T("FetchJobCount")
 #define FetchAllJobs		_T("FetchAllJobs")
+#define JobsEnabled			_T("JobsEnabled")
 #define FetchHistCount		_T("FetchHistCount")
 #define FetchAllHist		_T("FetchAllHist")
 #define FetchCompleteHist	_T("FetchCompleteHist")
@@ -694,6 +695,9 @@ BOOL CP4Registry::ReadRegistry()
 
     if(!GetRegKey( &m_FetchAllJobs, _T("Options"), FetchAllJobs, FALSE ))
 		SetFetchAllJobs( m_FetchAllJobs );
+
+    if(!GetRegKey( &m_JobsEnabled, _T("Options"), JobsEnabled, TRUE ))
+		SetJobsEnabled( m_JobsEnabled );
 
 	if(!GetRegKey( &m_FetchHistCount, _T("Options"), FetchHistCount, 100 ))
 		SetFetchHistCount( m_FetchHistCount );
@@ -2854,6 +2858,14 @@ BOOL CP4Registry::SetFetchAllJobs(BOOL fetchAll)
 	return SetRegKey( str, _T("Options"), FetchAllJobs );
 }
 
+BOOL CP4Registry::SetJobsEnabled(BOOL jobsEnabled)
+{
+	CString str;
+	str.Format(_T("%ld"), (long) jobsEnabled);
+	m_JobsEnabled=jobsEnabled;
+	return SetRegKey( str, _T("Options"), JobsEnabled );
+}
+
 BOOL CP4Registry::SetFetchHistCount(long fetchHistCount)
 {
 	ASSERT( fetchHistCount >= 0);
@@ -4930,33 +4942,6 @@ void CP4Registry::WriteVirginRegistry()
 	if(success == ERROR_SUCCESS)
 		RegCloseKey(key);
 }
-
-BOOL CP4Registry::TestRegWrite2HKLM()
-{
-	HKEY	hKey = NULL;
-	CString sKey = _T("Software\\Perforce\\environment\\");
-	DWORD	disposition;
-	TCHAR   test[] = _T("test");
-	LONG	rc;
-	if ( (rc = RegCreateKeyEx( HKEY_LOCAL_MACHINE, sKey,
-								0, NULL,
-								REG_OPTION_NON_VOLATILE,
-								KEY_READ|KEY_WRITE, NULL,
-								&hKey, &disposition )) == ERROR_SUCCESS )
-	{
-		disposition = sizeof(test);
-		rc = RegSetValueEx(hKey, _T("P4Win"), NULL, REG_SZ,
-				(LPBYTE)test, disposition);
-	}
-
-	if (rc != ERROR_SUCCESS )
-	{
-		RegWriteFailed(rc);
-		return FALSE;
-	}
-	return TRUE;
-}
-
 
 void CP4Registry::RegWriteFailed(LONG rc)
 {

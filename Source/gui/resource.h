@@ -1,17 +1,9 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by c:\workspac\main\p4-win\gui\P4Win409\P4Win409.rc
+// Used by U:\Personal\Projects\P4Win\Source\gui\P4Win409\P4Win409.rc
 //
-#define VERSION_MAJOR			2008
-#define VERSION_MINOR			1
-#define VERSION_PATCH			1
-#define VERSION_STRINGIFY(major, minor, patch) _T(#major) _T(".") _T(#minor) _T(".") _T(#patch)
-#define VERSION_TOSTRING(major, minor, patch) VERSION_STRINGIFY(major,minor,patch)
-#define VERSION_STRING VERSION_TOSTRING( VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH )
-#define RESOURCE_VERSION VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH, 0
-#define RESOURCE_VERSION_STRINGIFY(major, minor, patch) #major "," #minor "," #patch ",0"
-#define RESOURCE_VERSION_TOSTRING(major, minor, patch) RESOURCE_VERSION_STRINGIFY(major, minor, patch)
-#define RESOURCE_VERSION_STRING RESOURCE_VERSION_TOSTRING( VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH )
+#define VERSION_MINOR                   1
+#define VERSION_PATCH                   1
 #define IDC_NOT_USED                    1
 #define P4_INT_MINOR                    1
 #define IDC_NEXT                        2
@@ -611,6 +603,7 @@
 #define IDC_INTEGFORCE                  1133
 #define IDC_POLLJOBS                    1133
 #define IDC_INTEGREVERSE                1134
+#define IDC_ENABLEJOBS                  1134
 #define IDC_CHANGELIST                  1135
 #define IDC_EDITUSEVIEW                 1135
 #define IDC_INTEGPREVIEW                1136
@@ -1592,6 +1585,7 @@
 #define IDS_USER_HAS_OPEN_FILES_CANT_DELETE 2005
 #define IDS_CANT_DELETE_UNOWNED_BRANCH  2006
 #define IDS_CANT_DELETE_PRIVELEGE_s     2007
+#define VERSION_MAJOR                   2008
 #define IDS_CANT_DELETE_UNOWNED_CLIENT  2008
 #define IDS_CANT_DELETE_UNOWNED_LABEL   2009
 #define IDS_SYNC_PREVIEW                2010
@@ -1821,7 +1815,7 @@
 #define IDS_FAILEDREGWRITE              2226
 #define IDS_INSERTING_CLIENTS           2227
 #define IDS_INSERTING_LABELS            2228
-#define	IDS_USERCLIENTROOTCWDADDRVERSERVERADDRDATEVERLICENSEROOTOS	2229
+#define IDS_USERCLIENTROOTCWDADDRVERSERVERADDRDATEVERLICENSEROOTOS 2229
 #define P4_INT_LBUILD                   6053
 #define ID_PERFORCE_INFO                32771
 #define ID_PERFORCE_OPTIONS             32772
@@ -2375,7 +2369,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        466
+#define _APS_NEXT_RESOURCE_VALUE        467
 #define _APS_NEXT_COMMAND_VALUE         33160
 #define _APS_NEXT_CONTROL_VALUE         1542
 #define _APS_NEXT_SYMED_VALUE           368

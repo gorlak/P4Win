@@ -106,6 +106,8 @@ void CCmd_Depots::OnOutputInfo( char level, LPCTSTR data, LPCTSTR msg )
 		m_LocalDepotList.AddHead( depotName );
 	else if( depotType.CompareNoCase(_T("remote")) == 0)
 		m_RemoteDepotList.AddHead( depotName );
+	else if( depotType.CompareNoCase(_T("archive")) == 0)
+		m_RemoteDepotList.AddHead( depotName );
 	else if( depotType.CompareNoCase(_T("spec")) == 0)
 	{
 		if (GET_SERVERLEVEL() >= 18)

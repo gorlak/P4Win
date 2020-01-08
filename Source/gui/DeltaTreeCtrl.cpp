@@ -362,6 +362,27 @@ void CDeltaTreeCtrl::SaveExpansion()
 	}
 }
 
+CObject * CDeltaTreeCtrl::GetLParamObject(HTREEITEM curr_item)
+{
+	if ( !curr_item )
+		return NULL;
+
+	LPARAM lparam = GetLParam(curr_item);
+	if ( lparam == NULL || lparam == EXPAND_FOLDER || lparam == FOLDER_ALREADY_EXPANDED )
+		return NULL;
+
+	return (CObject *)lparam;
+}
+
+template <typename TObject>
+TObject * CDeltaTreeCtrl::GetLParamTyped(HTREEITEM curr_item)
+{
+	CObject *pObject = GetLParamObject(curr_item);
+	if ( !pObject )
+		return NULL;
+
+	return dynamic_cast<TObject *>(pObject);
+}
 
 BOOL CDeltaTreeCtrl::IsAFile(HTREEITEM curr_item)
 {
@@ -371,10 +392,7 @@ BOOL CDeltaTreeCtrl::IsAFile(HTREEITEM curr_item)
 	ASSERT(GetItemLevel(curr_item, &underMyRoot) == 2);
 #endif
 
-	if(GetLParam(curr_item) == NULL)
-		return(FALSE);
-	else
-		return(TRUE);
+	return GetLParamTyped<CP4FileStats>(curr_item) != NULL;
 }
 
 UINT CDeltaTreeCtrl::GetItemState(HTREEITEM curr_item)
@@ -443,10 +461,8 @@ void CDeltaTreeCtrl::DeleteItem(HTREEITEM item)
 {
 	ASSERT(item != NULL);
 
-	LPARAM lParam=GetLParam(item);
-	if(lParam > 0)
-		delete (CP4FileStats *) lParam;
-	
+	delete GetLParamObject(item);
+
 	CMultiSelTreeCtrl::DeleteItem(item);
 }
 
@@ -457,23 +473,16 @@ void CDeltaTreeCtrl::DeleteLParams(HTREEITEM root)
 
 	HTREEITEM change= GetChildItem(root);
 	HTREEITEM file;
-	LPARAM lParam;
 
 	while(change != NULL)
 	{
 		file= GetChildItem(change);	
 		while(file != NULL)
 		{
-			lParam=GetLParam(file);
-			if(lParam > 0)
-            {
-                ASSERT_KINDOF(CP4FileStats, (CP4FileStats *) lParam);
-                XTRACE(_T("CDeltaTreeCtrl::DeleteLParams: %s\n"), ((CP4FileStats *) lParam)->GetDepotFilename());
-				delete (CP4FileStats *) lParam;
-            }
-
+			delete GetLParamObject(file);
 			file=GetNextSiblingItem(file);
 		}
+		delete GetLParamObject(change);
 		change=GetNextSiblingItem(change);
 	}
 }
@@ -497,7 +506,10 @@ void CDeltaTreeCtrl::InitList()
 	CString rootName;
 	rootName.FormatMessage(IDS_PENDING_CHANGELISTS_MY_CLIENT_s, GET_P4REGPTR()->GetP4Client());
 	m_MyRoot=Insert(rootName, CP4ViewImageList::VI_YOURPENDING, EXPAND_FOLDER, TVI_ROOT, TRUE);
-	m_MyDefault=Insert(LoadStringResource(IDS_DEFAULTCHANGELISTNAME), CP4ViewImageList::VI_YOURCHANGE, 0, m_MyRoot, TRUE);
+
+	m_MyDefault=Insert(LoadStringResource(IDS_DEFAULTCHANGELISTNAME), 0, NULL, m_MyRoot, TRUE);
+	SetCorrectChglistImage( m_MyDefault );
+
 	if (!m_DragToChangeNum)
 		m_DragToChange=m_MyDefault;
 
@@ -528,7 +540,7 @@ void CDeltaTreeCtrl::InitList()
 		// in cases where that refresh will already be fetching the needed ifo (running opened -a)
 		// The final lParam and child count values are handled after the refresh in UpdateTreeState
 		if( m_OthersRootExpanded )
-			m_OthersRoot=Insert(txt, CP4ViewImageList::VI_THEIRPENDING, FOLDER_ALREADY_EXPANDED, TVI_ROOT, TRUE);
+			m_OthersRoot=Insert(txt, CP4ViewImageList::VI_THEIRPENDING, NULL, TVI_ROOT, TRUE);
 		else
 			m_OthersRoot=Insert(txt, CP4ViewImageList::VI_THEIRPENDING, EXPAND_FOLDER, TVI_ROOT, TRUE);
 	}
@@ -976,44 +988,42 @@ LRESULT CDeltaTreeCtrl::OnP4AutoResolve(WPARAM wParam, LPARAM lParam)
 
 void CDeltaTreeCtrl::SetCorrectChglistImage(HTREEITEM change)
 {
-	HTREEITEM file= GetChildItem(change);	
+	bool yourClient = true; // TODO - Figure out.
+	bool yourUser = true; // TODO - Figure out.
+	bool unresolved = false;
+	bool shelved = false; // TODO - Figure out.
+
+	HTREEITEM file= GetChildItem(change);
 	while(file != NULL)
 	{
-		LPARAM lParam=GetLParam(file);
-		if(lParam > 0)
+		if ( CP4FileStats *stats = GetLParamTyped<CP4FileStats>( file ) )
         {
-			CP4FileStats *stats= (CP4FileStats *) lParam;
-            ASSERT_KINDOF(CP4FileStats, stats);
-            if (stats->IsUnresolved())
-			{
-				int ix = stats->IsOtherUserMyClient() ? CP4ViewImageList::VI_YOUROTHERCHGUNRES 
-													  : CP4ViewImageList::VI_YOURCHGUNRES;
-				SetImage(change, ix, ix);
-				return;
-			}
+			unresolved = unresolved || stats->IsUnresolved();
 		}
 		file=GetNextSiblingItem(file);
 	}
-	SetImage(change, CP4ViewImageList::VI_YOURCHANGE, CP4ViewImageList::VI_YOURCHANGE);
+
+	int ix = CP4ViewImageList::GetChangeIndex(yourClient, yourUser, unresolved, shelved);
+
+	SetImage(change, ix, ix);
 }
 
-void CDeltaTreeCtrl::ClearUnresolvedFlags( )
+void CDeltaTreeCtrl::ClearUnresolvedFlags()
 {
 	HTREEITEM change= GetChildItem(m_MyRoot);
 	HTREEITEM file;
-	LPARAM lParam;
 
 	while(change != NULL)
 	{
-		SetImage(change, CP4ViewImageList::VI_YOURCHANGE, CP4ViewImageList::VI_YOURCHANGE);
+		// TODO: Figure out shelved.
+		int ix = CP4ViewImageList::GetChangeIndex(true, true, false, false);
+		SetImage(change, ix, ix);
+
 		file= GetChildItem(change);	
 		while(file != NULL)
 		{
-			lParam=GetLParam(file);
-			if(lParam > 0)
+			if ( CP4FileStats *stats = GetLParamTyped<CP4FileStats>( file ) )
             {
-				CP4FileStats *stats= (CP4FileStats *) lParam;
-                ASSERT_KINDOF(CP4FileStats, stats);
                 stats->SetUnresolved(FALSE);
 				int img=TheApp()->GetFileImageIndex(stats,TRUE);
 				SetImage(file, img, img);
@@ -1080,13 +1090,10 @@ LRESULT CDeltaTreeCtrl::OnP4Resolve(WPARAM wParam, LPARAM lParam)
 {
 	CCmd_Resolve *pCmd= (CCmd_Resolve *) wParam;
 
-	if(!pCmd->GetError())
+	if(!pCmd->GetError() && pCmd->GetResolved())
 	{
-		if(pCmd->GetResolved())
+		if ( CP4FileStats *stats = GetLParamTyped<CP4FileStats>( m_ActiveItem ) )
 		{
-			CP4FileStats *stats= (CP4FileStats *) GetLParam(m_ActiveItem);
-			ASSERT_KINDOF(CP4FileStats, stats);
-
 			stats->SetUnresolved(FALSE);
 			stats->SetResolved(TRUE);
 			int img=TheApp()->GetFileImageIndex(stats,TRUE);
@@ -1126,10 +1133,8 @@ LRESULT CDeltaTreeCtrl::OnP4UnResolved(WPARAM wParam, LPARAM lParam)
 
 			if( item != NULL )
 			{
-				LPARAM lParam= GetLParam(item);
-				if( lParam > 0 )
+				if ( CP4FileStats *fs = GetLParamTyped<CP4FileStats>( item ) )
 				{
-					CP4FileStats *fs= (CP4FileStats *) lParam;
 					fs->SetUnresolved(TRUE);
 					int img=TheApp()->GetFileImageIndex(fs,TRUE);
 					SetImage(item, img, img);
@@ -1177,12 +1182,8 @@ LRESULT CDeltaTreeCtrl::OnP4Resolved(WPARAM wParam, LPARAM lParam)
 
 			if( item != NULL )
 			{
-				LPARAM lParam= GetLParam(item);
-				if( lParam > 0 )
-				{
-					CP4FileStats *fs= (CP4FileStats *) lParam;
+				if ( CP4FileStats *fs = GetLParamTyped<CP4FileStats>( item ) )
 					fs->SetResolved(TRUE);
-				}
 				else
 					ASSERT(0);
 			}
@@ -1342,10 +1343,7 @@ void CDeltaTreeCtrl::OnP4Reopen(CStringList *list)
 	
 	HTREEITEM item = NULL;
 	int imageIndex = -1;
-	int ix = 0;
-	LPARAM param;
-	CP4FileStats *stats;
-				
+
     SetRedraw(FALSE);
 	for(pos=list->GetHeadPosition(); pos!=NULL;)
 	{
@@ -1367,9 +1365,8 @@ void CDeltaTreeCtrl::OnP4Reopen(CStringList *list)
 			
 			item=FindMyOpenFile(fileName, item);
 			ASSERT(item != NULL);
-			if(item != NULL)
+			if ( CP4FileStats *stats = GetLParamTyped<CP4FileStats>( item ) )
 			{
-				stats= (CP4FileStats *) GetLParam(item);
 				stats->SetType(info.Mid(lstrlen(_T("type "))));
 				SetItemText(item, stats->GetFormattedChangeFile(GET_P4REGPTR()->ShowFileType(), GET_P4REGPTR()->ShowOpenAction()));
 				int img=TheApp()->GetFileImageIndex(stats,TRUE);
@@ -1386,22 +1383,16 @@ void CDeltaTreeCtrl::OnP4Reopen(CStringList *list)
 				fileName = fileName.Left(i);
 			
 			item=GetChildItem(m_DragFromChange);
-			param=NULL;
+			CP4FileStats *stats = NULL;
 			while(item != NULL)
 			{
-				if(IsAFile(item))
+				if ( stats = GetLParamTyped<CP4FileStats>( item ) )
 				{
-					param= GetLParam(item);
-					ASSERT(param != 0);
-					stats= (CP4FileStats *) param;
-					ASSERT_KINDOF(CP4FileStats, stats);
 					temp= stats->GetFullDepotPath();
 					if(temp == fileName)
 					{
 						imageIndex=GetImage(item);
 						stats->SetOpenChangeNum( m_DragToChangeNum );
-						ix = stats->IsOtherUserMyClient() ? CP4ViewImageList::VI_YOUROTHERCHANGE 
-														  : CP4ViewImageList::VI_YOURCHANGE;
 
 						// reopen and update open file info
 						//
@@ -1436,15 +1427,7 @@ void CDeltaTreeCtrl::OnP4Reopen(CStringList *list)
 			// And add under m_DragToChange
 			if(item != NULL && imageIndex >= 0)
 			{
-				item=Insert(temp, imageIndex, param, m_DragToChange, TRUE);
-				// we may have to reset the icon on the dragtochange because
-				// the Insert() is looking at data for the drag from change
-				// which might have been our client/other user. But we know
-				// the dragtochange is ours - so force it for unresolved files.
-				stats= (CP4FileStats *) GetLParam(item);
-				if (stats->IsUnresolved())
-					SetImage(m_DragToChange, CP4ViewImageList::VI_YOURCHGUNRES, 
-											 CP4ViewImageList::VI_YOURCHGUNRES);
+				item=Insert(temp, imageIndex, (LPARAM)stats, m_DragToChange, TRUE);
 			}
 			ASSERT(item != NULL);
 		}// if reopen by type or change
@@ -1452,20 +1435,16 @@ void CDeltaTreeCtrl::OnP4Reopen(CStringList *list)
 
 	if( !isReopenByType && list->GetCount() )
 	{
-		int img;
 		// Make sure the source change is closed if it was just emptied
 		if( GetChildItem(m_DragFromChange) == NULL )
 		{
 			SetUnexpanded(m_DragFromChange);
 			SetChildCount(m_DragFromChange, 0);
 			SetLParam(m_DragFromChange, EXPAND_FOLDER);
-			SetImage(m_DragFromChange, ix, ix);
 		}
-		else if ((img = GetImage(m_DragFromChange)) == CP4ViewImageList::VI_YOURCHGUNRES
-			   || img == CP4ViewImageList::VI_YOUROTHERCHGUNRES)
-		{
-			SetCorrectChglistImage(m_DragFromChange);
-		}
+
+		SetCorrectChglistImage(m_DragFromChange);
+		SetCorrectChglistImage(m_DragToChange);
 
 		// Make sure the target change is openable if it contains children
 		if( GetChildItem(m_DragToChange) != NULL )
@@ -1818,13 +1797,11 @@ void CDeltaTreeCtrl::OnP4EditFile(CStringList *list)
 	
 		// And finally, update the item's status
 		HTREEITEM item=FindMyOpenFile(fileName);
-		if(item != NULL)
+		if(CP4FileStats *stats = GetLParamTyped<CP4FileStats>( item ))
 		{
-			CP4FileStats *newStats;
-			CP4FileStats *stats= (CP4FileStats *) GetLParam(item);
 			HTREEITEM change= GetParentItem(item);
 
-			newStats= new CP4FileStats;
+			CP4FileStats *newStats= new CP4FileStats;
 			newStats->Create(stats);
 			newStats->SetOpenAction(F_EDIT, FALSE);
 			DeleteItem(item);
@@ -1940,7 +1917,9 @@ LRESULT CDeltaTreeCtrl::OnP4EndSpecEdit( WPARAM wParam, LPARAM lParam )
 					// insert a new default change in the tree
 					
 					SetItemText(m_MyDefault, txt);
-					m_MyDefault=Insert(LoadStringResource(IDS_DEFAULTCHANGELISTNAME), CP4ViewImageList::VI_YOURCHANGE, NULL, m_MyRoot, TRUE);
+					m_MyDefault=Insert(LoadStringResource(IDS_DEFAULTCHANGELISTNAME), 0, NULL, m_MyRoot, TRUE);
+					SetCorrectChglistImage( m_MyDefault );
+
 					if (!m_DragToChangeNum)
 						m_DragToChange=m_MyDefault;
 				}
@@ -2275,18 +2254,33 @@ BOOL CDeltaTreeCtrl::ExpandTree( const HTREEITEM item )
 	if ( changeNum <= 0 )
 		return TRUE;
 
-	//  D) And finally fire up fixes
-	CCmd_Fixes *pCmdFixes= new CCmd_Fixes;
-	pCmdFixes->Init( m_hWnd, RUN_ASYNC);
-	if( pCmdFixes->Run(changeNum, item) )
+	//  D) And finally fire up fixes, if enabled
+	if ( GET_P4REGPTR()->GetJobsEnabled() )
 	{
-		MainFrame()->UpdateStatus( LoadStringResource(IDS_UPDATING_JOB_FIXES) );
+		CCmd_Fixes *pCmdFixes= new CCmd_Fixes;
+		pCmdFixes->Init( m_hWnd, RUN_ASYNC);
+		if( pCmdFixes->Run(changeNum, item) )
+		{
+			MainFrame()->UpdateStatus( LoadStringResource(IDS_UPDATING_JOB_FIXES) );
+		}
+		else
+		{
+			delete pCmdFixes;
+			RedrawWindow();
+       		MainFrame()->ClearStatus();
+		}
 	}
 	else
 	{
-		delete pCmdFixes;
-		RedrawWindow();
-       	MainFrame()->ClearStatus();
+		// If we aren't running the fixes command, we need to manually
+		// fix up our expansion state (this normally happens downstream
+		// of the fixes command coming back.)
+
+		SetLParam( item, FOLDER_ALREADY_EXPANDED);
+		if( GetChildItem( item ) == NULL )
+		{
+			SetChildCount( item, 0 );
+		}
 	}
 
 	return TRUE;
@@ -2584,10 +2578,8 @@ LRESULT CDeltaTreeCtrl::OnP4UpdateOpen(WPARAM wParam, LPARAM lParam)
 	{
 	case P4LOCK:
 	case P4UNLOCK:
-		if(item != NULL)
+		if( oldStats = GetLParamTyped<CP4FileStats>(item))
 		{
-			oldStats= (CP4FileStats *) GetLParam(item);
-
 			// update image and stats values
 			oldStats->SetLocked(stats->IsMyLock(), FALSE);
 			oldStats->SetLocked(FALSE, TRUE);
@@ -2605,9 +2597,8 @@ LRESULT CDeltaTreeCtrl::OnP4UpdateOpen(WPARAM wParam, LPARAM lParam)
 	case P4EDIT:
 	case P4DELETE:
 	case P4INTEG:
-		if(item != NULL)
+		if( oldStats = GetLParamTyped<CP4FileStats>( item ) )
 		{
-			oldStats= (CP4FileStats *) GetLParam(item);
 			if(stats->GetMyOpenAction() > 0) // Its in the tree and still open
 			{
 				// update image and stats values
@@ -2733,10 +2724,9 @@ LRESULT CDeltaTreeCtrl::OnP4SetUnresolved(WPARAM wParam, LPARAM lParam)
 
 	HTREEITEM item=FindMyOpenFile(stats->GetFullDepotPath());
 		
-	if(item != NULL)
+	if(CP4FileStats *oldStats = GetLParamTyped<CP4FileStats>( item ))
 	{
 		// Found it, so see if unresolved
-		CP4FileStats *oldStats= (CP4FileStats *) GetLParam(item);
         if(oldStats->GetHaveRev() < stats->GetHaveRev())
 		    oldStats->SetUnresolved(TRUE);
 		oldStats->SetHaveRev(stats->GetHaveRev());
@@ -2931,24 +2921,28 @@ HTREEITEM CDeltaTreeCtrl::FindItemByText(LPCTSTR text)
 HTREEITEM CDeltaTreeCtrl::InsertChange(CP4FileStats *stats, BOOL searchFirst /*=TRUE*/)
 {
 	HTREEITEM item, currentItem;
-	int  imageIndex;
 	BOOL sort = FALSE;
 
+	bool yourClient = true;
+	bool yourUser = true;
+	bool unresolved = stats->IsUnresolved();
+	bool shelved = false; // TODO - Figure out.
+
 	// Directly assign the root node, based on change category
-	if( stats->IsOtherUserMyClient() )	
+	if( stats->IsOtherUserMyClient() )
 	{
 		currentItem= m_MyRoot;
-		imageIndex = CP4ViewImageList::VI_YOUROTHERCHANGE;
+		yourClient = false;
 	}
 	else if(stats->IsMyOpen())
 	{
 		currentItem= m_MyRoot;
-		imageIndex = CP4ViewImageList::VI_YOURCHANGE;
 	}
 	else if( m_OthersRoot )
 	{
 		currentItem= m_OthersRoot;
-		imageIndex = CP4ViewImageList::VI_THEIRCHANGE;
+		yourClient = false;
+		yourUser = false;
 	}
 	else return NULL;
 
@@ -3011,6 +3005,8 @@ HTREEITEM CDeltaTreeCtrl::InsertChange(CP4FileStats *stats, BOOL searchFirst /*=
 		}
     }
 
+	int imageIndex = CP4ViewImageList::GetChangeIndex(yourClient, yourUser, unresolved, shelved);
+
 	item = Insert( changeName, imageIndex, 0, currentItem, sort);
 	if (m_DragToChangeNum == changeNumber)
 		m_DragToChange = item;
@@ -3021,17 +3017,6 @@ HTREEITEM CDeltaTreeCtrl::Insert(LPCTSTR text, int imageIndex, LPARAM lParam,
 							 HTREEITEM hParent, BOOL sort)
 {
 	XTRACE(_T("CDeltaTreeCtrl::Insert txt=%s\n"), text);
-
-	if( lParam > 0 )
-	{
-		CP4FileStats *fs= (CP4FileStats *) lParam;
-		if (fs->IsUnresolved())
-		{
-			int ix = fs->IsOtherUserMyClient() ? CP4ViewImageList::VI_YOUROTHERCHGUNRES 
-											   : CP4ViewImageList::VI_YOURCHGUNRES;
-			SetImage(hParent, ix, ix);
-		}
-	}
 
 	// Add an entry to the tree
 	TV_INSERTSTRUCT tree_insert;
@@ -3133,23 +3118,18 @@ LRESULT CDeltaTreeCtrl::OnP4Change(WPARAM wParam, LPARAM lParam)
 				HTREEITEM item;
 				if(change->IsMyChange())
 				{
-					// Its my client, but maybe not my user
-					if( Compare( change->GetUser(), GET_P4REGPTR()->GetMyID()) == 0 )
-						item=Insert(change->GetFormattedChange(GET_P4REGPTR()->ShowChangeDesc(),
-																		GET_P4REGPTR()->SortChgsByUser()), 
-									CP4ViewImageList::VI_YOURCHANGE, NULL, m_MyRoot, TRUE);
-					else
-						item=Insert(change->GetFormattedChange(GET_P4REGPTR()->ShowChangeDesc(),
-																		GET_P4REGPTR()->SortChgsByUser()), 
-																		CP4ViewImageList::VI_YOUROTHERCHANGE, NULL, m_MyRoot, TRUE);
+					item=Insert(change->GetFormattedChange(GET_P4REGPTR()->ShowChangeDesc(), GET_P4REGPTR()->SortChgsByUser()), 0, NULL, m_MyRoot, TRUE);
 				}
 				else if (m_OthersRoot)
 				{
-					item=Insert(change->GetFormattedChange(GET_P4REGPTR()->ShowChangeDesc(),
-																	GET_P4REGPTR()->SortChgsByUser()), 
-									CP4ViewImageList::VI_THEIRCHANGE, NULL, m_OthersRoot, TRUE);
+					item=Insert(change->GetFormattedChange(GET_P4REGPTR()->ShowChangeDesc(), GET_P4REGPTR()->SortChgsByUser()), 0, NULL, m_OthersRoot, TRUE);
 				}
 				else item = NULL;
+
+				if ( item )
+				{
+					SetCorrectChglistImage( item );
+				}
 
 				if( change->GetChangeNumber() > 0 && item )
 					SetChildCount( item, 1 );
@@ -3975,17 +3955,11 @@ LRESULT CDeltaTreeCtrl::OnP4ChangeDescribe(WPARAM wParam, LPARAM lParam)
 			CString fileText;
 			while( child != NULL )
 			{
-				if( IsAFile( child ) )
+				if( CP4FileStats *fs= GetLParamTyped<CP4FileStats>(child) )
 				{
-					CP4FileStats *fs= (CP4FileStats *) GetLParam(child);
-					if( fs->IsMyOpen() )
-						fileText.Format(_T("\r\n%s#%d %s"), fs->GetFullDepotPath(),
-													fs->GetHaveRev(),
-													fs->GetActionStr( fs->GetMyOpenAction() ) );
-					else
-						fileText.Format(_T("\r\n%s#%d %s"), fs->GetFullDepotPath(),
-													fs->GetHaveRev(),
-													fs->GetActionStr( fs->GetOtherOpenAction() ) );
+					fileText.Format(_T("\r\n%s#%d %s"), fs->GetFullDepotPath(),
+												fs->GetHaveRev(),
+												fs->GetActionStr( fs->IsMyOpen() ? fs->GetMyOpenAction() : fs->GetOtherOpenAction() ) );
 
 					// do reallocs in large chunks, rather than letting CString::operator +=() do it
 					// in little bits.  This makes a huge speed difference if the number if items is large.
@@ -4178,7 +4152,7 @@ void CDeltaTreeCtrl::ChangeEdit(long chgnum /*= -1*/, HTREEITEM chgItem /*= 0*/)
 		item=GetChildItem(m_EditChange);
 		while(item!=NULL)
 		{
-			if(IsAFile(item))
+			if(CP4FileStats *stats = GetLParamTyped<CP4FileStats>(item))
 			{
 				fileName=GetItemText(item);
 				if ((m_SubmitOnlyChged || GET_SERVERLEVEL() >= 21)	//always build list for 6.1+
@@ -4188,8 +4162,6 @@ void CDeltaTreeCtrl::ChangeEdit(long chgnum /*= -1*/, HTREEITEM chgItem /*= 0*/)
 					{
 						if (b20051)	// working with good 2005.1 or later server?
 						{
-							LPARAM lParam=GetLParam(item);
-							CP4FileStats *stats = (CP4FileStats *) lParam;
 							if (TheApp()->digestIsSame(stats, FALSE, client)
 							 && stats->GetType() == stats->GetHeadType())
 								m_FileList.AddTail(stats->GetFullDepotPath());
@@ -4502,8 +4474,7 @@ void CDeltaTreeCtrl::OnFiletype()
 	else
 	{
 		CFileType dlg;
-		CP4FileStats *stats;
-		stats= (CP4FileStats *) GetLParam(item);
+		CP4FileStats *stats = GetLParamTyped<CP4FileStats>(item);
 		dlg.m_itemStr = stats->GetFormattedChangeFile(TRUE, TRUE);
 		INT_PTR i=GetSelectedCount();
 		if (i > 1)
@@ -5589,7 +5560,7 @@ void CDeltaTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 		//
 		if(HasChildren(currentItem))
 		{
-			popMenu.AppendMenu( stringsON, ID_CHANGE_SUBMIT );
+			popMenu.AppendMenu( stringsON, ID_CHANGE_SUBMIT, LoadStringResource( IDS_SUBMIT ) );
 			popMenu.AppendMenu(MF_SEPARATOR);
 		}
 
@@ -5599,7 +5570,11 @@ void CDeltaTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 		{
 			popMenu.AppendMenu( stringsON, ID_CHANGE_EDSPEC, LoadStringResource( IDS_EDITSPEC ) );
 			popMenu.AppendMenu( stringsON, ID_CHANGE_DESCRIBE, LoadStringResource( IDS_DESCRIBEIT ) );
-			popMenu.AppendMenu( stringsON, ID_CHANGE_ADDJOBFIX, LoadStringResource( IDS_ADDJOBFIX ) );
+
+			if ( GET_P4REGPTR()->GetJobsEnabled() )
+			{
+				popMenu.AppendMenu( stringsON, ID_CHANGE_ADDJOBFIX, LoadStringResource( IDS_ADDJOBFIX ) );
+			}
 		}
 
 		// Choice for empty changes if not default
@@ -5725,7 +5700,7 @@ void CDeltaTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 		{
 			if (!SERVER_BUSY() && GET_SERVERLEVEL() >= 14 && GetSelectedCount()==1)
 			{
-				CP4FileStats *fs= (CP4FileStats *) GetLParam( GetSelectedItem(0) );
+				CP4FileStats *fs= GetLParamTyped<CP4FileStats>( GetSelectedItem(0) );
 				BOOL enable = ( fs->GetHaveRev() <= 1
 								&& ( fs->GetMyOpenAction() == F_ADD 
 								  || fs->GetMyOpenAction() == F_BRANCH ) ) ? FALSE : TRUE;
@@ -5940,7 +5915,7 @@ void CDeltaTreeCtrl::OnUpdateFileRevisionhistory(CCmdUI* pCmdUI)
 					IsAFile( GetSelectedItem(0)) );
 	if( enable )
 	{
-		CP4FileStats *fs= (CP4FileStats *) GetLParam( GetSelectedItem(0) );
+		CP4FileStats *fs= GetLParamTyped<CP4FileStats>( GetSelectedItem(0) );
 		if( fs->GetHaveRev() <= 1 &&
 			( fs->GetMyOpenAction() == F_ADD || fs->GetMyOpenAction() == F_BRANCH ) )
 			enable= FALSE;
@@ -5957,7 +5932,7 @@ void CDeltaTreeCtrl::OnUpdateFileAnnotate(CCmdUI* pCmdUI)
 					&& IsAFile( GetSelectedItem(0) );
 	if( enable )
 	{
-		CP4FileStats *fs= (CP4FileStats *) GetLParam( GetSelectedItem(0) );
+		CP4FileStats *fs= GetLParamTyped<CP4FileStats>( GetSelectedItem(0) );
 		if( fs->GetHaveRev() <= 1 &&
 			( fs->GetMyOpenAction() == F_ADD || fs->GetMyOpenAction() == F_BRANCH ) )
 			enable= FALSE;
@@ -6108,6 +6083,7 @@ BOOL CDeltaTreeCtrl::IsMyPendingChange(HTREEITEM currentItem)
 
 	if(level==1 && underMyRoot)
 	{
+		// TODO: Figure out.
 		if( GetImage( currentItem) != CP4ViewImageList::VI_YOUROTHERCHANGE )
 			myChange= TRUE;
 	}
@@ -6167,18 +6143,7 @@ BOOL CDeltaTreeCtrl::IsMyPendingChangeFile(HTREEITEM currentItem)
 
 BOOL CDeltaTreeCtrl::IsMyPendingChangeItem(HTREEITEM currentItem)
 {
-	BOOL myItem= FALSE;
-	BOOL underMyRoot;
-	int level= GetItemLevel(currentItem, &underMyRoot);
-
-	if(level==2 && underMyRoot)
-	{
-		HTREEITEM changeItem= GetParentItem(currentItem);
-		if( GetImage( changeItem ) != CP4ViewImageList::VI_YOUROTHERCHANGE )
-			myItem= TRUE;
-	}
-
-	return myItem;
+	return currentItem && IsMyPendingChange(GetParentItem(currentItem));
 }
 
 BOOL CDeltaTreeCtrl::IsSelectionSubmittableChange()
@@ -6338,7 +6303,7 @@ BOOL CDeltaTreeCtrl::AnyMyLock()
 	{
 		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
-			stats= (CP4FileStats *) GetLParam(GetSelectedItem(i));
+			stats= GetLParamTyped<CP4FileStats>( GetSelectedItem(i) );
 			if(stats != NULL)
 			{
 				if(stats->IsMyLock())
@@ -6368,7 +6333,7 @@ BOOL CDeltaTreeCtrl::AnyMyUnLocked()
 	{
 		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
-			stats= (CP4FileStats *) GetLParam(GetSelectedItem(i));
+			stats= GetLParamTyped<CP4FileStats>( GetSelectedItem(i) );
 			if(stats != NULL)
 			{
 				if(!stats->IsMyLock())
@@ -6418,7 +6383,7 @@ BOOL CDeltaTreeCtrl::AnyBinaryFiles(BOOL bAnyResolvable/*=FALSE*/)
 			{
 				if (bAnyResolvable)
 				{
-					CP4FileStats *stats = (CP4FileStats *) GetLParam(GetSelectedItem(i));
+					CP4FileStats *stats = GetLParamTyped<CP4FileStats>( GetSelectedItem(i) );
 					if(stats != NULL)
 					{
 						if (!stats->IsUnresolved() && !stats->IsResolved())
@@ -6449,7 +6414,7 @@ BOOL CDeltaTreeCtrl::AnyUnresolvedFiles()
 	{
 		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
-			stats= (CP4FileStats *) GetLParam(GetSelectedItem(i));
+			stats= GetLParamTyped<CP4FileStats>( GetSelectedItem(i) );
 			if(stats != NULL)
 			{
 				if(stats->IsUnresolved())
@@ -6480,7 +6445,7 @@ BOOL CDeltaTreeCtrl::AnyResolvedFiles(BOOL bList/*=FALSE*/)
 	{
 		for(INT_PTR i=GetSelectedCount()-1; i>=0; i--)
 		{
-			stats= (CP4FileStats *) GetLParam(GetSelectedItem(i));
+			stats= GetLParamTyped<CP4FileStats>( GetSelectedItem(i) );
 			if(stats != NULL)
 			{
 				if(stats->IsResolved())
@@ -7915,7 +7880,7 @@ void CDeltaTreeCtrl::OnUpdateFileInformation(CCmdUI* pCmdUI)
 					IsAFile( GetSelectedItem(0)) );
 	if( enable )
 	{
-		CP4FileStats *fs= (CP4FileStats *) GetLParam( GetSelectedItem(0) );
+		CP4FileStats *fs= GetLParamTyped<CP4FileStats>( GetSelectedItem(0) );
 		if( fs->GetHaveRev() <= 1 &&
 			( fs->GetMyOpenAction() == F_ADD || fs->GetMyOpenAction() == F_BRANCH ) )
 			enable= FALSE;

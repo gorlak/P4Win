@@ -20,24 +20,29 @@ public:
 protected:
 	long m_ChangeNumber;
 	CString m_ChangeDate;
-	CString m_User;
+	CString m_UserAtClient; // user@client
 	BOOL m_Initialized;
 	BOOL m_Pending;
+	BOOL m_Shelved;
 	BOOL m_MyChange;
 	CString m_Description;
 	
 public:
-	BOOL Create(LPCTSTR changesRow, LPCTSTR currentUser);  // char * as returned by 'p4 changes'
+	BOOL Create(LPCTSTR changesRow);  // char * as returned by 'p4 changes'
+	BOOL Create(class StrDict *varlist);
 
 	inline BOOL IsPending() const {ASSERT(m_Initialized); return m_Pending;}
+	inline BOOL IsShelved() const {ASSERT(m_Initialized); return m_Shelved;}
 	inline BOOL IsMyChange() const {ASSERT(m_Initialized); return m_MyChange;}
 	CString GetFormattedChange(BOOL showChangeDesc, BOOL sortByUser) const;
 
 	inline long GetChangeNumber() const { ASSERT(m_Initialized); return m_ChangeNumber; }
 	inline LPCTSTR GetChangeDate() const { ASSERT(m_Initialized); return LPCTSTR(m_ChangeDate); }
-	inline LPCTSTR GetUser() const { ASSERT(m_Initialized); return LPCTSTR(m_User); }
+	inline LPCTSTR GetUser() const { ASSERT(m_Initialized); return LPCTSTR(m_UserAtClient); }
 	inline LPCTSTR GetDescription() const { ASSERT(m_Initialized); return LPCTSTR(m_Description); }
 	inline void SetDescription(LPCTSTR str) { ASSERT(m_Initialized); m_Description = str; }
+
+	inline void SetShelved( BOOL shelved ) { ASSERT(m_Initialized); m_Shelved = shelved; }
 
 	~CP4Change();
 

@@ -23,6 +23,7 @@ public:
 	enum { IDD = IDD_PAGE_JOBS };
 	CButton	m_PollJobs;
 	CButton	m_JobCountRadio;
+	CButton m_JobsEnabledCheckbox;
 	int		m_JobCount;
 	//}}AFX_DATA
 
@@ -44,12 +45,11 @@ protected:
 
 	void OnFetchRadio(); 
 	void OnJobConfigure();
+	void OnEnableCheckbox();
 
 	// Generated message map functions
 	//{{AFX_MSG(CJobsPage)
 	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
-
-private:
 };

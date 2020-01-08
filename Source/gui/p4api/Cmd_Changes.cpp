@@ -38,12 +38,16 @@ CCmd_Changes::~CCmd_Changes()
 //	0 -> no, do not add -l or -L
 //	1 -> yes, use -l to get full descriptions
 //	2 -> yes, use -L to get max 250 byte descriptions (valid only on 2005.1 and later servers)
-BOOL CCmd_Changes::Run(int filter, int loquatious, CStringList *viewSpec/*=NULL*/, 
+BOOL CCmd_Changes::Run(ECmdChangesFilter filter, int loquatious, CStringList *viewSpec/*=NULL*/, 
 					   long numToFetch/*=0*/, BOOL inclInteg/*=FALSE*/, 
 					   CString *user/*=NULL*/, CString *client/*=NULL*/)
 {
 	ClearArgs();
 	m_BaseArgs= AddArg(_T("changes"));
+
+	// We use the tagged output in order to detected shelved changelists.
+	// Luckily shelving isn't supported until server level 28.
+	m_UsedTagged = GET_SERVERLEVEL() >= 8 ? TRUE : FALSE;
 
 	// May only want numToFetch most recent changes
 	if(numToFetch > 0)
@@ -83,9 +87,12 @@ BOOL CCmd_Changes::Run(int filter, int loquatious, CStringList *viewSpec/*=NULL*
 			if (GET_SERVERLEVEL() >= 16)
 				m_BaseArgs= AddArg(_T("-t"));
 		}
+		else if(filter == SHELVED_CHANGES)
+			AddArg(_T("shelved"));
 		else
 			ASSERT(0);
 	}
+
 	m_pBatch= new CObList;
 
 	// We may or may not have a view spec to limit the fetching of 
@@ -97,6 +104,7 @@ BOOL CCmd_Changes::Run(int filter, int loquatious, CStringList *viewSpec/*=NULL*
 		m_posStrListIn= m_pStrListIn->GetHeadPosition();
 		NextListArgs();
 	}
+
 	return CP4Command::Run();
 }
 
@@ -104,13 +112,29 @@ void CCmd_Changes::OnOutputInfo(char level, LPCTSTR data, LPCTSTR msg)
 {
 	// Parse into a CP4Change and send that back
 	CP4Change *change= new CP4Change;
-	if( change->Create(data, GET_P4REGPTR()->GetMyID()) )
+	if( change->Create(data) )
        	m_Changes.Add(change);
     else
     {
         #ifdef _DEBUG
             CString errMsg;
             errMsg.Format(_T("Change parse failed:\n%s"), data);
+            TheApp()->StatusAdd(errMsg, SV_DEBUG);
+        #endif
+        delete change;
+    }
+}
+
+void CCmd_Changes::OnOutputStat( StrDict *varList )
+{
+	CP4Change *change= new CP4Change;
+	if( change->Create(varList) )
+       	m_Changes.Add(change);
+    else
+    {
+        #ifdef _DEBUG
+            CString errMsg;
+            errMsg.Format(_T("Change parse failed (tagged output)"));
             TheApp()->StatusAdd(errMsg, SV_DEBUG);
         #endif
         delete change;

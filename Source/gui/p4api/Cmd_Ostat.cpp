@@ -213,6 +213,10 @@ void CCmd_Ostat::PreProcess(BOOL& done)
         }
 	}
 
+	// Look for any changelists with shelved files.
+	// p4 changes?
+	// user-fstat -Op -Rs -e 4758996 //...'
+
 	if( !m_FatalError && m_OpenArray.GetSize() > 0 )
          // Sort the results from opened
         SortOpened();

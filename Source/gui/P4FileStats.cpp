@@ -725,7 +725,8 @@ CString CP4FileStats::GetFormattedHeadTime()
 	{
 		if(m_HeadTime < 0)
 			m_HeadTime = -m_HeadTime;
-		t = localtime( (const time_t *)&m_HeadTime ); 
+
+		t = _localtime32( (const __time32_t *)&m_HeadTime ); 
 		
 		time.Format(_T("%04d/%02d/%02d %02d:%02d:%02d"), 
 			t->tm_year+1900, t->tm_mon+1, t->tm_mday, 

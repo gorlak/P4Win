@@ -32,7 +32,7 @@ CP4Change::~CP4Change()
 
 // Eat a row of text from 'P4 changes' that looks like:
 // Change 2698 on 02/01/1997 by NIRIAS@ELWOOD *pending* 'Another change 
-BOOL CP4Change::Create(LPCTSTR changesRow, LPCTSTR currentUser)
+BOOL CP4Change::Create(LPCTSTR changesRow)
 {
 	CTokenString str;
 	str.Create(changesRow);
@@ -54,14 +54,13 @@ BOOL CP4Change::Create(LPCTSTR changesRow, LPCTSTR currentUser)
 	}
 
 	VERIFY(lstrcmp(temp, _T("by"))==0);   // Skip over word, 'by'
-	m_User=str.GetToken();
-	ASSERT(m_User.Find(_T("@")));
+	m_UserAtClient=str.GetToken();
 
 	m_MyChange=FALSE;
-	int at= m_User.Find(_T("@"));
+	int at= m_UserAtClient.Find(_T("@"));
 	if( at == -1)
 		ASSERT(0);
-	else if( Compare( m_User.Mid( at+1 ), GET_P4REGPTR()->GetP4Client() ) == 0 )
+	else if( Compare( m_UserAtClient.Mid( at+1 ), GET_P4REGPTR()->GetP4Client() ) == 0 )
 		m_MyChange=TRUE;
 	
 	LPTSTR token=str.GetToken();
@@ -101,6 +100,52 @@ BOOL CP4Change::Create(LPCTSTR changesRow, LPCTSTR currentUser)
     return TRUE;
 }
 
+static void TimestampToFormattedTime( long changeTime, CString *pFormatted )
+{
+	// There's some weird negative number math going on in CP4FileStats::GetFormattedHeadTime()
+	ASSERT(changeTime >= 0);
+
+	struct tm *t = _localtime32( (const __time32_t *)&changeTime ); 
+	pFormatted->Format(_T("%04d/%02d/%02d %02d:%02d:%02d"), 
+		t->tm_year+1900, t->tm_mon+1, t->tm_mday, 
+		t->tm_hour, t->tm_min, t->tm_sec);
+}
+
+BOOL CP4Change::Create(StrDict *varlist)
+{
+ 	StrPtr *str;
+
+ 	VERIFY( str = varlist->GetVar( "change" ) );
+	m_ChangeNumber = atol(!str ? "" : str->Value());
+	ASSERT(m_ChangeNumber);
+
+ 	VERIFY( str = varlist->GetVar( "time" ) );
+	TimestampToFormattedTime( atol(!str ? "0" : str->Value()), &m_ChangeDate );
+
+ 	VERIFY( str = varlist->GetVar( "user" ) );
+	m_UserAtClient = CharToCString(!str ? "" : str->Value());
+
+	m_UserAtClient.AppendChar( L'@' );
+
+ 	VERIFY( str = varlist->GetVar( "client" ) );
+	m_UserAtClient.Append( CharToCString(!str ? "" : str->Value()) );
+
+	CString sClient = !str ? "" : str->Value();
+	m_MyChange = ( Compare( sClient, GET_P4REGPTR()->GetP4Client() ) == 0 );
+	
+ 	VERIFY( str = varlist->GetVar( "status" ) );
+	m_Pending = (strcmp(!str ? "" : str->Value(), "pending")==0);
+
+ 	str = varlist->GetVar( "shelved" );
+	m_Shelved = (str != NULL);
+
+ 	VERIFY( str = varlist->GetVar( "desc" ) );
+	m_Description = !str ? "" : str->Value();
+
+	m_Initialized=TRUE;
+    return TRUE;
+}
+
 CString CP4Change::GetFormattedChange(BOOL showChangeDesc, BOOL sortByUser) const
 {
 	ASSERT(m_Initialized);
@@ -135,7 +180,7 @@ CString CP4Change::GetFormattedChange(BOOL showChangeDesc, BOOL sortByUser) cons
 		txtout.ReleaseBuffer();
 	}
 
-	if( Compare( m_User, GET_P4REGPTR()->GetMyID() ) == 0 )
+	if( Compare( m_UserAtClient, GET_P4REGPTR()->GetMyID() ) == 0 )
 	{
 		if(showChangeDesc)
 		{
@@ -151,17 +196,17 @@ CString CP4Change::GetFormattedChange(BOOL showChangeDesc, BOOL sortByUser) cons
 		{
             if(showChangeDesc)
 				txt.FormatMessage(!bTrunc ? IDS_CHANGE_s_n_s : IDS_CHANGE_s_n_s_TRUNC, 
-						m_User, m_ChangeNumber, desc);
+						m_UserAtClient, m_ChangeNumber, desc);
 			else
-				txt.FormatMessage(IDS_CHANGE_USER_s_n, m_User, m_ChangeNumber);
+				txt.FormatMessage(IDS_CHANGE_USER_s_n, m_UserAtClient, m_ChangeNumber);
 		}
 		else
 		{
 			if(showChangeDesc)
 				txt.FormatMessage(!bTrunc ? IDS_CHANGE_n_s_s : IDS_CHANGE_n_s_s_TRUNC, 
-						m_ChangeNumber, m_User, desc);
+						m_ChangeNumber, m_UserAtClient, desc);
 			else
-				txt.FormatMessage(IDS_CHANGE_n_s, m_ChangeNumber, m_User);
+				txt.FormatMessage(IDS_CHANGE_n_s, m_ChangeNumber, m_UserAtClient);
 		}
 	}
 	

@@ -167,6 +167,7 @@
 #define WM_DOLABELSYNC			WM_USER+323
 #define	WM_ONDODELETEFIXES		WM_USER+324
 #define	WM_UPDATEHAVEREV		WM_USER+325
+#define	WM_P4CHANGESSHELVED		WM_USER+326
 #define WM_P4UPPERBOUND			WM_USER+398     // Used to test command values only, not a command
 #define WM_P4STATUS				WM_USER+399
 

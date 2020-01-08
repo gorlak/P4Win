@@ -187,6 +187,7 @@ protected:
     BOOL m_FetchAll;
 	long m_FetchJobCount;
     BOOL m_FetchAllJobs;
+	BOOL m_JobsEnabled;
 	long m_FetchHistCount;
     BOOL m_FetchAllHist;
     long m_FetchCompleteHist;
@@ -527,6 +528,7 @@ public:
     inline BOOL GetFetchAllChanges() { ASSERT(m_AttemptedRead); return m_FetchAll; }
 	inline int  GetFetchJobCount() { ASSERT(m_AttemptedRead); return m_FetchJobCount; }
     inline BOOL GetFetchAllJobs() { ASSERT(m_AttemptedRead); return m_FetchAllJobs; }
+    inline BOOL GetJobsEnabled() { ASSERT(m_AttemptedRead); return m_JobsEnabled; }
 	inline int  GetFetchHistCount() { ASSERT(m_AttemptedRead); return m_FetchHistCount; }
     inline BOOL GetFetchAllHist() { ASSERT(m_AttemptedRead); return m_FetchAllHist; }
     inline long GetFetchCompleteHist() { ASSERT(m_AttemptedRead); return m_FetchCompleteHist; }
@@ -631,6 +633,7 @@ public:
     BOOL SetFetchAllChanges(BOOL fetchAll);
 	BOOL SetFetchJobCount(long fetchJobCount);
     BOOL SetFetchAllJobs(BOOL fetchAllJobs);
+	BOOL SetJobsEnabled(BOOL jobsEnabled);
 	BOOL SetFetchHistCount(long fetchHistCount);
 	BOOL SetFetchAllHist(BOOL fetchAll);
 	BOOL SetFetchCompleteHist(long fetchComplete);
@@ -885,7 +888,6 @@ public:
 	void ReadDiffAssocList();
 	void ReadMergeAssocList();
 	CString GetPasswordfromReg( );
-	BOOL TestRegWrite2HKLM();
 
 protected:
 	POSITION FindAssociation(LPCTSTR extension);
