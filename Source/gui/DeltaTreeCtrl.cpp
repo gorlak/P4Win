@@ -2254,18 +2254,21 @@ BOOL CDeltaTreeCtrl::ExpandTree( const HTREEITEM item )
 	if ( changeNum <= 0 )
 		return TRUE;
 
-	//  D) And finally fire up fixes
-	CCmd_Fixes *pCmdFixes= new CCmd_Fixes;
-	pCmdFixes->Init( m_hWnd, RUN_ASYNC);
-	if( pCmdFixes->Run(changeNum, item) )
+	//  D) And finally fire up fixes, if enabled
+	if ( GET_P4REGPTR()->GetJobsEnabled() )
 	{
-		MainFrame()->UpdateStatus( LoadStringResource(IDS_UPDATING_JOB_FIXES) );
-	}
-	else
-	{
-		delete pCmdFixes;
-		RedrawWindow();
-       	MainFrame()->ClearStatus();
+		CCmd_Fixes *pCmdFixes= new CCmd_Fixes;
+		pCmdFixes->Init( m_hWnd, RUN_ASYNC);
+		if( pCmdFixes->Run(changeNum, item) )
+		{
+			MainFrame()->UpdateStatus( LoadStringResource(IDS_UPDATING_JOB_FIXES) );
+		}
+		else
+		{
+			delete pCmdFixes;
+			RedrawWindow();
+       		MainFrame()->ClearStatus();
+		}
 	}
 
 	return TRUE;
@@ -5555,7 +5558,11 @@ void CDeltaTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 		{
 			popMenu.AppendMenu( stringsON, ID_CHANGE_EDSPEC, LoadStringResource( IDS_EDITSPEC ) );
 			popMenu.AppendMenu( stringsON, ID_CHANGE_DESCRIBE, LoadStringResource( IDS_DESCRIBEIT ) );
-			popMenu.AppendMenu( stringsON, ID_CHANGE_ADDJOBFIX, LoadStringResource( IDS_ADDJOBFIX ) );
+
+			if ( GET_P4REGPTR()->GetJobsEnabled() )
+			{
+				popMenu.AppendMenu( stringsON, ID_CHANGE_ADDJOBFIX, LoadStringResource( IDS_ADDJOBFIX ) );
+			}
 		}
 
 		// Choice for empty changes if not default

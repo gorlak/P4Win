@@ -534,7 +534,7 @@ BOOL CSpecDescDlg::OnInitDialog()
 		GetMenu()->DeleteMenu(3, MF_BYPOSITION);
 	}
 
-	if (m_ShowShowFixes)
+	if (m_ShowShowFixes && GET_P4REGPTR()->GetJobsEnabled())
 	{
 		GetDlgItem(IDC_SHOWFIXES)->ShowWindow(SW_SHOWNORMAL);
 		GetDlgItem(IDC_SHOWFIXES)->EnableWindow(TRUE);

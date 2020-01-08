@@ -41,6 +41,7 @@ void CJobsPage::DoDataExchange(CDataExchange* pDX)
 	//{{AFX_DATA_MAP(CJobsPage)
 	DDX_Control(pDX, IDC_POLLJOBS, m_PollJobs);
 	DDX_Control(pDX, IDC_FETCHALLJOBS_RAD, m_JobCountRadio);
+	DDX_Control(pDX, IDC_ENABLEJOBS, m_JobsEnabledCheckbox);
 	DDX_Text(pDX, IDC_JOBCOUNT, m_JobCount);
 	DDV_MinMaxInt(pDX, m_JobCount, 0, 1000000);
 	//}}AFX_DATA_MAP
@@ -53,6 +54,7 @@ BEGIN_MESSAGE_MAP(CJobsPage, CPropertyPage)
 	ON_BN_CLICKED(IDC_FETCHALLJOBS_RAD, OnFetchRadio)
 	ON_BN_CLICKED(IDC_FETCHXJOBS_RAD, OnFetchRadio)
 	ON_BN_CLICKED(ID_JOB_CONFIGURE, OnJobConfigure)
+	ON_BN_CLICKED(IDC_ENABLEJOBS, OnEnableCheckbox)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -67,6 +69,7 @@ BOOL CJobsPage::OnInitDialog()
 	// Init all data members from the registry
 	m_JobCount = GET_P4REGPTR()->GetFetchJobCount();
 	m_JobCountRadio.SetCheck(GET_P4REGPTR()->GetFetchAllJobs());
+	m_JobsEnabledCheckbox.SetCheck(GET_P4REGPTR()->GetJobsEnabled());
 	if(!GET_P4REGPTR()->GetFetchAllJobs())
 	{	
 		CButton otherButton;
@@ -77,6 +80,9 @@ BOOL CJobsPage::OnInitDialog()
 
 	// Enable/disable fetch change count per radio button
 	OnFetchRadio();
+
+	// Same, but for the overall enabling checkbox
+	OnEnableCheckbox();
 	
 	// Init the jobs polling flag
 	m_PollJobs.SetCheck(GET_P4REGPTR()->GetAutoPollJobs());
@@ -105,6 +111,24 @@ void CJobsPage::OnFetchRadio()
 		pwnd->EnableWindow(FALSE);
 }
 
+void CJobsPage::OnEnableCheckbox()
+{
+	bool bJobsEnabled = m_JobsEnabledCheckbox.GetCheck() != 0;
+
+	const int nDisableEnable[] = {
+		IDC_FETCHALLJOBS_RAD,
+		IDC_FETCHXJOBS_RAD,
+		IDC_JOBCOUNT,
+		IDC_POLLJOBS,
+		ID_JOB_CONFIGURE,
+	};
+
+	for ( int nID : nDisableEnable )
+	{
+		GetDlgItem(nID)->EnableWindow( bJobsEnabled ? TRUE : FALSE );
+	}
+}
+
 void CJobsPage::OnJobConfigure()
 {
 	MainFrame()->OnJobConfigure();
@@ -123,6 +147,13 @@ void CJobsPage::OnOK()
 
 	if( UpdateData( TRUE ) )
 	{
+		BOOL enableState=TRUE;	
+		if(m_JobsEnabledCheckbox.GetCheck() == 0)
+			enableState=FALSE;
+		if( enableState != GET_P4REGPTR()->GetJobsEnabled() )
+			if(!GET_P4REGPTR()->SetJobsEnabled( enableState ) )
+				m_ErrorCount++;
+
 		BOOL jobsState=TRUE;	
 		if(m_PollJobs.GetCheck() == 0)
 			jobsState=FALSE;
