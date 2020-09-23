@@ -26,7 +26,7 @@ Now, build dependent libs. Open a visual studio command prompt for _the architec
 
 Now, generate the main solution:
 
-    premake vs2017
+    premake vs2019
     start Build\P4Win.sln
 
 ### License
