@@ -37,7 +37,8 @@ if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.orig
 :: Release
 ::
 
-if defined BUILD_RELEASE perl Configure %CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-m%RUNTIME%
+if defined BUILD_RELEASE rmdir /s /q %~dp0\openssl-%PLATFORM%-m%RUNTIME%
+if defined BUILD_RELEASE perl Configure %CONFIGURE% no-asm --prefix=%~dp0\openssl-%PLATFORM%-m%RUNTIME%
 if defined BUILD_RELEASE call %SETUP%
 
 if defined BUILD_RELEASE if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.unhacked
@@ -45,14 +46,15 @@ if defined BUILD_RELEASE if "%RUNTIME%" equ "d" perl -p -e "s/\/MT/\/MD/g" ms\nt
 
 if defined BUILD_RELEASE nmake -f ms\nt.mak
 if defined BUILD_RELEASE nmake -f ms\nt.mak install
-if defined BUILD_RELEASE copy /y tmp32\lib.pdb %~dp0\%PLATFORM%-m%RUNTIME%\lib\
+if defined BUILD_RELEASE copy /y tmp32\lib.pdb %~dp0\openssl-%PLATFORM%-m%RUNTIME%\lib\
 if defined BUILD_RELEASE nmake -f ms\nt.mak clean
 
 ::
 :: Debug
 ::
 
-if defined BUILD_DEBUG perl Configure debug-%CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-m%RUNTIME%d
+if defined BUILD_DEBUG rmdir /s /q %~dp0\openssl-%PLATFORM%-m%RUNTIME%d
+if defined BUILD_DEBUG perl Configure debug-%CONFIGURE% no-asm --prefix=%~dp0\openssl-%PLATFORM%-m%RUNTIME%d
 if defined BUILD_DEBUG call %SETUP%
 
 if defined BUILD_DEBUG if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.unhacked
@@ -60,7 +62,7 @@ if defined BUILD_DEBUG if "%RUNTIME%" equ "d" perl -p -e "s/\/MT/\/MD/g" ms\nt.m
 
 if defined BUILD_DEBUG nmake -f ms\nt.mak
 if defined BUILD_DEBUG nmake -f ms\nt.mak install
-if defined BUILD_DEBUG copy /y tmp32.dbg\lib.pdb %~dp0\%PLATFORM%-m%RUNTIME%d\lib\
+if defined BUILD_DEBUG copy /y tmp32.dbg\lib.pdb %~dp0\openssl-%PLATFORM%-m%RUNTIME%d\lib\
 if defined BUILD_DEBUG nmake -f ms\nt.mak clean
 
 ::
@@ -75,22 +77,6 @@ if "%RUNTIME%" equ "d" copy /y ms\nt.mak.orig ms\nt.mak
 
 git checkout .
 git clean -fdx
-
-popd
-
-pushd %~dp0
-
-if exist openssl-install attrib -r openssl-install\*.* /s
-if exist openssl-install rmdir /s /q openssl-install
-
-ren %PLATFORM%-m%RUNTIME%\lib m%RUNTIME%
-ren %PLATFORM%-m%RUNTIME%d\lib m%RUNTIME%d
-
-ren %PLATFORM%-m%RUNTIME% openssl-install
-mkdir openssl-install\lib\vstudio-%VisualStudioVersion%\%PLATFORM%
-move openssl-install\m%RUNTIME% openssl-install\lib\vstudio-%VisualStudioVersion%\%PLATFORM%\
-move %PLATFORM%-m%RUNTIME%d\m%RUNTIME%d openssl-install\lib\vstudio-%VisualStudioVersion%\%PLATFORM%\
-rmdir /s /q %PLATFORM%-m%RUNTIME%d
 
 popd
 

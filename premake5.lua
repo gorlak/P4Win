@@ -21,6 +21,11 @@ newoption
 
 architecture( _OPTIONS[ "architecture" ] )
 
+local platform = "x64"
+if _OPTIONS[ "architecture" ] == "x86" then
+	platform = "Win32"
+end
+
 flags
 {
 	"FatalWarnings",
@@ -48,11 +53,6 @@ defines
 	"ID_D=\"0\"",
 	"USE_SSL",
 	"Z_PREFIX",
-}
-
-includedirs
-{
-	"Dependencies/openssl-install/include",
 }
 
 buildoptions
@@ -110,6 +110,46 @@ configuration "Release"
 	{
 		"/Ob2",
 		"/Oi",
+	}
+
+configuration {"Debug", "x86"}
+	includedirs
+	{
+		"Dependencies/openssl-Win32-mdd/include",
+	}
+	libdirs
+	{
+		"Dependencies/openssl-Win32-mdd/lib"
+	}
+
+configuration {"not Debug", "x86"}
+	includedirs
+	{
+		"Dependencies/openssl-Win32-md/include",
+	}
+	libdirs
+	{
+		"Dependencies/openssl-Win32-md/lib"
+	}
+
+configuration {"Debug", "x86_64"}
+	includedirs
+	{
+		"Dependencies/openssl-x64-mdd/include",
+	}
+	libdirs
+	{
+		"Dependencies/openssl-x64-mdd/lib"
+	}
+
+configuration {"not Debug", "x86_64"}
+	includedirs
+	{
+		"Dependencies/openssl-x64-md/include",
+	}
+	libdirs
+	{
+		"Dependencies/openssl-x64-md/lib"
 	}
 
 configuration {}
@@ -426,11 +466,6 @@ project "p4"
 		"Dependencies/p4/zlib",
 	}
 
-	local platform = "x64"
-	if _OPTIONS[ "architecture" ] == "x86" then
-		platform = "Win32"
-	end
-
 	files
 	{
 		"Dependencies/p4/client/clientmain.*",
@@ -452,18 +487,6 @@ project "p4"
 		"wininet",
 		"setargv.obj",
 	}
-
-	configuration "Debug"
-		libdirs
-		{
-			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/mdd"
-		}
-
-	configuration "not Debug"
-		libdirs
-		{
-			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/md"
-		}
 
 project "P4Win"
 
@@ -506,11 +529,6 @@ project "P4Win"
 		"Source/gui/spec-dlgs",
 		"Source/gui/OptionsDlg",
 	}
-
-	local platform = "x64"
-	if _OPTIONS[ "architecture" ] == "x86" then
-		platform = "Win32"
-	end
 
 	files
 	{
@@ -556,15 +574,3 @@ project "P4Win"
 		"wininet",
 		"winmm",
 	}
-
-	configuration "Debug"
-		libdirs
-		{
-			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/mdd"
-		}
-
-	configuration "not Debug"
-		libdirs
-		{
-			"Dependencies/openssl-install/lib/vstudio-$(VisualStudioVersion)/" .. platform .. "/md"
-		}
