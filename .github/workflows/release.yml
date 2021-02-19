@@ -38,6 +38,7 @@ jobs:
 
     - name: Source Index PDB
       run: |
+        cmd.exe /c call source_index_pdb.bat Bin\Release\P4.pdb
         cmd.exe /c call source_index_pdb.bat Bin\Release\P4Win.pdb
 
     - name: Build Installer
