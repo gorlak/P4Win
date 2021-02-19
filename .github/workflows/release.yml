@@ -16,8 +16,10 @@ jobs:
       with:
           submodules: recursive
 
-    - name: Build OpenSSL Release
+    - name: Setup vcvars
       uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Build OpenSSL Release
       run: |
         cd ${{ github.workspace }}\Dependencies
         cmd.exe /c call openssl-build.bat release
