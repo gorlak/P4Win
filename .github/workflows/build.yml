@@ -1,0 +1,65 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+jobs:
+
+  build-debug:
+    name: Debug
+    runs-on: [windows-latest]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+          submodules: recursive
+
+    - name: Build OpenSSL Debug
+      uses: ilammy/msvc-dev-cmd@v1
+      run: |
+        cd ${{ github.workspace }}\Dependencies
+        cmd.exe /c call openssl-build.bat debug
+
+    - name: Premake
+      run: |
+        cd ${{ github.workspace }}
+        cmd.exe /c call premake.bat
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Build Debug
+      run: |
+        MSBuild.exe Build\P4Win.sln -p:Configuration=Debug
+
+  build-release:
+    name: Release
+    runs-on: [windows-latest]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+          submodules: recursive
+
+    - name: Build OpenSSL Release
+      uses: ilammy/msvc-dev-cmd@v1
+      run: |
+        cd ${{ github.workspace }}\Dependencies
+        cmd.exe /c call openssl-build.bat release
+
+    - name: Premake
+      run: |
+        cd ${{ github.workspace }}
+        cmd.exe /c call premake.bat
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Build Release
+      run: |
+        MSBuild.exe Build\P4Win.sln -p:Configuration=Release

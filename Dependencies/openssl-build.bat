@@ -18,6 +18,11 @@ if "%VSCMD_ARG_TGT_ARCH%" equ "x64" (
     set SETUP=ms\do_ms.bat
 )
 
+if "%1" equ "" set BUILD_DEBUG=1
+if "%1" equ "" set BUILD_RELEASE=1
+if "%1" equ "debug" set BUILD_DEBUG=1
+if "%1" equ "release" set BUILD_RELEASE=1
+
 set RUNTIME=d
 
 pushd %~dp0openssl
@@ -32,31 +37,31 @@ if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.orig
 :: Release
 ::
 
-perl Configure %CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-m%RUNTIME%
-call %SETUP%
+if defined BUILD_RELEASE perl Configure %CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-m%RUNTIME%
+if defined BUILD_RELEASE call %SETUP%
 
-if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.unhacked
-if "%RUNTIME%" equ "d" perl -p -e "s/\/MT/\/MD/g" ms\nt.mak.unhacked > ms\nt.mak
+if defined BUILD_RELEASE if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.unhacked
+if defined BUILD_RELEASE if "%RUNTIME%" equ "d" perl -p -e "s/\/MT/\/MD/g" ms\nt.mak.unhacked > ms\nt.mak
 
-nmake -f ms\nt.mak
-nmake -f ms\nt.mak install
-copy /y tmp32\lib.pdb %~dp0\%PLATFORM%-m%RUNTIME%\lib\
-nmake -f ms\nt.mak clean
+if defined BUILD_RELEASE nmake -f ms\nt.mak
+if defined BUILD_RELEASE nmake -f ms\nt.mak install
+if defined BUILD_RELEASE copy /y tmp32\lib.pdb %~dp0\%PLATFORM%-m%RUNTIME%\lib\
+if defined BUILD_RELEASE nmake -f ms\nt.mak clean
 
 ::
 :: Debug
 ::
 
-perl Configure debug-%CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-m%RUNTIME%d
-call %SETUP%
+if defined BUILD_DEBUG perl Configure debug-%CONFIGURE% no-asm --prefix=%~dp0\%PLATFORM%-m%RUNTIME%d
+if defined BUILD_DEBUG call %SETUP%
 
-if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.unhacked
-if "%RUNTIME%" equ "d" perl -p -e "s/\/MT/\/MD/g" ms\nt.mak.unhacked > ms\nt.mak
+if defined BUILD_DEBUG if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.unhacked
+if defined BUILD_DEBUG if "%RUNTIME%" equ "d" perl -p -e "s/\/MT/\/MD/g" ms\nt.mak.unhacked > ms\nt.mak
 
-nmake -f ms\nt.mak
-nmake -f ms\nt.mak install
-copy /y tmp32.dbg\lib.pdb %~dp0\%PLATFORM%-m%RUNTIME%d\lib\
-nmake -f ms\nt.mak clean
+if defined BUILD_DEBUG nmake -f ms\nt.mak
+if defined BUILD_DEBUG nmake -f ms\nt.mak install
+if defined BUILD_DEBUG copy /y tmp32.dbg\lib.pdb %~dp0\%PLATFORM%-m%RUNTIME%d\lib\
+if defined BUILD_DEBUG nmake -f ms\nt.mak clean
 
 ::
 :: Restore
