@@ -21,11 +21,6 @@ newoption
 
 architecture( _OPTIONS[ "architecture" ] )
 
-local platform = "x64"
-if _OPTIONS[ "architecture" ] == "x86" then
-	platform = "Win32"
-end
-
 flags
 {
 	"FatalWarnings",

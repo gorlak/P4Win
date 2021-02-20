@@ -23,15 +23,10 @@ if "%1" equ "" set BUILD_RELEASE=1
 if "%1" equ "debug" set BUILD_DEBUG=1
 if "%1" equ "release" set BUILD_RELEASE=1
 
+:: d for DLL CRT, t for static CRT
 set RUNTIME=d
 
 pushd %~dp0openssl
-
-::
-:: Backup
-::
-
-if "%RUNTIME%" equ "d" copy /y ms\nt.mak ms\nt.mak.orig
 
 ::
 :: Release
@@ -64,12 +59,6 @@ if defined BUILD_DEBUG nmake -f ms\nt.mak
 if defined BUILD_DEBUG nmake -f ms\nt.mak install
 if defined BUILD_DEBUG copy /y tmp32.dbg\lib.pdb %~dp0\openssl-%PLATFORM%-m%RUNTIME%d\lib\
 if defined BUILD_DEBUG nmake -f ms\nt.mak clean
-
-::
-:: Restore
-::
-
-if "%RUNTIME%" equ "d" copy /y ms\nt.mak.orig ms\nt.mak
 
 ::
 :: Tidy
