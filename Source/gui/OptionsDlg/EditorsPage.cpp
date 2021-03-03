@@ -286,7 +286,7 @@ void CEditorsPage::OnBrowse()
 	CFileDialog fDlg(TRUE, NULL, NULL,  
 		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_NONETWORKBUTTON | OFN_PATHMUSTEXIST,
 		LoadStringResource(IDS_TEXT_EDITOR_FILTER), this,
-		MainFrame()->m_osVer.dwMajorVersion < 5 ? OPENFILENAME_SIZE_VERSION_400 : sizeof(OPENFILENAME)); 
+		MainFrame()->m_osVer.dwMajorVersion < 5 ? OPENFILENAME_SIZE_VERSION_400 : sizeof(OPENFILENAME), FALSE); 
 	
 	TCHAR buf[MAX_PATH];
 	// Zero 1st char so commdlg knows we aren't providing a default filename

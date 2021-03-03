@@ -287,10 +287,11 @@ void CHelperAppsPage::Browse(CString &filename, LPCTSTR title)
 {
 	CFileDialog fDlg(TRUE, NULL, NULL,  
 		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_NONETWORKBUTTON | OFN_PATHMUSTEXIST,
-		LoadStringResource(IDS_HELPER_APPS_FILTER), this,
-		MainFrame()->m_osVer.dwMajorVersion < 5 ? OPENFILENAME_SIZE_VERSION_400 : sizeof(OPENFILENAME)); 
+		LoadStringResource(IDS_HELPER_APPS_FILTER),
+		this,
+		MainFrame()->m_osVer.dwMajorVersion < 5 ? OPENFILENAME_SIZE_VERSION_400 : sizeof(OPENFILENAME), FALSE); 
 	
-	TCHAR buf[MAX_PATH];
+	TCHAR buf[MAX_PATH+1];
 	// Zero 1st char so commdlg knows we aren't providing a default filename
 	buf[0]=_T('\0');  
 
