@@ -36,7 +36,7 @@ jobs:
 
     - name: Build Debug
       run: |
-        MSBuild.exe Build\P4Win.sln -p:Configuration=Debug
+        MSBuild.exe Build\P4Win.sln -p:Configuration=Debug /p:Platform=x64
 
   build-release:
     name: Release
@@ -66,4 +66,4 @@ jobs:
 
     - name: Build Release
       run: |
-        MSBuild.exe Build\P4Win.sln -p:Configuration=Release
+        MSBuild.exe Build\P4Win.sln -p:Configuration=Release /p:Platform=x64

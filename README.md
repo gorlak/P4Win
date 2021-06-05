@@ -17,12 +17,7 @@ First, grab our source tree from git and ensure that you fetch all the submodule
 
     git submodule update --init
 
-Now, build dependent libs. Open a visual studio command prompt for _the architecture you want to use, Win32 or x64_.  Then:
-
-    cd Dependencies
-    openssl-build.bat
-
-Now, generate the main solution:
+Now, build dependencies and generate the main solution:
 
     premake vs2019
     start Build\P4Win.sln

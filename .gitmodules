@@ -4,12 +4,9 @@
 [submodule "Dependencies/p4"]
 	path = Dependencies/p4
 	url = https://github.com/gorlak/P4.git
-[submodule "Dependencies/openssl"]
-	path = Dependencies/openssl
-	url = https://github.com/gorlak/openssl.git
-[submodule "Dependencies/StrawberryPerl"]
-	path = Dependencies/StrawberryPerl
-	url = https://github.com/HeliumProject/StrawberryPerl.git
 [submodule "Dependencies/InnoSetup"]
 	path = Dependencies/InnoSetup
 	url = https://github.com/HeliumProject/InnoSetup.git
+[submodule "Dependencies/vcpkg"]
+	path = Dependencies/vcpkg
+	url = https://github.com/microsoft/vcpkg
