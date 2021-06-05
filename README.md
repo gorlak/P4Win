@@ -20,6 +20,9 @@ First, grab our source tree from git and ensure that you fetch all the submodule
 Now, build dependencies and generate the main solution:
 
     premake vs2019
+
+You can open the main solution from the command prompt by doing:
+
     start Build\P4Win.sln
 
 ### License
