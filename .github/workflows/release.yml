@@ -19,11 +19,6 @@ jobs:
     - name: Setup vcvars
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Build OpenSSL Release
-      run: |
-        cd ${{ github.workspace }}\Dependencies
-        cmd.exe /c call openssl-build.bat release
-
     - name: Premake
       run: |
         cd ${{ github.workspace }}

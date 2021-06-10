@@ -21,11 +21,6 @@ jobs:
     - name: Setup vcvars
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Build OpenSSL Debug
-      run: |
-        cd ${{ github.workspace }}\Dependencies
-        cmd.exe /c call openssl-build.bat debug
-
     - name: Premake
       run: |
         cd ${{ github.workspace }}
@@ -36,7 +31,7 @@ jobs:
 
     - name: Build Debug
       run: |
-        MSBuild.exe Build\P4Win.sln -p:Configuration=Debug
+        MSBuild.exe Build\P4Win.sln -p:Configuration=Debug /p:Platform=x64
 
   build-release:
     name: Release
@@ -51,11 +46,6 @@ jobs:
     - name: Setup vcvars
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Build OpenSSL Release
-      run: |
-        cd ${{ github.workspace }}\Dependencies
-        cmd.exe /c call openssl-build.bat release
-
     - name: Premake
       run: |
         cd ${{ github.workspace }}
@@ -66,4 +56,4 @@ jobs:
 
     - name: Build Release
       run: |
-        MSBuild.exe Build\P4Win.sln -p:Configuration=Release
+        MSBuild.exe Build\P4Win.sln -p:Configuration=Release /p:Platform=x64

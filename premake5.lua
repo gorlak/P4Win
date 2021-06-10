@@ -1,3 +1,9 @@
+action = _ACTION
+
+if (action == nil) then
+	action = "none"
+end
+
 newoption
 {
 	trigger	= "client",
@@ -10,16 +16,7 @@ newoption
 	description	= "Bundle japanese resources",
 }
 
-newoption
-{
-	trigger = "architecture",
-	description = "Specify architecture (see premake 'architecture' action for choices)",
-	default = (function() if os.is64bit() then return 'x86_64' else return 'x86' end end)(),
-}
-
 -- global options
-
-architecture( _OPTIONS[ "architecture" ] )
 
 flags
 {
@@ -68,20 +65,40 @@ configurations
 	"Release",
 }
 
+platforms
+{
+	"x86",
+	"x64",
+}
+
 location "Build"
 objdir "Build"
 
 -- global configurations
 
-configuration "Debug"
+filter { "platforms:x86" }
+	architecture "x86"
+
+filter { "platforms:x64" }
+	architecture "x86_64"
+
+filter { "configurations:Debug", "platforms:x86" }
+	targetdir( "Bin/Debug (x86)/" )
+	libdirs { "Bin/Debug (x86)/" }
+
+filter { "configurations:Release", "platforms:x86" }
+	targetdir( "Bin/Release (x86)/" )
+	libdirs { "Bin/Release (x86)/" }
+
+filter { "configurations:Debug", "platforms:x64" }
 	targetdir( "Bin/Debug/" )
 	libdirs { "Bin/Debug/" }
 
-configuration "Release"
+filter { "configurations:Release", "platforms:x64" }
 	targetdir( "Bin/Release/" )
 	libdirs { "Bin/Release/" }
 
-configuration "Debug"
+filter { "configurations:Debug" }
 	defines
 	{
 		"_DEBUG",
@@ -92,7 +109,7 @@ configuration "Debug"
 		"/Ob0",
 	}
 
-configuration "Release"
+filter { "configurations:Release" }
 	defines
 	{
 		"NDEBUG",
@@ -107,47 +124,43 @@ configuration "Release"
 		"/Oi",
 	}
 
-configuration {"Debug", "x86"}
+filter { "platforms:x86" }
 	includedirs
 	{
-		"Dependencies/openssl-Win32-mdd/include",
-	}
-	libdirs
-	{
-		"Dependencies/openssl-Win32-mdd/lib"
+		"Dependencies/vcpkg-installed/overlay-x86-windows-" .. action .. "/include",
 	}
 
-configuration {"not Debug", "x86"}
+filter { "configurations:Debug", "platforms:x86" }
+	libdirs
+	{
+		"Dependencies/vcpkg-installed/overlay-x86-windows-" .. action .. "/debug/lib",
+	}
+
+filter { "configurations:not Debug", "platforms:x86" }
+	libdirs
+	{
+		"Dependencies/vcpkg-installed/overlay-x86-windows-" .. action .. "/lib",
+	}
+
+filter { "platforms:x64" }
 	includedirs
 	{
-		"Dependencies/openssl-Win32-md/include",
-	}
-	libdirs
-	{
-		"Dependencies/openssl-Win32-md/lib"
+		"Dependencies/vcpkg-installed/overlay-x64-windows-" .. action .. "/include",
 	}
 
-configuration {"Debug", "x86_64"}
-	includedirs
-	{
-		"Dependencies/openssl-x64-mdd/include",
-	}
+filter { "configurations:Debug", "platforms:x64" }
 	libdirs
 	{
-		"Dependencies/openssl-x64-mdd/lib"
+		"Dependencies/vcpkg-installed/overlay-x64-windows-" .. action .. "/debug/lib",
 	}
 
-configuration {"not Debug", "x86_64"}
-	includedirs
-	{
-		"Dependencies/openssl-x64-md/include",
-	}
+filter { "configurations:not Debug", "platforms:x64" }
 	libdirs
 	{
-		"Dependencies/openssl-x64-md/lib"
+		"Dependencies/vcpkg-installed/overlay-x64-windows-" .. action .. "/lib",
 	}
 
-configuration {}
+filter {}
 
 -- workspace
 
@@ -287,6 +300,11 @@ project "libscript-curl"
 	language "C++"
 	characterset "MBCS"
 	-- staticruntime "On"
+
+	disablewarnings
+	{
+		"4090", -- 'function': different 'const' qualifiers
+	}
 
 	defines
 	{
@@ -447,7 +465,6 @@ project "p4"
 
 	includedirs
 	{
-		"Dependencies/openssl-install/include",
 		"Dependencies/p4/client",
 		"Dependencies/p4/diff",
 		"Dependencies/p4/i18n",
@@ -475,10 +492,11 @@ project "p4"
 		"libscript-curl",
 		"libscript-sqlite",
 		"libclient",
-		"ssleay32",
-		"libeay32",
+		"libssl",
+		"libcrypto",
 		"dbghelp",
 		"ws2_32",
+		"crypt32",
 		"wininet",
 		"setargv.obj",
 	}
@@ -557,10 +575,19 @@ project "P4Win"
 		"libscript-curl",
 		"libscript-sqlite",
 		"libclient",
-		"ssleay32",
-		"libeay32",
+		"libssl",
+		"libcrypto",
 		"dbghelp",
 		"ws2_32",
+		"crypt32",
 		"wininet",
 		"winmm",
 	}
+
+if action:match("^vs*") then
+	local success, termination, result = os.execute( "cmd.exe /c Dependencies\\vcpkg.bat " .. action )
+	if ( result ~= 0 ) then
+		premake.error( "vcpkg failed!" )
+		os.exit( 1 )
+	end
+end
